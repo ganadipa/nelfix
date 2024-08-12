@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "module": "es6",
+    "target": "es6",
+    "lib": ["dom", "esnext"],
+    "outDir": "./public/js",
+    "rootDir": "./scripts/public",
+    "strict": true,
+    "esModuleInterop": true,
+    "moduleResolution": "node",
+    "sourceMap": true,
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true
+  },
+  "include": ["./scripts/public/**/*.ts"],
+  "exclude": ["node_modules"]
+}
