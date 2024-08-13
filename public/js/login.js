@@ -14,6 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
         responseContainer.classList.remove('bg-red-100', 'text-red-800', 'border-red-400', 'mb-12');
         // add the success classes
         responseContainer.classList.add('bg-green-100', 'text-green-800', 'border-green-400', 'mb-12');
+        location.reload();
     });
     // What happens when it fails?
     handler.setOnFail((data) => {

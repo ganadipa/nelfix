@@ -1,9 +1,10 @@
 import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
+import { AppModule } from './modules/app.module';
 import { ValidationPipe } from '@nestjs/common';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { join } from 'path';
 import * as hbs from 'hbs';
+import { BaseResponseExceptionFilter } from './common/filters/base-response-exception-filter';
 
 async function bootstrap() {
   // init app
@@ -11,7 +12,7 @@ async function bootstrap() {
 
   // enable cors
   app.enableCors({
-    origin: 'https://labpro-fe.hmif.dev/',
+    origin: '*',
   });
 
   // global validation pipe
@@ -20,6 +21,9 @@ async function bootstrap() {
       whitelist: true,
     }),
   );
+
+  // use custom exception filter - base response exception filter
+  app.useGlobalFilters(new BaseResponseExceptionFilter());
 
   // static files
   app.useStaticAssets(join(__dirname, '..', 'public'));

@@ -18,6 +18,7 @@ export type TUser = {
   role: TRole;
   firstName: string;
   lastName: string;
+  token: string;
 };
 
 export type TSelfGetData = {

@@ -1,9 +1,9 @@
 import { Body, Controller, Post, Req, Res } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Request, Response } from 'express';
-import { AuthService } from 'src/auth/auth.service';
-import { RegisterDto, SignInDto } from 'src/auth/dto';
-import { TLoginPostData, TResponseStatus } from 'src/types';
+import { AuthService } from '../auth/auth.service';
+import { RegisterDto, SignInDto } from '../auth/dto';
+import { TLoginPostData, TResponseStatus } from 'src/common/types';
 
 @Controller('api')
 export class ApiController {
@@ -24,7 +24,6 @@ export class ApiController {
     @Req() req: Request,
   ): Promise<TResponseStatus<TLoginPostData>> {
     const resp = await this.authService.signIn(body);
-    console.log(req);
 
     if (resp.status === 'success') {
       res.cookie('token', resp.data.token, {

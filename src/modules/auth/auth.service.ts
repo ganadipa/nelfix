@@ -1,13 +1,19 @@
-import { ForbiddenException, Inject, Injectable, Post } from '@nestjs/common';
-import { PrismaService } from 'src/prisma/prisma.service';
+import {
+  ForbiddenException,
+  Inject,
+  Injectable,
+  Post,
+  Req,
+} from '@nestjs/common';
 import { RegisterDto, SignInDto } from './dto';
 import * as argon from 'argon2';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
-import { TLoginPostData, TResponseStatus } from 'src/types';
-import { User } from 'src/user/user.entity';
-import { Response } from 'express';
 import { IAuthStrategy } from './strategy';
+import { PrismaService } from '../prisma/prisma.service';
+import { User } from '../user/user.entity';
+import { TLoginPostData, TResponseStatus } from 'src/common/types';
+import { ExtendedRequest } from 'src/common/interfaces/request.interface';
 
 @Injectable()
 export class AuthService {
@@ -141,6 +147,4 @@ export class AuthService {
   async validateToken(token: string) {
     return this.jwt.verifyAsync(token);
   }
-
-  async self() {}
 }

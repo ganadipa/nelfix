@@ -36,6 +36,8 @@ document.addEventListener('DOMContentLoaded', () => {
       'border-green-400',
       'mb-12',
     );
+
+    location.reload();
   });
 
   // What happens when it fails?

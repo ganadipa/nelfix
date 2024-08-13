@@ -1,9 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { IAuthStrategy } from '.';
 import { JwtService } from '@nestjs/jwt';
-import { TUser } from 'src/types';
-import { Request, Response } from 'express';
 import { ConfigService } from '@nestjs/config';
+import { TUser } from 'src/common/types';
 
 type TJwtPayload = Omit<TUser, 'id'> & { userId: string; iat: number };
 
@@ -26,6 +25,7 @@ export class JwtAuthStrategy implements IAuthStrategy {
       firstName: payload.firstName,
       lastName: payload.lastName,
       role: payload.role,
+      token,
     };
   }
 }

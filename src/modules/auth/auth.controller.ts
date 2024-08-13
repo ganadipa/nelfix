@@ -1,7 +1,7 @@
 import { Controller, Get, Post, Render, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { Roles } from './decorator/roles.decorator';
 import { AuthGuard } from './auth.guard';
+import { Roles } from 'src/common/decorator/roles.decorator';
 
 @Controller('auth')
 @UseGuards(AuthGuard)
@@ -10,14 +10,14 @@ export class AuthController {
 
   @Get('login')
   @Render('auth/login/index')
-  @Roles(['GUEST', 'ADMIN'])
+  @Roles(['GUEST'], '/web/films')
   getLogin() {
     return { message: 'Hello world!' };
   }
 
   @Get('register')
   @Render('auth/register/index')
-  @Roles(['GUEST'])
+  @Roles(['GUEST'], '/web/films')
   getRegister() {
     return {
       fields: [
