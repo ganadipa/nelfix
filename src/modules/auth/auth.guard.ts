@@ -6,7 +6,6 @@ import {
   ForbiddenException,
   HttpException,
 } from '@nestjs/common';
-import { Observable } from 'rxjs';
 import { IAuthStrategy } from './strategy';
 import { Reflector } from '@nestjs/core';
 import { TUser } from 'src/common/types';
@@ -25,9 +24,7 @@ export class AuthGuard implements CanActivate {
     private reflector: Reflector,
   ) {}
 
-  canActivate(
-    context: ExecutionContext,
-  ): boolean | Promise<boolean> | Observable<boolean> {
+  async canActivate(context: ExecutionContext): Promise<boolean> {
     const metadata: TRoleDecoratorMetadata = this.reflector.get(
       'authMetadata',
       context.getHandler(),
@@ -41,7 +38,7 @@ export class AuthGuard implements CanActivate {
     // Check token from header
 
     try {
-      const payload = this.strategy.validate(tokenFromHeader);
+      const payload = await this.strategy.validate(tokenFromHeader);
       creds.push(payload);
     } catch (e) {
       // Do nothing
@@ -49,7 +46,7 @@ export class AuthGuard implements CanActivate {
 
     // Check token from cookie
     try {
-      const payload = this.strategy.validate(tokenFromCookie);
+      const payload = await this.strategy.validate(tokenFromCookie);
       creds.push(payload);
     } catch (e) {
       // Do nothing
@@ -81,7 +78,7 @@ export class AuthGuard implements CanActivate {
       return false;
     }
 
-    // Here it means one of the following conditions is met:
+    // Here, it means one of the following conditions is met:
     // 1. no creds and roles includes 'GUEST'
     // 2. have creds and roles includes the role of the user
 
@@ -111,6 +108,7 @@ export class AuthGuard implements CanActivate {
       return false;
     }
 
+    console.log(roles, creds[0].role);
     if (!roles.includes(creds[0].role)) {
       return false;
     }

@@ -7,20 +7,15 @@ import {
 } from '@nestjs/common';
 import { RegisterDto, SignInDto } from './dto';
 import * as argon from 'argon2';
-import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { IAuthStrategy } from './strategy';
-import { PrismaService } from '../prisma/prisma.service';
-import { User } from '../user/user.entity';
-import { TLoginPostData, TResponseStatus } from 'src/common/types';
-import { ExtendedRequest } from 'src/common/interfaces/request.interface';
+import { TLoginPostData, TResponseStatus, TRole } from 'src/common/types';
+import { UserRepository } from '../user/repository';
 
 @Injectable()
 export class AuthService {
   constructor(
-    private prismaService: PrismaService,
-    private jwt: JwtService,
-    private config: ConfigService,
+    private userRepo: UserRepository,
     @Inject('AUTH_STRATEGY') private authStrategy: IAuthStrategy,
   ) {}
 
@@ -28,44 +23,34 @@ export class AuthService {
     try {
       const hashed = await argon.hash(dto.password);
 
-      const usernameExist = await new User(this.prismaService).findByUsername(
-        dto.username,
-      );
-      const emailExist = await new User(this.prismaService).findByEmail(
-        dto.email,
-      );
+      const usernameExist = await this.userRepo.findByUsername(dto.username);
+      const emailExist = await this.userRepo.findByEmail(dto.email);
 
-      if (usernameExist.getIsReady()) {
+      if (usernameExist) {
         throw new ForbiddenException('Username already exists');
       }
 
-      if (emailExist.getIsReady()) {
+      if (emailExist) {
         throw new ForbiddenException('Email already exists');
       }
 
-      const user = await new User(this.prismaService).create({
-        email: dto.email,
+      const user = await this.userRepo.create({
         username: dto.username,
+        email: dto.email,
+        hashedPassword: hashed,
         firstName: dto.firstName,
         lastName: dto.lastName,
-        hashedPassword: hashed,
+        balance: 0,
       });
 
       return {
         status: 'success',
         message: 'User created',
         data: {
-          id: user.getId(),
-          username: user.getUsername(),
-          email: user.getEmail(),
-          token: await this.signToken({
-            userId: user.getId(),
-            username: user.getUsername(),
-            email: user.getEmail(),
-            firstName: user.getFirstName(),
-            lastName: user.getLastName(),
-            role: user.getRole(),
-          }),
+          id: user.id,
+          username: user.username,
+          email: user.email,
+          token: await this.signToken(user.id),
         },
       };
     } catch (error) {
@@ -78,11 +63,9 @@ export class AuthService {
   }
 
   async signIn(dto: SignInDto): Promise<TResponseStatus<TLoginPostData>> {
-    const user = await new User(this.prismaService).findByUsername(
-      dto.username,
-    );
+    const user = await this.userRepo.findByUsername(dto.username);
 
-    if (!user.getIsReady()) {
+    if (!user) {
       return {
         status: 'error',
         message: 'Invalid credentials',
@@ -90,7 +73,7 @@ export class AuthService {
       };
     }
 
-    const valid = await argon.verify(user.getHashedPassword(), dto.password);
+    const valid = await argon.verify(user.hashedPassword, dto.password);
 
     if (!valid) {
       return {
@@ -104,47 +87,14 @@ export class AuthService {
       status: 'success',
       message: "User's credentials are valid",
       data: {
-        id: user.getId(),
-        username: user.getUsername(),
-        email: user.getEmail(),
-        token: await this.signToken({
-          userId: user.getId(),
-          username: user.getUsername(),
-          email: user.getEmail(),
-          firstName: user.getFirstName(),
-          lastName: user.getLastName(),
-          role: user.getRole(),
-        }),
+        username: user.username,
+        token: await this.signToken(user.id),
       },
     };
   }
 
-  async signToken({
-    userId,
-    username,
-    email,
-    firstName,
-    lastName,
-    role,
-  }: {
-    userId: string;
-    username: string;
-    email: string;
-    firstName: string;
-    lastName: string;
-    role: string;
-  }) {
-    const payload = { userId, username, email, firstName, lastName, role };
-    const secret = this.config.get<string>('JWT_SECRET');
-
-    const token = await this.jwt.signAsync(payload, {
-      secret,
-    });
-
+  async signToken(id: string) {
+    const token = await this.authStrategy.getToken(id);
     return token;
-  }
-
-  async validateToken(token: string) {
-    return this.jwt.verifyAsync(token);
   }
 }

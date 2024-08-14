@@ -2,7 +2,6 @@ import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
 import { SignInDto } from './auth/dto';
 import { AuthService } from './auth/auth.service';
 import { TLoginPostData, TResponseStatus } from '../common/types';
-import { ConfigService } from '@nestjs/config';
 import { AuthGuard } from './auth/auth.guard';
 import { Request } from 'express';
 import { Roles } from 'src/common/decorator/roles.decorator';
@@ -11,10 +10,7 @@ import { ExtendedRequest } from 'src/common/interfaces/request.interface';
 @UseGuards(AuthGuard)
 @Controller('')
 export class AppController {
-  constructor(
-    private authService: AuthService,
-    private config: ConfigService,
-  ) {}
+  constructor(private authService: AuthService) {}
 
   @Post('login')
   @Roles(['GUEST'])

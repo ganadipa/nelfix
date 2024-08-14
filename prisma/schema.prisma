@@ -28,4 +28,20 @@ model User {
   lastName       String
   role           Role
   hashedPassword String
+  balance        Int      @default(0)
+}
+
+model Film {
+  id          String   @id @default(uuid())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @default(now()) @updatedAt
+  title       String
+  description String
+  director    String
+  releaseYear Int
+  genre       String[]
+  price       Int
+  duration    Int
+  videoUrl    String
+  imageUrl    String?
 }

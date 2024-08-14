@@ -6,8 +6,18 @@ import {
 } from '@nestjs/common';
 import { Response } from 'express';
 
+type TExceptionResponse = {
+  error: string;
+  message: string | string[];
+  statusCode: number;
+};
+
 /**
- * This
+ * This filter is used to catch all exceptions that are thrown in the application
+ * and return a consistent response format.
+ *
+ * This is used globally in the main application file.
+ * by adding `app.useGlobalFilters(new BaseResponseExceptionFilter());`
  */
 @Catch(HttpException)
 export class BaseResponseExceptionFilter implements ExceptionFilter {
@@ -20,11 +30,18 @@ export class BaseResponseExceptionFilter implements ExceptionFilter {
     }
 
     const status = exception.getStatus();
-    const exceptionResponse = exception.getResponse();
+    const exceptionResponse = exception.getResponse() as TExceptionResponse;
+
+    let message: string = '';
+    if (typeof exceptionResponse.message === 'string') {
+      message = exceptionResponse.message;
+    } else {
+      message = exceptionResponse.message[0];
+    }
 
     response.status(status).json({
       status: 'error',
-      message: (exceptionResponse as any).message,
+      message,
       data: null,
     });
   }

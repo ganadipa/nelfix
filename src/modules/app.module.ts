@@ -8,6 +8,7 @@ import { JwtService } from '@nestjs/jwt';
 import { AuthModule } from './auth/auth.module';
 import { ApiModule } from './api/api.module';
 import { AuthService } from './auth/auth.service';
+import { FilmModule } from './film/film.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { AuthService } from './auth/auth.service';
     PrismaModule,
     WebModule,
     ApiModule,
+    FilmModule,
   ],
   controllers: [AppController],
   providers: [AuthService, JwtService],

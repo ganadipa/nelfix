@@ -3,8 +3,9 @@ import { AppModule } from './modules/app.module';
 import { ValidationPipe } from '@nestjs/common';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { join } from 'path';
-import * as hbs from 'hbs';
 import { BaseResponseExceptionFilter } from './common/filters/base-response-exception-filter';
+import { AuthGuard } from './modules/auth/auth.guard';
+import * as hbs from 'hbs';
 
 async function bootstrap() {
   // init app
@@ -24,6 +25,10 @@ async function bootstrap() {
 
   // use custom exception filter - base response exception filter
   app.useGlobalFilters(new BaseResponseExceptionFilter());
+
+  // Use global guards
+  const authGuard = app.get(AuthGuard);
+  app.useGlobalGuards(authGuard);
 
   // static files
   app.useStaticAssets(join(__dirname, '..', 'public'));

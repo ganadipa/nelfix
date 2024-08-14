@@ -1,6 +1,7 @@
-import { Request, Response } from 'express';
 import { TUser } from 'src/common/types';
+export * from './jwt.strategy';
 
 export interface IAuthStrategy {
-  validate(token: string): TUser;
+  validate(token: string): Promise<TUser>;
+  getToken(id: string): Promise<string>;
 }

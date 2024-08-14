@@ -7,10 +7,7 @@ import { TLoginPostData, TResponseStatus } from 'src/common/types';
 
 @Controller('api')
 export class ApiController {
-  constructor(
-    private authService: AuthService,
-    private config: ConfigService,
-  ) {}
+  constructor(private authService: AuthService) {}
 
   @Post('register')
   register(@Body() body: RegisterDto) {
@@ -21,7 +18,6 @@ export class ApiController {
   async signIn(
     @Body() body: SignInDto,
     @Res() res: Response,
-    @Req() req: Request,
   ): Promise<TResponseStatus<TLoginPostData>> {
     const resp = await this.authService.signIn(body);
 
