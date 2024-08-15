@@ -5,12 +5,14 @@ import { v4 as uuidv4 } from 'uuid';
 import { Film } from './film.entity';
 import { FilmRepository } from './repository/film.repository';
 import { TPrismaFilm } from 'src/common/types';
+import { BoughtFilmRepository } from '../bought-film/repository';
 
 @Injectable()
 export class FilmService {
   constructor(
     private firebaseRepository: FirebaseRepository,
     private readonly filmRepository: FilmRepository,
+    private readonly boughtFilmRepository: BoughtFilmRepository,
   ) {}
 
   async createFilm(
@@ -187,6 +189,33 @@ export class FilmService {
       status: 'success',
       message: 'Film deleted successfully!',
       data: deletedFilm,
+    };
+  }
+
+  async buyFilm(userId: string, filmId: string) {
+    // Check if the user has already bought the film
+    const boughtFilm =
+      await this.boughtFilmRepository.getBoughtFilmByUserIdAndFilmId(
+        userId,
+        filmId,
+      );
+    if (boughtFilm) {
+      // Bad Request
+      return {
+        status: 'error',
+        message: 'Film already bought!',
+        data: null,
+      };
+    }
+
+    // Create a new bought film record
+    await this.boughtFilmRepository.create({ userId, filmId });
+
+    // OK
+    return {
+      status: 'success',
+      message: 'Film bought successfully!',
+      data: { user_id: userId, film_id: filmId },
     };
   }
 }

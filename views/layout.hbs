@@ -1,0 +1,10 @@
+<html>
+{{> head title=title}}
+  <body class="min-h-screen bg-gray-900 max-w-[2000px] mx-auto relative">
+    {{> navbar user=user pathname=pathname}}
+    <main class="container mx-auto max-w-7xl p-4 flex items-center justify-center flex-col">
+    {{{body}}}
+    </main>
+    <script src="{{script}}"></script>
+  </body>
+</html>

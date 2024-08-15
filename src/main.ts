@@ -6,6 +6,7 @@ import { join } from 'path';
 import { BaseResponseExceptionFilter } from './common/filters/base-response-exception-filter';
 import { AuthGuard } from './modules/auth/auth.guard';
 import * as hbs from 'hbs';
+import './hbs-helper';
 
 async function bootstrap() {
   // init app

@@ -36,7 +36,6 @@ export class AuthGuard implements CanActivate {
     let creds: TUser[] = [];
 
     // Check token from header
-
     try {
       const payload = await this.strategy.validate(tokenFromHeader);
       creds.push(payload);
@@ -67,6 +66,7 @@ export class AuthGuard implements CanActivate {
     const roles = metadata.roles;
     const redirectPath = metadata.redirectPath;
     const isAllowed = this.checkCondition(roles, creds);
+    console.log(creds);
 
     if (!isAllowed && redirectPath) {
       const response = context.switchToHttp().getResponse();

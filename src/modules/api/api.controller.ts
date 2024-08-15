@@ -4,17 +4,20 @@ import { Request, Response } from 'express';
 import { AuthService } from '../auth/auth.service';
 import { RegisterDto, SignInDto } from '../auth/dto';
 import { TLoginPostData, TResponseStatus } from 'src/common/types';
+import { Roles } from 'src/common/decorator/roles.decorator';
 
 @Controller('api')
 export class ApiController {
   constructor(private authService: AuthService) {}
 
   @Post('register')
+  @Roles(['GUEST'])
   register(@Body() body: RegisterDto) {
     return this.authService.register(body);
   }
 
   @Post('login')
+  @Roles(['GUEST'])
   async signIn(
     @Body() body: SignInDto,
     @Res() res: Response,

@@ -4,7 +4,6 @@ import { AuthGuard } from './auth.guard';
 import { Roles } from 'src/common/decorator/roles.decorator';
 
 @Controller('auth')
-@UseGuards(AuthGuard)
 export class AuthController {
   constructor(private authService: AuthService) {}
 

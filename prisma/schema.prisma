@@ -19,22 +19,23 @@ enum Role {
 }
 
 model User {
-  id             String   @id @default(uuid())
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @default(now()) @updatedAt
-  username       String   @unique
-  email          String   @unique
+  id             String       @id @default(uuid())
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @default(now()) @updatedAt
+  username       String       @unique
+  email          String       @unique
   firstName      String
   lastName       String
-  role           Role
+  role           Role         @default(USER)
   hashedPassword String
-  balance        Int      @default(0)
+  balance        Int          @default(0)
+  BoughtFilm     BoughtFilm[]
 }
 
 model Film {
-  id          String   @id @default(uuid())
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @default(now()) @updatedAt
+  id          String       @id @default(uuid())
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @default(now()) @updatedAt
   title       String
   description String
   director    String
@@ -44,4 +45,14 @@ model Film {
   duration    Int
   videoUrl    String
   imageUrl    String?
+  BoughtFilm  BoughtFilm[]
+}
+
+model BoughtFilm {
+  id          String   @id @default(uuid())
+  purchasedAt DateTime @default(now())
+  userId      String
+  filmId      String
+  user        User     @relation(fields: [userId], references: [id])
+  film        Film     @relation(fields: [filmId], references: [id])
 }

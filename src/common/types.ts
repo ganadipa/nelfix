@@ -84,3 +84,10 @@ export type TPrismaUser = {
   hashedPassword: string;
   balance: number;
 };
+
+export type TPrismaBoughtFilm = {
+  id: string;
+  purchasedAt: Date;
+  userId: string;
+  filmId: string;
+};

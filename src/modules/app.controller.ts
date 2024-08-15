@@ -2,12 +2,9 @@ import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
 import { SignInDto } from './auth/dto';
 import { AuthService } from './auth/auth.service';
 import { TLoginPostData, TResponseStatus } from '../common/types';
-import { AuthGuard } from './auth/auth.guard';
-import { Request } from 'express';
 import { Roles } from 'src/common/decorator/roles.decorator';
 import { ExtendedRequest } from 'src/common/interfaces/request.interface';
 
-@UseGuards(AuthGuard)
 @Controller('')
 export class AppController {
   constructor(private authService: AuthService) {}
@@ -16,7 +13,6 @@ export class AppController {
   @Roles(['GUEST'])
   async signIn(
     @Body() body: SignInDto,
-    @Req() req: Request,
   ): Promise<TResponseStatus<TLoginPostData>> {
     const resp = await this.authService.signIn(body);
     return resp;
