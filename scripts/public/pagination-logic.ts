@@ -58,7 +58,6 @@ class PaginationContainer {
     // render the page buttons
     elements.forEach((element, index) => {
       if (element.willBeShown) {
-        console.log('idx', index);
         const pageLink = document.createElement('a');
         this.pageButtonGenerator(pageLink, element.page, element.active);
         this.paginationContainer.appendChild(pageLink);

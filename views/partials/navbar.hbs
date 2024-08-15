@@ -10,13 +10,18 @@
     <div class="flex items-center">
       <ul class="flex space-x-4">
         <li>
-          <a href="/web/films" class="text-white hover:text-gray-300 {{#if (eq pathname '/web/films')}}border-b-2 border-white{{/if}}">
+          <a href="/web/films" class="text-white hover:text-gray-300 {{#if (eq pathname '/web/films')}}border-b-2 p-1 border-white{{/if}}">
             Films
           </a>
         </li>
         <li>
-          <a href="/web/profile" class="text-white hover:text-gray-300 {{#if (eq pathname '/web/profile')}}border-b-2 border-white{{/if}}">
+          <a href="/web/profile" class="text-white hover:text-gray-300 {{#if (eq pathname '/web/profile')}}border-b-2 p-2 border-white{{/if}}">
           Profile
+          </a>
+        </li>
+        <li>
+          <a href="/web/my-list" class="text-white hover:text-gray-300 {{#if (eq pathname '/web/my-list')}}border-b-2 border-white{{/if}}">
+          Purchased
           </a>
         </li>
       </ul>

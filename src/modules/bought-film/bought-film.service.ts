@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
 import { BoughtFilmRepository } from './repository';
 import { FilmRepository } from '../film/repository';
 import { TFilmJson, TPrismaFilm } from 'src/common/types';
@@ -45,11 +45,8 @@ export class BoughtFilmService {
   async buyFilm(userId: string, filmId: string) {
     const film = await this.filmRepository.findById(filmId);
     if (!film) {
-      return {
-        status: 'success',
-        message: 'Film not found!',
-        data: null,
-      };
+      // throw relevant http exception
+      throw new Error('Film not found!');
     }
 
     const boughtFilm =
@@ -58,11 +55,7 @@ export class BoughtFilmService {
         filmId,
       );
     if (boughtFilm) {
-      return {
-        status: 'success',
-        message: 'Film already bought!',
-        data: null,
-      };
+      throw new Error('Film already bought!');
     }
 
     const information = await this.boughtFilmRepository.create({
@@ -71,10 +64,43 @@ export class BoughtFilmService {
     });
 
     // OK
-    return {
-      status: 'success',
-      message: 'Film bought successfully!',
-      data: information,
-    };
+    return information;
+  }
+
+  async hadBought(userId: string, filmId: string) {
+    const boughtFilm =
+      await this.boughtFilmRepository.getBoughtFilmByUserIdAndFilmId(
+        userId,
+        filmId,
+      );
+    if (!boughtFilm) {
+      return false;
+    }
+
+    const film = await this.filmRepository.findById(filmId);
+    if (!film) {
+      throw new Error('Film not found!');
+    }
+
+    const filmJson = new Film(film).toJSON();
+
+    // OK
+    return true;
+  }
+
+  async getBoughtFilmsByUserId(userId: string) {
+    const boughtFilms =
+      await this.boughtFilmRepository.getBoughtFilmsByUserId(userId);
+    const films = await this.filmRepository.getAll();
+
+    const boughtMap = new Map<string, boolean>();
+    boughtFilms.forEach((film) => boughtMap.set(film.filmId, true));
+
+    const returnedFilms = films
+      .filter((film) => boughtMap.has(film.id))
+      .map((film) => new Film(film).toJSON());
+
+    // OK
+    return returnedFilms;
   }
 }

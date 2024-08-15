@@ -8,14 +8,14 @@ export class AuthController {
   constructor(private authService: AuthService) {}
 
   @Get('login')
-  @Render('auth/login/index')
+  @Render('auth/login')
   @Roles(['GUEST'], '/web/films')
   getLogin() {
     return { message: 'Hello world!' };
   }
 
   @Get('register')
-  @Render('auth/register/index')
+  @Render('auth/register')
   @Roles(['GUEST'], '/web/films')
   getRegister() {
     return {

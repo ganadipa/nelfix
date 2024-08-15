@@ -5,15 +5,31 @@ import { AuthService } from '../auth/auth.service';
 import { RegisterDto, SignInDto } from '../auth/dto';
 import { TLoginPostData, TResponseStatus } from 'src/common/types';
 import { Roles } from 'src/common/decorator/roles.decorator';
+import { FilmService } from '../film/film.service';
+import { ExtendedRequest } from 'src/common/interfaces/request.interface';
 
 @Controller('api')
 export class ApiController {
-  constructor(private authService: AuthService) {}
+  constructor(
+    private authService: AuthService,
+    private filmService: FilmService,
+  ) {}
 
   @Post('register')
   @Roles(['GUEST'])
   register(@Body() body: RegisterDto) {
-    return this.authService.register(body);
+    try {
+      return {
+        status: 'success',
+        message: 'User registered successfully',
+        data: this.authService.register(body),
+      };
+    } catch (e) {
+      return {
+        status: 'error',
+        message: e.message,
+      };
+    }
   }
 
   @Post('login')
@@ -34,5 +50,23 @@ export class ApiController {
 
     res.status(200).json(resp);
     return;
+  }
+
+  @Post('buy-film')
+  @Roles(['USER'])
+  async buyFilm(@Req() req: ExtendedRequest) {
+    try {
+      return {
+        status: 'success',
+        message: 'Film was successfully bought',
+        data: await this.filmService.buyFilm(req.user.id, req.body.filmId),
+      };
+    } catch (e) {
+      return {
+        status: 'error',
+        message: e.message,
+        data: null,
+      };
+    }
   }
 }

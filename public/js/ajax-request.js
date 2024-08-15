@@ -25,32 +25,25 @@ export class AjaxRequest {
                 if (this.isValidSuccessResponse(jsonData)) {
                     return jsonData;
                 }
-                else if (this.isErrorResponseExpected(jsonData)) {
-                    return jsonData;
-                }
                 else {
                     return {
-                        error: 'Invalid Response',
-                        message: ['Invalid response from the server'],
-                        statusCode: 500,
+                        status: 'error',
+                        message: jsonData.message,
+                        data: null,
                     };
                 }
             }
             catch (error) {
                 return {
-                    error: 'Fetch Error',
-                    message: error instanceof Error ? [error.message] : ['Unknown error'],
-                    statusCode: 500,
+                    status: 'error',
+                    message: error.message,
+                    data: null,
                 };
             }
         });
     }
     isValidSuccessResponse(data) {
         return 'status' in data && data.status === 'success' && 'data' in data;
-    }
-    isErrorResponseExpected(data) {
-        return (('error' in data && 'message' in data && 'statusCode' in data) ||
-            ('status' in data && data.status === 'error'));
     }
 }
 //# sourceMappingURL=ajax-request.js.map

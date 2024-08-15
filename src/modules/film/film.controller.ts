@@ -21,8 +21,20 @@ export class FilmController {
 
   @Get('')
   @Roles(['ADMIN'])
-  postFilms(@Query('q') q: string) {
-    return this.filmService.getFilms(q);
+  async postFilms(@Query('q') q: string) {
+    try {
+      return {
+        status: 'success',
+        message: 'Films retrieved',
+        data: await this.filmService.getFilms(q),
+      };
+    } catch (e) {
+      return {
+        status: 'error',
+        message: e.message,
+        data: null,
+      };
+    }
   }
 
   @Post('')
@@ -33,7 +45,7 @@ export class FilmController {
       { name: 'cover_image', maxCount: 1 },
     ]),
   )
-  createFilm(
+  async createFilm(
     @UploadedFiles()
     files: {
       video: Express.Multer.File[];
@@ -41,13 +53,37 @@ export class FilmController {
     },
     @Body() createItemDto: FilmDto,
   ) {
-    return this.filmService.createFilm(createItemDto, files);
+    try {
+      return {
+        status: 'success',
+        message: 'Film created',
+        data: await this.filmService.createFilm(createItemDto, files),
+      };
+    } catch (e) {
+      return {
+        status: 'error',
+        message: e.message,
+        data: null,
+      };
+    }
   }
 
   @Get(':id')
   @Roles(['ADMIN'])
-  getFilm(@Param('id') id: string) {
-    return this.filmService.getFilm(id);
+  async getFilm(@Param('id') id: string) {
+    try {
+      return {
+        status: 'success',
+        message: 'Film retrieved',
+        data: await this.filmService.getFilm(id),
+      };
+    } catch (e) {
+      return {
+        status: 'error',
+        message: e.message,
+        data: null,
+      };
+    }
   }
 
   @Put(':id')
@@ -67,12 +103,36 @@ export class FilmController {
     @Body() updateItemDto: FilmDto,
     @Param('id') id: string,
   ) {
-    return this.filmService.updateFilm(updateItemDto, files, id);
+    try {
+      return {
+        status: 'success',
+        message: 'Film updated',
+        data: this.filmService.updateFilm(updateItemDto, files, id),
+      };
+    } catch (e) {
+      return {
+        status: 'error',
+        message: e.message,
+        data: null,
+      };
+    }
   }
 
   @Delete(':id')
   @Roles(['ADMIN'])
   deleteFilm(@Param('id') id: string) {
-    return this.filmService.deleteFilm(id);
+    try {
+      return {
+        status: 'success',
+        message: 'Film deleted',
+        data: this.filmService.deleteFilm(id),
+      };
+    } catch (e) {
+      return {
+        status: 'error',
+        message: e.message,
+        data: null,
+      };
+    }
   }
 }

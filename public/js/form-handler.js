@@ -38,19 +38,11 @@ export class FormHandler {
             });
             const ajaxRequest = new AjaxRequest(this.url);
             const resp = yield ajaxRequest.post(data);
-            if ('status' in resp && 'message' in resp) {
-                if (resp.status === 'success') {
-                    this.onSuccess(resp);
-                }
-                else {
-                    this.onFail(resp);
-                }
+            if (resp.status === 'success') {
+                this.onSuccess(resp);
             }
             else {
-                this.onFail({
-                    status: 'error',
-                    message: resp.message[0],
-                });
+                this.onFail(resp);
             }
         });
     }

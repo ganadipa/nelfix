@@ -66,7 +66,6 @@ export class AuthGuard implements CanActivate {
     const roles = metadata.roles;
     const redirectPath = metadata.redirectPath;
     const isAllowed = this.checkCondition(roles, creds);
-    console.log(creds);
 
     if (!isAllowed && redirectPath) {
       const response = context.switchToHttp().getResponse();
@@ -108,7 +107,6 @@ export class AuthGuard implements CanActivate {
       return false;
     }
 
-    console.log(roles, creds[0].role);
     if (!roles.includes(creds[0].role)) {
       return false;
     }

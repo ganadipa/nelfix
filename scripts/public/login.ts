@@ -1,5 +1,5 @@
 import { FormHandler } from './form-handler.js';
-import { TAuthPostData, TResponseStatus } from './types.js';
+import { TLoginPostData, TResponseStatus } from './types.js';
 
 document.addEventListener('DOMContentLoaded', () => {
   // get the form element
@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
   ) as HTMLDivElement;
 
   // create new FormHandler instance
-  const handler = new FormHandler<TResponseStatus<TAuthPostData>>(
+  const handler = new FormHandler<TResponseStatus<TLoginPostData>>(
     form,
     '/api/login',
   );

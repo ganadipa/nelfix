@@ -18,27 +18,41 @@ export class UserController {
 
   @Get('')
   @Roles(['ADMIN'])
-  getUsers(@Query('q') q: string, @Req() req: ExtendedRequest) {
-    console.log(req.user);
-
-    return this.userService.getUsers(q);
+  async getUsers(@Query('q') q: string, @Req() req: ExtendedRequest) {
+    return {
+      status: 'success',
+      message: 'Users fetched successfully',
+      data: await this.userService.getUsers(q),
+    };
   }
 
   @Get(':id')
   @Roles(['ADMIN'])
-  getUser(@Param('id') id: string) {
-    return this.userService.getUser(id);
+  async getUser(@Param('id') id: string) {
+    return {
+      status: 'success',
+      message: 'User fetched successfully',
+      data: await this.userService.getUser(id),
+    };
   }
 
   @Post(':id/balance')
   @Roles(['ADMIN'])
-  addBalance(@Param('id') id: string, @Body('increment') inc: number) {
-    return this.userService.addBalance(id, inc);
+  async addBalance(@Param('id') id: string, @Body('increment') inc: number) {
+    return {
+      status: 'success',
+      message: 'Balance updated successfully',
+      data: await this.userService.addBalance(id, inc),
+    };
   }
 
   @Delete(':id')
   @Roles(['ADMIN'])
-  deleteUser(@Param('id') id: string) {
-    return this.userService.deleteUser(id);
+  async deleteUser(@Param('id') id: string) {
+    return {
+      status: 'success',
+      message: 'User deleted successfully',
+      data: await this.userService.deleteUser(id),
+    };
   }
 }

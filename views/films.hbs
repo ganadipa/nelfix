@@ -2,7 +2,7 @@
   {{#if films.length}}
     <div class="font-sans font-semibold mx-auto grid grid-cols-4 gap-3.5 auto-cols-max">
       {{#each films}}
-        <a class='bg-gray-700 hover:bg-gray-600 rounded-lg shadow-lg hover:shadow-2xl transition duration-300 ease-in-out overflow-hidden cursor-pointer flex flex-col justify-between' href="/web/films/{{this.id}}">
+        <a class='bg-gray-700 hover:bg-gray-600 rounded-lg shadow-lg hover:shadow-2xl transition relative duration-300 ease-in-out overflow-hidden cursor-pointer flex flex-col justify-between' href="/web/films/{{this.id}}">
           <img src='{{#if this.cover_image_url}}{{this.cover_image_url}}{{else}}/placeholder.jpg{{/if}}' alt='{{this.title}}' class='w-full h-[200px] object-cover' />
           <div class='p-4 text-gray-300 flex flex-col gap-1.5'>
             <h2 class="text-xl font-bold line-clamp-2">{{this.title}} ({{this.release_year}})</h2>
@@ -17,6 +17,11 @@
                 <img src="/coin.png" alt="Coin" class="h-4 inline" />
               </div>
           </div>
+          {{#if this.is_bought}}
+            <div class="absolute top-0 left-0 w-full h-full bg-black bg-opacity-50 flex items-center justify-center">
+              <div class="bg-blue-800 text-white px-4 py-2 rounded-lg">Purchased</div>
+            </div>
+          {{/if}}
         </a>
       {{/each}}
     </div>

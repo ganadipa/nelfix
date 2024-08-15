@@ -27,6 +27,7 @@ export class FilmDto {
   @IsArray()
   @ArrayNotEmpty()
   @IsString({ each: true })
+  @Transform(({ value }) => (Array.isArray(value) ? value : [value]))
   genre: string[];
 
   @Transform(({ value }) => parseFloat(value), { toClassOnly: true })

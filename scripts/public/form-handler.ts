@@ -53,17 +53,10 @@ export class FormHandler<
 
     const ajaxRequest = new AjaxRequest<T>(this.url);
     const resp = await ajaxRequest.post(data);
-    if ('status' in resp && 'message' in resp) {
-      if (resp.status === 'success') {
-        this.onSuccess(resp);
-      } else {
-        this.onFail(resp);
-      }
+    if (resp.status === 'success') {
+      this.onSuccess(resp);
     } else {
-      this.onFail({
-        status: 'error',
-        message: resp.message[0],
-      });
+      this.onFail(resp);
     }
   }
 }

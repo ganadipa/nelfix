@@ -1,4 +1,4 @@
-import { Injectable, Query } from '@nestjs/common';
+import { ForbiddenException, Injectable, Query } from '@nestjs/common';
 import { FilmDto } from './dto/film.dto';
 import { FirebaseRepository } from '../firebase/firebase.repository';
 import { v4 as uuidv4 } from 'uuid';
@@ -6,6 +6,7 @@ import { Film } from './film.entity';
 import { FilmRepository } from './repository/film.repository';
 import { TPrismaFilm } from 'src/common/types';
 import { BoughtFilmRepository } from '../bought-film/repository';
+import { UserService } from '../user/user.service';
 
 @Injectable()
 export class FilmService {
@@ -13,6 +14,7 @@ export class FilmService {
     private firebaseRepository: FirebaseRepository,
     private readonly filmRepository: FilmRepository,
     private readonly boughtFilmRepository: BoughtFilmRepository,
+    private readonly userService: UserService,
   ) {}
 
   async createFilm(
@@ -47,36 +49,22 @@ export class FilmService {
       videoUrl,
       imageUrl,
     };
-    console.log(imageUrl);
+    imageUrl;
 
     const prismaFilm = await this.filmRepository.create(filmData);
     const filmInstance = new Film(prismaFilm);
 
     // OK
-    return {
-      status: 'success',
-      message: 'Film created successfully!',
-      data: filmInstance.toJSON(),
-    };
+    return filmInstance.toJSON();
   }
 
   async getFilm(id: string) {
     const film = await this.filmRepository.findById(id);
     if (!film) {
-      // Not Found
-      return {
-        status: 'error',
-        message: 'Film not found!',
-        data: null,
-      };
+      throw new Error('Film not found!');
     }
 
-    // OK
-    return {
-      status: 'success',
-      message: 'Film fetched successfully!',
-      data: new Film(film).toJSON(),
-    };
+    return new Film(film).toJSON();
   }
 
   async getFilms(q: string) {
@@ -97,16 +85,11 @@ export class FilmService {
       (film) => new Film(film),
     );
 
-    // OK
-    return {
-      status: 'success',
-      message: 'Films fetched successfully!',
-      data: filmInstances.map((film) => {
-        const json = film.toJSON();
-        delete json.video_url;
-        return json;
-      }),
-    };
+    return filmInstances.map((film) => {
+      const filmJson = film.toJSON();
+      delete filmJson.video_url;
+      return filmJson;
+    });
   }
 
   async updateFilm(
@@ -119,12 +102,7 @@ export class FilmService {
   ) {
     const oldFilm = await this.filmRepository.findById(id);
     if (!oldFilm) {
-      // Not Found
-      return {
-        status: 'error',
-        message: 'Film not found!',
-        data: null,
-      };
+      throw new Error('Film not found!');
     }
 
     let videoUrl = oldFilm.videoUrl;
@@ -159,22 +137,14 @@ export class FilmService {
     const updatedFilm = await this.filmRepository.update(id, updatedFilmData);
 
     // OK
-    return {
-      status: 'success',
-      message: 'Film updated successfully!',
-      data: new Film(updatedFilm).toJSON(),
-    };
+    return new Film(updatedFilm).toJSON();
   }
 
   async deleteFilm(id: string) {
     const film = await this.filmRepository.findById(id);
     if (!film) {
       // Not Found
-      return {
-        status: 'error',
-        message: 'Film not found!',
-        data: null,
-      };
+      throw new Error('Film not found!');
     }
 
     const prismaFilm = await this.filmRepository.delete(id);
@@ -185,11 +155,7 @@ export class FilmService {
     delete deletedFilm.cover_image_url;
 
     // OK
-    return {
-      status: 'success',
-      message: 'Film deleted successfully!',
-      data: deletedFilm,
-    };
+    return deletedFilm;
   }
 
   async buyFilm(userId: string, filmId: string) {
@@ -200,22 +166,25 @@ export class FilmService {
         filmId,
       );
     if (boughtFilm) {
-      // Bad Request
-      return {
-        status: 'error',
-        message: 'Film already bought!',
-        data: null,
-      };
+      throw new Error('Film already bought!');
     }
+
+    const user = await this.userService.getUser(userId);
+    const film = await this.filmRepository.findById(filmId);
+
+    if (user.balance < film.price) {
+      throw new Error('Insufficient balance!');
+    }
+
+    // Update the user's balance
+    await this.userService.addBalance(userId, -film.price);
 
     // Create a new bought film record
     await this.boughtFilmRepository.create({ userId, filmId });
 
+    const filmJson = new Film(film).toJSON();
+
     // OK
-    return {
-      status: 'success',
-      message: 'Film bought successfully!',
-      data: { user_id: userId, film_id: filmId },
-    };
+    return { ...filmJson, is_bought: true };
   }
 }
