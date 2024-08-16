@@ -10,6 +10,7 @@
     "db:dev:rm": "docker compose rm db -s -f -v",
     "db:dev:up": "docker compose up db -d",
     "db:dev:restart": "pnpm run db:dev:rm && pnpm run db:dev:up && sleep 2 && pnpm run prisma:dev:deploy",
+    "docker:db": "pnpm prisma migrate dev && pnpm run prisma:dev:deploy",
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
@@ -23,7 +24,8 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "build:css": "tailwindcss -i ./public/styles.css -o ./public/tailwind.css --watch",
-    "gana:dev": "service postgresql stop && pnpm db:dev:restart && pnpm start:dev"
+    "gana:dev": "service postgresql stop && pnpm db:dev:restart && pnpm start:dev",
+    "start:migrate:dev": "pnpm prisma migrate deploy && pnpm start:dev"
   },
   "dependencies": {
     "@nestjs/common": "^10.0.0",

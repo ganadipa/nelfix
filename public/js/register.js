@@ -34,12 +34,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const loginLink = form.querySelector('a');
         loginLink.setAttribute('href', '#');
         loginLink.classList.add('hidden');
-        // set the response message
-        responseContainer.innerText = 'Loading...';
-        // remove the success and error classes
-        responseContainer.classList.remove('bg-green-100', 'text-green-800', 'border-green-400', 'bg-red-100', 'text-red-800', 'border-red-400');
-        // Add the loading classes
-        responseContainer.classList.add('bg-blue-100', 'text-blue-800', 'border-blue-400', 'mb-12');
     });
     // What happens when it is loaded?
     handler.setLoaded((form) => {
@@ -51,8 +45,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const loginLink = form.querySelector('a');
         loginLink.setAttribute('href', '/auth/login');
         loginLink.classList.remove('hidden');
-        // remove the loading classes
-        responseContainer.classList.remove('bg-blue-100', 'text-blue-800', 'border-blue-400');
     });
     // Ok, we are ready
     handler.set();
