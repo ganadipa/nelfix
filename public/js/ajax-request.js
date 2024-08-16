@@ -11,9 +11,6 @@ export class AjaxRequest {
     constructor(url) {
         this.url = url;
     }
-    sleep(ms) {
-        return new Promise((resolve) => setTimeout(resolve, ms));
-    }
     post(data) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
@@ -25,7 +22,6 @@ export class AjaxRequest {
                     body: JSON.stringify(data),
                 });
                 const jsonData = yield response.json();
-                yield this.sleep(5000);
                 if (this.isValidSuccessResponse(jsonData)) {
                     return jsonData;
                 }

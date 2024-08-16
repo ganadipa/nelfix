@@ -1,6 +1,5 @@
 import { Controller, Get, Post, Render, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { AuthGuard } from './auth.guard';
 import { Roles } from 'src/common/decorator/roles.decorator';
 
 @Controller('auth')
@@ -12,6 +11,8 @@ export class AuthController {
   @Roles(['GUEST'], '/web/films')
   getLogin() {
     return {
+      title: 'Login',
+
       fields: [
         { name: 'username', label: 'Username', type: 'text', required: true },
         {
@@ -29,6 +30,7 @@ export class AuthController {
   @Roles(['GUEST'], '/web/films')
   getRegister() {
     return {
+      title: 'Register',
       fields: [
         { name: 'email', label: 'Email', type: 'email', required: true },
         { name: 'username', label: 'Username', type: 'text', required: true },
