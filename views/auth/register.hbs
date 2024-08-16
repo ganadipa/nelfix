@@ -7,15 +7,12 @@
       <form id="register-form" >
         {{#each fields}}
           <div class="mb-4">
-            <label for="{{this.name}}" class="block text-gray-700 text-sm font-bold mb-2">
-              {{this.label}}:
-            </label>
-            <input type="{{this.type}}" id="{{this.name}}" name="{{this.name}}" required="{{this.required}}" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+          {{> input type=this.type name=this.name id=this.id label=this.label required=this.required}}
           </div>
         {{/each}}
         <div id="response-container" class="mt-4 p-4 rounded-sm text-xs"></div>
         <div class="flex items-center justify-between">
-          <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Register</button>
+                    <button type="submit" class="bg-blue-700 hover:bg-blue-200 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline disabled:bg-blue-200 disabled:cursor-not-allowed">Register</button>
           <a href="/auth/login" class="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800">Already have an account?</a>
         </div>
       </form>

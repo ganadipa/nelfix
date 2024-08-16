@@ -18,6 +18,8 @@ export class FormHandler<
     status: 'success' | 'error';
     message: string;
   }) => void;
+  private loading: (form: HTMLFormElement) => void;
+  private loaded: (form: HTMLFormElement) => void;
 
   constructor(
     private readonly form: HTMLFormElement,
@@ -41,6 +43,14 @@ export class FormHandler<
     this.onFail = callback;
   }
 
+  public setLoading(fn: (form: HTMLFormElement) => void): void {
+    this.loading = fn;
+  }
+
+  public setLoaded(fn: (form: HTMLFormElement) => void): void {
+    this.loaded = fn;
+  }
+
   private async handleSubmit(event: Event): Promise<void> {
     event.preventDefault();
 
@@ -52,7 +62,10 @@ export class FormHandler<
     });
 
     const ajaxRequest = new AjaxRequest<T>(this.url);
+    this.loading(this.form);
     const resp = await ajaxRequest.post(data);
+    this.loaded(this.form);
+
     if (resp.status === 'success') {
       this.onSuccess(resp);
     } else {

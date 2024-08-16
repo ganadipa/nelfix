@@ -11,7 +11,17 @@ export class AuthController {
   @Render('auth/login')
   @Roles(['GUEST'], '/web/films')
   getLogin() {
-    return { message: 'Hello world!' };
+    return {
+      fields: [
+        { name: 'username', label: 'Username', type: 'text', required: true },
+        {
+          name: 'password',
+          label: 'Password',
+          type: 'password',
+          required: true,
+        },
+      ],
+    };
   }
 
   @Get('register')

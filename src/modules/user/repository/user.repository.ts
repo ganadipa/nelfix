@@ -1,4 +1,4 @@
-import { TPrismaUser } from 'src/common/types';
+import { TPrismaUser, TRole } from 'src/common/types';
 import { IUserRepository } from '.';
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../../../modules/prisma/prisma.service';
@@ -8,12 +8,14 @@ export class UserRepository implements IUserRepository {
   constructor(private readonly prisma: PrismaService) {}
 
   create(
-    userData: Omit<TPrismaUser, 'id' | 'createdAt' | 'updatedAt' | 'role'>,
+    userData: Omit<TPrismaUser, 'id' | 'createdAt' | 'updatedAt' | 'role'> & {
+      role?: TRole;
+    },
   ): Promise<TPrismaUser> {
     return this.prisma.user.create({
       data: {
         ...userData,
-        role: 'USER',
+        role: userData.role || 'USER',
       },
     });
   }

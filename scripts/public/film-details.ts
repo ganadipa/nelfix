@@ -65,6 +65,12 @@ document.addEventListener('DOMContentLoaded', () => {
     ajaxRequest.post({ filmId }).then((resp) => {
       if (resp.status === 'success') {
         modalHandler.onSuccess(resp.message);
+
+        // then after 2s hide the modal
+        setTimeout(() => {
+          modalHandler.hide();
+          window.location.reload();
+        }, 2000);
       } else {
         modalHandler.onFail(resp.message);
       }
@@ -74,6 +80,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const confirmPurchaseButton = document.getElementById(
     'confirmPurchaseButton',
   ) as HTMLButtonElement;
+
   confirmPurchaseButton.addEventListener('click', () => {
     modalHandler.onSubmit();
   });

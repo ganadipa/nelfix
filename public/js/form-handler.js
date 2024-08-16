@@ -28,6 +28,12 @@ export class FormHandler {
     setOnFail(callback) {
         this.onFail = callback;
     }
+    setLoading(fn) {
+        this.loading = fn;
+    }
+    setLoaded(fn) {
+        this.loaded = fn;
+    }
     handleSubmit(event) {
         return __awaiter(this, void 0, void 0, function* () {
             event.preventDefault();
@@ -37,7 +43,9 @@ export class FormHandler {
                 data[key] = value;
             });
             const ajaxRequest = new AjaxRequest(this.url);
+            this.loading(this.form);
             const resp = yield ajaxRequest.post(data);
+            this.loaded(this.form);
             if (resp.status === 'success') {
                 this.onSuccess(resp);
             }

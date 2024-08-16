@@ -14,6 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
         responseContainer.classList.remove('bg-red-100', 'text-red-800', 'border-red-400', 'mb-12');
         // add the success classes
         responseContainer.classList.add('bg-green-100', 'text-green-800', 'border-green-400', 'mb-12');
+        // Reload to automatically redirect whatever it takes them to
         location.reload();
     });
     // What happens when it fails?
@@ -24,6 +25,36 @@ document.addEventListener('DOMContentLoaded', () => {
         responseContainer.classList.remove('bg-green-100', 'text-green-800', 'border-green-400', 'mb-12');
         // add the error classes
         responseContainer.classList.add('bg-red-100', 'text-red-800', 'border-red-400', 'mb-12');
+    });
+    // What happens when it is loading?
+    handler.setLoading((form) => {
+        // disable the form
+        form.querySelectorAll('input, button').forEach((el) => {
+            el.setAttribute('disabled', 'disabled');
+        });
+        // disable navigates to the register page
+        const registerLink = form.querySelector('a');
+        registerLink.setAttribute('href', '#');
+        registerLink.classList.add('hidden');
+        // set the response message
+        responseContainer.innerText = 'Loading...';
+        // remove the success and error classes
+        responseContainer.classList.remove('bg-green-100', 'text-green-800', 'border-green-400', 'bg-red-100', 'text-red-800', 'border-red-400');
+        // Add the loading classes
+        responseContainer.classList.add('bg-blue-100', 'text-blue-800', 'border-blue-400', 'mb-12');
+    });
+    // What happens when it is loaded?
+    handler.setLoaded((form) => {
+        // enable the form
+        form.querySelectorAll('input, button').forEach((el) => {
+            el.removeAttribute('disabled');
+        });
+        // enable navigates to the register page
+        const registerLink = form.querySelector('a');
+        registerLink.setAttribute('href', '/auth/login');
+        registerLink.classList.remove('hidden');
+        // remove the loading classes
+        responseContainer.classList.remove('bg-blue-100', 'text-blue-800', 'border-blue-400');
     });
     // Ok, we are ready
     handler.set();

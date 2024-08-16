@@ -53,7 +53,7 @@ export class ApiController {
   }
 
   @Post('buy-film')
-  @Roles(['USER'])
+  @Roles(['USER', 'ADMIN'])
   async buyFilm(@Req() req: ExtendedRequest) {
     try {
       return {

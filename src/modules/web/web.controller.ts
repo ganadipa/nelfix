@@ -28,6 +28,7 @@ export class WebController {
       page: paginationData.page,
       totalPages: paginationData.totalPages,
       script: '/js/pagination-logic.js',
+      no_film_desc: "Oops, there's no film available.",
     };
   }
 
@@ -74,6 +75,18 @@ export class WebController {
       page: paginationData.page,
       totalPages: paginationData.totalPages,
       script: '/js/pagination-logic.js',
+      no_film_desc: "You haven't bought any film yet.",
+    };
+  }
+
+  @Get('profile')
+  @Render('profile')
+  @Roles(['USER', 'ADMIN'], '/auth/login')
+  async getProfile(@Req() req: ExtendedRequest) {
+    return {
+      user: req.user,
+      pathname: req.path,
+      title: 'Profile',
     };
   }
 }
