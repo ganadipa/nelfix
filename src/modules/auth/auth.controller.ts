@@ -2,14 +2,26 @@ import { Controller, Get, Post, Render, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { Roles } from 'src/common/decorator/roles.decorator';
 
+type TLoginViewsData = {
+  title: string;
+  fields: { name: string; label: string; type: string; required: boolean }[];
+  scripts: string[];
+};
+
+type TRegisterViewsData = {
+  title: string;
+  fields: { name: string; label: string; type: string; required: boolean }[];
+  scripts: string[];
+};
+
 @Controller('auth')
 export class AuthController {
-  constructor(private authService: AuthService) {}
+  constructor() {}
 
   @Get('login')
   @Render('auth/login')
   @Roles(['GUEST'], '/web/films')
-  getLogin() {
+  getLogin(): TLoginViewsData {
     return {
       title: 'Login',
 
@@ -30,7 +42,7 @@ export class AuthController {
   @Get('register')
   @Render('auth/register')
   @Roles(['GUEST'], '/web/films')
-  getRegister() {
+  getRegister(): TRegisterViewsData {
     return {
       title: 'Register',
       fields: [

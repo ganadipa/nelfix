@@ -4,17 +4,15 @@ import { FirebaseRepository } from '../firebase/firebase.repository';
 import { v4 as uuidv4 } from 'uuid';
 import { Film } from './film.entity';
 import { FilmRepository } from './repository/film.repository';
-import { TPrismaFilm } from 'src/common/types';
-import { BoughtFilmRepository } from '../bought-film/repository';
+import { TFilmJson, TPrismaFilm } from 'src/common/types';
 import { UserService } from '../user/user.service';
+import { BoughtFilmRepository } from '../bought-film/repository';
 
 @Injectable()
 export class FilmService {
   constructor(
     private firebaseRepository: FirebaseRepository,
     private readonly filmRepository: FilmRepository,
-    private readonly boughtFilmRepository: BoughtFilmRepository,
-    private readonly userService: UserService,
   ) {}
 
   async createFilm(
@@ -67,7 +65,7 @@ export class FilmService {
     return new Film(film).toJSON();
   }
 
-  async getFilms(q: string) {
+  async getFilms(q: string): Promise<Omit<TFilmJson, 'video_url'>[]> {
     const byTitle = await this.filmRepository.getFilmsLikeTitle(q);
     const byDirector = await this.filmRepository.getFilmsLikeDirector(q);
 
@@ -156,35 +154,5 @@ export class FilmService {
 
     // OK
     return deletedFilm;
-  }
-
-  async buyFilm(userId: string, filmId: string) {
-    // Check if the user has already bought the film
-    const boughtFilm =
-      await this.boughtFilmRepository.getBoughtFilmByUserIdAndFilmId(
-        userId,
-        filmId,
-      );
-    if (boughtFilm) {
-      throw new Error('Film already bought!');
-    }
-
-    const user = await this.userService.getUser(userId);
-    const film = await this.filmRepository.findById(filmId);
-
-    if (user.balance < film.price) {
-      throw new Error('Insufficient balance!');
-    }
-
-    // Update the user's balance
-    await this.userService.addBalance(userId, -film.price);
-
-    // Create a new bought film record
-    await this.boughtFilmRepository.create({ userId, filmId });
-
-    const filmJson = new Film(film).toJSON();
-
-    // OK
-    return { ...filmJson, is_bought: true };
   }
 }

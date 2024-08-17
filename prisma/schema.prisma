@@ -30,6 +30,8 @@ model User {
   hashedPassword String
   balance        Int          @default(0)
   BoughtFilm     BoughtFilm[]
+  Review         Review[]
+  // Wishlist       Wishlist[]
 }
 
 model Film {
@@ -46,6 +48,8 @@ model Film {
   videoUrl    String
   imageUrl    String?
   BoughtFilm  BoughtFilm[]
+  Review      Review[]
+  // Wishlist    Wishlist[]
 }
 
 model BoughtFilm {
@@ -56,3 +60,22 @@ model BoughtFilm {
   user        User     @relation(fields: [userId], references: [id])
   film        Film     @relation(fields: [filmId], references: [id])
 }
+
+model Review {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  userId    String
+  filmId    String
+  rating    Int
+  comment   String?
+  user      User     @relation(fields: [userId], references: [id])
+  film      Film     @relation(fields: [filmId], references: [id])
+}
+
+// model Wishlist {
+//   id     String @id @default(uuid())
+//   userId String
+//   filmId String
+//   user   User   @relation(fields: [userId], references: [id])
+//   film   Film   @relation(fields: [filmId], references: [id])
+// }

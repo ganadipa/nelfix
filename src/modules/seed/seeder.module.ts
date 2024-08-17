@@ -8,12 +8,11 @@ import { ConfigService } from '@nestjs/config';
 import { UserRepository } from '../user/repository';
 import { FilmRepository } from '../film/repository';
 import { BoughtFilmRepository } from '../bought-film/repository';
-import { FirebaseRepository } from '../firebase/firebase.repository';
 import { FirebaseModule } from '../firebase/firebase.module';
-import { FileService } from '../file/file.service';
+import { FileModule } from '../file/file.module';
 
 @Module({
-  imports: [FirebaseModule],
+  imports: [FirebaseModule, FileModule],
   providers: [
     PrismaService,
     UserSeeder,
@@ -24,7 +23,6 @@ import { FileService } from '../file/file.service';
     UserRepository,
     FilmRepository,
     BoughtFilmRepository,
-    FileService,
   ],
   exports: [SeederFactory],
 })

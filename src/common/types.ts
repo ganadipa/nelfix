@@ -22,6 +22,13 @@ export type TUser = {
   balance: number;
 };
 
+export type TGetUser = {
+  id: string;
+  username: string;
+  email: string;
+  balance: number;
+};
+
 export type TSelfGetData = {
   username: string;
   token: string;
@@ -39,7 +46,7 @@ export type TFilmJson = {
   price: number;
   duration: number;
   video_url: string;
-  cover_image_url?: string;
+  cover_image_url: string | null;
   created_at: Date;
   updated_at: Date;
 };

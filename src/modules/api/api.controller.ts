@@ -1,18 +1,17 @@
 import { Body, Controller, Get, Post, Req, Res } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-import { Request, Response } from 'express';
+import { Response } from 'express';
 import { AuthService } from '../auth/auth.service';
 import { RegisterDto, SignInDto } from '../auth/dto';
 import { TLoginPostData, TResponseStatus } from 'src/common/types';
 import { Roles } from 'src/common/decorator/roles.decorator';
-import { FilmService } from '../film/film.service';
 import { ExtendedRequest } from 'src/common/interfaces/request.interface';
+import { BoughtFilmService } from '../bought-film/bought-film.service';
 
 @Controller('api')
 export class ApiController {
   constructor(
     private authService: AuthService,
-    private filmService: FilmService,
+    private boughtFilmService: BoughtFilmService,
   ) {}
 
   @Post('register')
@@ -69,7 +68,10 @@ export class ApiController {
       return {
         status: 'success',
         message: 'Film was successfully bought',
-        data: await this.filmService.buyFilm(req.user.id, req.body.filmId),
+        data: await this.boughtFilmService.buyFilm(
+          req.user.id,
+          req.body.filmId,
+        ),
       };
     } catch (e) {
       return {
