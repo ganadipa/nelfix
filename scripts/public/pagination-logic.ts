@@ -104,6 +104,7 @@ document.addEventListener('DOMContentLoaded', () => {
         'bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded transition duration-300 ease-in-out shadow hover:shadow-md';
       element.setAttribute('aria-label', 'Previous Page');
     } else {
+      element.href = '#';
       element.textContent = '<';
       element.className =
         'bg-gray-500 text-white px-4 py-2 rounded cursor-not-allowed';
@@ -119,6 +120,7 @@ document.addEventListener('DOMContentLoaded', () => {
         'bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded transition duration-300 ease-in-out shadow hover:shadow-md';
       element.setAttribute('aria-label', 'Next Page');
     } else {
+      element.href = '#';
       element.textContent = '>';
       element.className =
         'bg-gray-500 text-white px-4 py-2 rounded cursor-not-allowed';

@@ -37,8 +37,10 @@ document.addEventListener('DOMContentLoaded', () => {
       'mb-12',
     );
 
-    // Reload to automatically redirect whatever it takes them to
-    location.reload();
+    // after 2s, eload to automatically redirect whatever it takes them to
+    setTimeout(() => {
+      location.reload();
+    }, 2000);
   });
 
   // What happens when it fails?
@@ -77,16 +79,15 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // What happens when it is loaded?
-  handler.setLoaded((form) => {
-    // enable the form
-    form.querySelectorAll('input, button').forEach((el) => {
-      el.removeAttribute('disabled');
-    });
+  handler.setLoaded((form, status) => {
+    // input and button still disabled
 
     // enable navigates to the register page
-    const registerLink = form.querySelector('a') as HTMLAnchorElement;
-    registerLink.setAttribute('href', '/auth/login');
-    registerLink.classList.remove('hidden');
+    if (status === 'error') {
+      const registerLink = form.querySelector('a') as HTMLAnchorElement;
+      registerLink.setAttribute('href', '/auth/register');
+      registerLink.classList.remove('hidden');
+    }
   });
 
   // Ok, we are ready

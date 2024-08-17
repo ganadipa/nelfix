@@ -22,6 +22,8 @@ export class AuthController {
           required: true,
         },
       ],
+
+      scripts: ['/js/login.js', '/js/input.js', '/js/navbar.js'],
     };
   }
 
@@ -54,6 +56,7 @@ export class AuthController {
           required: true,
         },
       ],
+      scripts: ['/js/register.js', '/js/input.js'],
     };
   }
 }

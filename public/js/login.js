@@ -14,8 +14,10 @@ document.addEventListener('DOMContentLoaded', () => {
         responseContainer.classList.remove('bg-red-100', 'text-red-800', 'border-red-400', 'mb-12');
         // add the success classes
         responseContainer.classList.add('bg-green-100', 'text-green-800', 'border-green-400', 'mb-12');
-        // Reload to automatically redirect whatever it takes them to
-        location.reload();
+        // after 2s, eload to automatically redirect whatever it takes them to
+        setTimeout(() => {
+            location.reload();
+        }, 2000);
     });
     // What happens when it fails?
     handler.setOnFail((data) => {
@@ -38,15 +40,14 @@ document.addEventListener('DOMContentLoaded', () => {
         registerLink.classList.add('hidden');
     });
     // What happens when it is loaded?
-    handler.setLoaded((form) => {
-        // enable the form
-        form.querySelectorAll('input, button').forEach((el) => {
-            el.removeAttribute('disabled');
-        });
+    handler.setLoaded((form, status) => {
+        // input and button still disabled
         // enable navigates to the register page
-        const registerLink = form.querySelector('a');
-        registerLink.setAttribute('href', '/auth/login');
-        registerLink.classList.remove('hidden');
+        if (status === 'error') {
+            const registerLink = form.querySelector('a');
+            registerLink.setAttribute('href', '/auth/register');
+            registerLink.classList.remove('hidden');
+        }
     });
     // Ok, we are ready
     handler.set();

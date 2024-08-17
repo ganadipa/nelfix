@@ -14,8 +14,11 @@ export class AppController {
   async signIn(
     @Body() body: SignInDto,
   ): Promise<TResponseStatus<TLoginPostData>> {
-    const resp = await this.authService.signIn(body);
-    return resp;
+    return {
+      status: 'success',
+      message: 'User logged in successfully',
+      data: await this.authService.signIn(body),
+    };
   }
 
   @Get('self')

@@ -42,6 +42,36 @@ export class AjaxRequest {
             }
         });
     }
+    get() {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const response = yield fetch(this.url, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                });
+                const jsonData = yield response.json();
+                if (this.isValidSuccessResponse(jsonData)) {
+                    return jsonData;
+                }
+                else {
+                    return {
+                        status: 'error',
+                        message: jsonData.message,
+                        data: null,
+                    };
+                }
+            }
+            catch (error) {
+                return {
+                    status: 'error',
+                    message: error.message,
+                    data: null,
+                };
+            }
+        });
+    }
     isValidSuccessResponse(data) {
         return 'status' in data && data.status === 'success' && 'data' in data;
     }

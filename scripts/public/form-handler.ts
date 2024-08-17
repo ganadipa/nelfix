@@ -19,7 +19,7 @@ export class FormHandler<
     message: string;
   }) => void;
   private loading: (form: HTMLFormElement) => void;
-  private loaded: (form: HTMLFormElement) => void;
+  private loaded: (form: HTMLFormElement, status: 'success' | 'error') => void;
 
   constructor(
     private readonly form: HTMLFormElement,
@@ -47,7 +47,9 @@ export class FormHandler<
     this.loading = fn;
   }
 
-  public setLoaded(fn: (form: HTMLFormElement) => void): void {
+  public setLoaded(
+    fn: (form: HTMLFormElement, status: 'success' | 'error') => void,
+  ): void {
     this.loaded = fn;
   }
 
@@ -64,7 +66,7 @@ export class FormHandler<
     const ajaxRequest = new AjaxRequest<T>(this.url);
     this.loading(this.form);
     const resp = await ajaxRequest.post(data);
-    this.loaded(this.form);
+    this.loaded(this.form, resp.status);
 
     if (resp.status === 'success') {
       this.onSuccess(resp);

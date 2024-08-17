@@ -70,6 +70,7 @@ document.addEventListener('DOMContentLoaded', () => {
             element.setAttribute('aria-label', 'Previous Page');
         }
         else {
+            element.href = '#';
             element.textContent = '<';
             element.className =
                 'bg-gray-500 text-white px-4 py-2 rounded cursor-not-allowed';
@@ -85,6 +86,7 @@ document.addEventListener('DOMContentLoaded', () => {
             element.setAttribute('aria-label', 'Next Page');
         }
         else {
+            element.href = '#';
             element.textContent = '>';
             element.className =
                 'bg-gray-500 text-white px-4 py-2 rounded cursor-not-allowed';

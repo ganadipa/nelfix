@@ -27,7 +27,7 @@ export class WebController {
       title: 'Films',
       page: paginationData.page,
       totalPages: paginationData.totalPages,
-      script: '/js/pagination-logic.js',
+      scripts: ['/js/pagination-logic.js'],
       no_film_desc: "Oops, there's no film available.",
     };
   }
@@ -47,7 +47,7 @@ export class WebController {
       user: req.user,
       pathname: req.path,
       title: film.title,
-      script: '/js/film-details.js',
+      scripts: ['/js/film-details.js'],
     };
   }
 
@@ -74,7 +74,7 @@ export class WebController {
       title: 'My List',
       page: paginationData.page,
       totalPages: paginationData.totalPages,
-      script: '/js/pagination-logic.js',
+      scripts: ['/js/pagination-logic.js'],
       no_film_desc: "You haven't bought any film yet.",
     };
   }

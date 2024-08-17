@@ -20,76 +20,52 @@ export class AuthService {
   ) {}
 
   async register(dto: RegisterDto) {
-    try {
-      const hashed = await argon.hash(dto.password);
+    const hashed = await argon.hash(dto.password);
 
-      const usernameExist = await this.userRepo.findByUsername(dto.username);
-      const emailExist = await this.userRepo.findByEmail(dto.email);
+    const usernameExist = await this.userRepo.findByUsername(dto.username);
+    const emailExist = await this.userRepo.findByEmail(dto.email);
 
-      if (usernameExist) {
-        throw new ForbiddenException('Username already exists');
-      }
-
-      if (emailExist) {
-        throw new ForbiddenException('Email already exists');
-      }
-
-      const user = await this.userRepo.create({
-        username: dto.username,
-        email: dto.email,
-        hashedPassword: hashed,
-        firstName: dto.firstName,
-        lastName: dto.lastName,
-        balance: 0,
-      });
-
-      return {
-        status: 'success',
-        message: 'User created',
-        data: {
-          id: user.id,
-          username: user.username,
-          email: user.email,
-          token: await this.signToken(user.id),
-        },
-      };
-    } catch (error) {
-      return {
-        status: 'error',
-        message: error.message,
-        data: null,
-      };
+    if (usernameExist) {
+      throw new Error('Username already exists');
     }
+
+    if (emailExist) {
+      throw new Error('Email already exists');
+    }
+
+    const user = await this.userRepo.create({
+      username: dto.username,
+      email: dto.email,
+      hashedPassword: hashed,
+      firstName: dto.firstName,
+      lastName: dto.lastName,
+      balance: 0,
+    });
+
+    return {
+      id: user.id,
+      username: user.username,
+      email: user.email,
+      token: await this.signToken(user.id),
+    };
   }
 
-  async signIn(dto: SignInDto): Promise<TResponseStatus<TLoginPostData>> {
+  async signIn(dto: SignInDto): Promise<TLoginPostData> {
     const user = await this.userRepo.findByUsername(dto.username);
 
     if (!user) {
-      return {
-        status: 'error',
-        message: 'Invalid credentials',
-        data: null,
-      };
+      throw new Error('Invalid credentials');
     }
 
     const valid = await argon.verify(user.hashedPassword, dto.password);
 
     if (!valid) {
-      return {
-        status: 'error',
-        message: 'Invalid credentials',
-        data: null,
-      };
+      throw new Error('Invalid credentials');
     }
 
     return {
-      status: 'success',
-      message: "User's credentials are valid",
-      data: {
-        username: user.username,
-        token: await this.signToken(user.id),
-      },
+      username: user.username,
+      token: await this.signToken(user.id),
     };
   }
 

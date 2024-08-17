@@ -32,6 +32,34 @@ export class AjaxRequest<U extends IApiResponseBase> {
     }
   }
 
+  async get(): Promise<U | IErrorResponse> {
+    try {
+      const response = await fetch(this.url, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      const jsonData = await response.json();
+      if (this.isValidSuccessResponse(jsonData)) {
+        return jsonData as U;
+      } else {
+        return {
+          status: 'error',
+          message: jsonData.message,
+          data: null,
+        };
+      }
+    } catch (error) {
+      return {
+        status: 'error',
+        message: error.message,
+        data: null,
+      };
+    }
+  }
+
   private isValidSuccessResponse(data: any): data is U {
     return 'status' in data && data.status === 'success' && 'data' in data;
   }

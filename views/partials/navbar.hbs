@@ -8,21 +8,26 @@
     </div>
     {{#if user}}
     <div class="flex items-center">
-      <ul class="flex space-x-4">
+      <ul class="flex space-x-4 items-center">
         <li>
-          <a href="/web/films" class="text-white hover:text-gray-300 {{#if (eq pathname '/web/films')}}border-b-2 p-2 border-white{{/if}}">
+          <a href="/web/films" class="text-white hover:text-gray-300 p-2 {{#if (eq pathname '/web/films')}}border-b-2 border-white{{/if}}">
             Films
           </a>
         </li>
         <li>
-          <a href="/web/profile" class="text-white hover:text-gray-300 {{#if (eq pathname '/web/profile')}}border-b-2 p-2 border-white{{/if}}">
+          <a href="/web/profile" class="text-white hover:text-gray-300  p-2 {{#if (eq pathname '/web/profile')}}border-b-2 border-white{{/if}}">
           Profile
           </a>
         </li>
         <li>
-          <a href="/web/my-list" class="text-white hover:text-gray-300 {{#if (eq pathname '/web/my-list')}}border-b-2 p-2 border-white{{/if}}">
+          <a href="/web/my-list" class="text-white hover:text-gray-300  p-2 {{#if (eq pathname '/web/my-list')}}border-b-2 border-white{{/if}}">
           Purchased
           </a>
+        </li>
+        <li>
+          <button id="logout" class="text-white hover:text-gray-300 p-2">
+          Logout
+          </button>
         </li>
       </ul>
     </div>
@@ -30,6 +35,53 @@
       <span class="text-white">{{user.balance}}</span>
       <img src="/coin.png" alt="Coin" class="h-4 inline" />
     </div>
+    <button id="side-nav-opener" class="md:hidden">
+      <i class="fa-solid fa-bars text-white p-4 rounded-md border border-white fa-lg"></i>
+    </button>
     {{/if}}
   </div>
 </nav>
+
+{{#if user}}
+
+<div id="side-nav" class="transition-all duration-500 ease-in-out fixed top-0 right-0 h-full w-4/5 bg-white z-50 md:hidden hidden p-4">
+  <div class="flex items-center justify-between mb-4">
+    <a href="/web/films" class="text-blue-900 text-xl font-bold">
+      <img src="/logo.png" alt="Logo" class="h-10 inline mr-2" />
+      Nelfix
+    </a>
+    <button id="side-nav-closer" class="text-blue-900">
+      <i class="fa-solid fa-times fa-lg"></i>
+    </button>
+  </div>
+  <ul class="flex flex-col space-y-4">
+    <li>
+      <a href="/web/films" class="text-blue-900 hover:text-gray-700 p-2 {{#if (eq pathname '/web/films')}}border-b-2 border-blue-900{{/if}}">
+        Films
+      </a>
+    </li>
+    <li>
+      <a href="/web/profile" class="text-blue-900 hover:text-gray-700  p-2 {{#if (eq pathname '/web/profile')}}border-b-2 border-blue-900{{/if}}">
+        Profile
+      </a>
+    </li>
+    <li>
+      <a href="/web/my-list" class="text-blue-900 hover:text-gray-700  p-2 {{#if (eq pathname '/web/my-list')}}border-b-2 border-blue-900{{/if}}">
+        Purchased
+      </a>
+    </li>
+    <li>
+      <button id="logout-side-nav" class="text-blue-900 hover:text-gray-700 p-2">
+        Logout
+      </button>
+    </li>
+  </ul>
+  {{#if user}}
+  <div class="bg-cyan-950 px-4 py-1 border-2 border-emerald-900 rounded-full min-w-16 text-center flex items-center justify-around mt-4">
+    <span class="text-white">{{user.balance}}</span>
+    <img src="/coin.png" alt="Coin" class="h-4 inline" />
+  </div>
+  {{/if}}
+</div>
+{{/if}}
+

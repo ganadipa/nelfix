@@ -45,7 +45,7 @@ export class FormHandler {
             const ajaxRequest = new AjaxRequest(this.url);
             this.loading(this.form);
             const resp = yield ajaxRequest.post(data);
-            this.loaded(this.form);
+            this.loaded(this.form, resp.status);
             if (resp.status === 'success') {
                 this.onSuccess(resp);
             }
