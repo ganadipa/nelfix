@@ -3,8 +3,6 @@ document.addEventListener('DOMContentLoaded', () => {
     'div[data-tag="input-container"]',
   );
 
-  console.log(inputContainers.length);
-
   if (inputContainers.length === 0) {
     return;
   }

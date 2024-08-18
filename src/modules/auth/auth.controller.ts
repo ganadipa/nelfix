@@ -1,6 +1,7 @@
 import { Controller, Get, Post, Render, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { Roles } from 'src/common/decorator/roles.decorator';
+import { TBaseViewData } from 'src/common/types';
 
 type TLoginViewsData = {
   title: string;
@@ -21,7 +22,7 @@ export class AuthController {
   @Get('login')
   @Render('auth/login')
   @Roles(['GUEST'], '/web/films')
-  getLogin(): TLoginViewsData {
+  getLogin(): TBaseViewData & TLoginViewsData {
     return {
       title: 'Login',
 
@@ -36,13 +37,17 @@ export class AuthController {
       ],
 
       scripts: ['/js/login.js', '/js/input.js', '/js/navbar.js'],
+
+      pathname: '/auth/login',
+
+      description: 'Login to Nelfix',
     };
   }
 
   @Get('register')
   @Render('auth/register')
   @Roles(['GUEST'], '/web/films')
-  getRegister(): TRegisterViewsData {
+  getRegister(): TRegisterViewsData & TBaseViewData {
     return {
       title: 'Register',
       fields: [
@@ -69,6 +74,10 @@ export class AuthController {
         },
       ],
       scripts: ['/js/register.js', '/js/input.js'],
+
+      pathname: '/auth/register',
+
+      description: 'Register for Nelfix',
     };
   }
 }

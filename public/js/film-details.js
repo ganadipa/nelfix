@@ -1,4 +1,5 @@
-import { AjaxRequest } from './ajax-request.js';
+import { AjaxRequest } from './request/ajax-request.js';
+import { RequestHandlerFactory } from './request/request-factory.js';
 class ModalHandler {
     constructor(modal) {
         this.modal = modal;
@@ -29,8 +30,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const modal = document.querySelector('#purchaseModal');
     const modalHandler = new ModalHandler(modal);
     const responseContainer = modal.querySelector('div#response-container');
+    const url = '/api/buy-film';
     const filmId = window.location.pathname.split('/').pop();
-    const ajaxRequest = new AjaxRequest('/api/buy-film');
+    const strategy = RequestHandlerFactory.create(url, 'POST');
+    const ajaxRequest = new AjaxRequest(url, strategy);
     modalHandler.setOnSuccess((message) => {
         responseContainer.textContent = message;
         responseContainer.className = 'text-green-500';
@@ -40,7 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
         responseContainer.className = 'text-red-500';
     });
     modalHandler.setOnSubmit(() => {
-        ajaxRequest.post({ filmId }).then((resp) => {
+        ajaxRequest.request({ filmId }).then((resp) => {
             if (resp.status === 'success') {
                 modalHandler.onSuccess(resp.message);
                 // then after 2s hide the modal

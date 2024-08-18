@@ -7,15 +7,18 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-import { AjaxRequest } from './ajax-request.js';
+import { AjaxRequest } from './request/ajax-request.js';
+import { RequestHandlerFactory } from './request/request-factory.js';
 /**
  * FormHandler class
- * U is the type of the response data
+ * T is the form data
+ * V is the type of the response.data
  */
 export class FormHandler {
-    constructor(form, url) {
+    constructor(form, url, method) {
         this.form = form;
         this.url = url;
+        this.method = method;
         this.onSuccess = () => { };
         this.onFail = () => { };
     }
@@ -37,20 +40,25 @@ export class FormHandler {
     handleSubmit(event) {
         return __awaiter(this, void 0, void 0, function* () {
             event.preventDefault();
+            console.log('Form submitted');
             const formData = new FormData(this.form);
             const data = {};
             formData.forEach((value, key) => {
                 data[key] = value;
             });
-            const ajaxRequest = new AjaxRequest(this.url);
+            const strategy = RequestHandlerFactory.create(this.url, this.method);
+            const ajaxRequest = new AjaxRequest(this.url, strategy);
             this.loading(this.form);
-            const resp = yield ajaxRequest.post(data);
+            const resp = yield ajaxRequest.request(data);
             this.loaded(this.form, resp.status);
-            if (resp.status === 'success') {
-                this.onSuccess(resp);
+            if (resp.status === 'success' && resp.data !== null) {
+                this.onSuccess(resp.data, data);
             }
             else {
-                this.onFail(resp);
+                this.onFail({
+                    status: resp.status,
+                    message: resp.message,
+                });
             }
         });
     }

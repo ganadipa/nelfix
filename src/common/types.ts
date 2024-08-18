@@ -98,3 +98,11 @@ export type TPrismaBoughtFilm = {
   userId: string;
   filmId: string;
 };
+
+export type TBaseViewData = {
+  title: string;
+  scripts: string[];
+  description: string;
+  pathname: string;
+  user?: TUser;
+};

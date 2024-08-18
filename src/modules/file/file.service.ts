@@ -1,13 +1,22 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import { Express } from 'express';
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 
 @Injectable()
 export class FileService {
   createMulterFile(filePath: string): Express.Multer.File {
-    const fileBuffer = fs.readFileSync(filePath);
-    const fileStat = fs.statSync(filePath);
+    let fileBuffer: Buffer;
+    let fileStat: fs.Stats;
+
+    try {
+      fileBuffer = fs.readFileSync(filePath);
+      fileStat = fs.statSync(filePath);
+    } catch (error) {
+      throw new InternalServerErrorException(
+        `Error reading file: ${error.message}`,
+      );
+    }
 
     const mimeType = this.getMimeType(filePath);
 

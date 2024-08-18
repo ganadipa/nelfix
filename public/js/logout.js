@@ -20,7 +20,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 'Content-Type': 'application/json',
             },
         });
-        if (response.ok) {
+        const data = yield response.json();
+        if (data.status === 'success') {
             location.reload();
         }
     }));

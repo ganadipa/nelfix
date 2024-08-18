@@ -4,6 +4,7 @@ import { FilmRepository } from '../film/repository';
 import { TFilmJson, TPrismaFilm } from 'src/common/types';
 import { Film } from '../film/film.entity';
 import { UserService } from '../user/user.service';
+import { FilmService } from '../film/film.service';
 
 @Injectable()
 export class BoughtFilmService {
@@ -11,15 +12,22 @@ export class BoughtFilmService {
     private readonly boughtFilmRepository: BoughtFilmRepository,
     private readonly filmRepository: FilmRepository,
     private readonly userService: UserService,
+    private readonly filmService: FilmService,
   ) {}
 
   async getFilmsRelative(
-    userId: string,
+    userId?: string,
   ): Promise<(TFilmJson & { is_bought: boolean })[]> {
+    const films = await this.filmRepository.getAll();
+    if (!userId) {
+      return films.map((film) => {
+        const filmJson = new Film(film).toJSON();
+        return { ...filmJson, is_bought: false };
+      });
+    }
+
     const boughtFilms =
       await this.boughtFilmRepository.getBoughtFilmsByUserId(userId);
-
-    const films = await this.filmRepository.getAll();
 
     const boughtMap = new Map<string, boolean>();
     boughtFilms.forEach((film) => boughtMap.set(film.filmId, true));
@@ -30,14 +38,6 @@ export class BoughtFilmService {
         ...filmJson,
         is_bought: boughtMap.has(filmJson.id),
       };
-    });
-
-    // sort by isBought then by release year
-    returnedFilms.sort((a, b) => {
-      if (a.is_bought === b.is_bought) {
-        return b.release_year - a.release_year;
-      }
-      return a.is_bought ? -1 : 1;
     });
 
     // OK
@@ -107,5 +107,51 @@ export class BoughtFilmService {
 
     // OK
     return { ...filmJson, is_bought: true };
+  }
+
+  sortFilmsByIsBoughtThenReleaseYear(
+    films: (TFilmJson & { is_bought: boolean })[],
+  ) {
+    const copy = [...films];
+    copy.sort((a, b) => {
+      if (a.is_bought === b.is_bought) {
+        return b.release_year - a.release_year;
+      }
+      return a.is_bought ? -1 : 1;
+    });
+
+    return copy;
+  }
+
+  async queryFilmsRelative(
+    userId?: string,
+    q?: string,
+  ): Promise<(TFilmJson & { is_bought: boolean })[]> {
+    const films = await this.filmService.getFilms(q);
+
+    // if no user is logged in, return the films
+    if (!userId) {
+      return films.map((film) => ({
+        ...film,
+        is_bought: false,
+      }));
+    }
+
+    // Get the bought films
+    const boughtFilms =
+      await this.boughtFilmRepository.getBoughtFilmsByUserId(userId);
+    const boughtMap = new Map<string, boolean>();
+    boughtFilms.forEach((film) => boughtMap.set(film.filmId, true));
+
+    // Prepare for return
+    const returnedFilms = films.map((film) => {
+      return {
+        ...film,
+        is_bought: boughtMap.has(film.id),
+      };
+    });
+
+    // OK
+    return returnedFilms;
   }
 }

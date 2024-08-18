@@ -1,4 +1,5 @@
-import { AjaxRequest } from './ajax-request.js';
+import { AjaxRequest } from './request/ajax-request.js';
+import { RequestHandlerFactory } from './request/request-factory.js';
 import { TFilmJson } from './types.js';
 
 class ModalHandler {
@@ -35,12 +36,6 @@ class ModalHandler {
   }
 }
 
-type TBuyFilmResponse = {
-  status: 'success' | 'error';
-  message: string;
-  data: TFilmJson & { is_bought: boolean };
-};
-
 document.addEventListener('DOMContentLoaded', () => {
   const modal = document.querySelector('#purchaseModal') as HTMLDivElement;
   const modalHandler = new ModalHandler(modal);
@@ -48,8 +43,19 @@ document.addEventListener('DOMContentLoaded', () => {
     'div#response-container',
   ) as HTMLDivElement;
 
+  const url = '/api/buy-film';
   const filmId = window.location.pathname.split('/').pop() as string;
-  const ajaxRequest = new AjaxRequest<TBuyFilmResponse>('/api/buy-film');
+  const strategy = RequestHandlerFactory.create<
+    TFilmJson & {
+      is_bought: boolean;
+    }
+  >(url, 'POST');
+
+  const ajaxRequest = new AjaxRequest<
+    TFilmJson & {
+      is_bought: boolean;
+    }
+  >(url, strategy);
 
   modalHandler.setOnSuccess((message) => {
     responseContainer.textContent = message;
@@ -62,7 +68,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   modalHandler.setOnSubmit(() => {
-    ajaxRequest.post({ filmId }).then((resp) => {
+    ajaxRequest.request({ filmId }).then((resp) => {
       if (resp.status === 'success') {
         modalHandler.onSuccess(resp.message);
 

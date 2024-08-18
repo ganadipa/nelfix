@@ -1,5 +1,5 @@
 import { FormHandler } from './form-handler.js';
-import { TLoginPostData, TResponseStatus } from './types.js';
+import { TLoginForm, TLoginPostData, TResponseStatus } from './types.js';
 
 document.addEventListener('DOMContentLoaded', () => {
   // get the form element
@@ -11,15 +11,17 @@ document.addEventListener('DOMContentLoaded', () => {
   ) as HTMLDivElement;
 
   // create new FormHandler instance
-  const handler = new FormHandler<TResponseStatus<TLoginPostData>>(
+  const url = '/api/login';
+  const handler = new FormHandler<TLoginForm, TLoginPostData>(
     form,
-    '/api/login',
+    url,
+    'POST',
   );
 
   // What happens when it is successful?
   handler.setOnSuccess((data) => {
     // set the response message
-    responseContainer.innerText = `Success: ${data.message}`;
+    responseContainer.innerText = `Success: User ${data.username} logged in!`;
 
     // remove the error classes
     responseContainer.classList.remove(

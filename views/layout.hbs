@@ -3,7 +3,7 @@
 {{> head title=title}}
   <body class="min-h-screen bg-gray-900 max-w-[2000px] mx-auto font-sans">
     {{> navbar user=user pathname=pathname}}
-    <main class="container mx-auto lg:min-h-[800px] min-h-[600px] max-w-7xl p-4 flex items-center justify-center flex-col relative">
+    <main class="w-full mx-auto xl:min-h-[800px] min-h-[600px] flex items-center justify-center flex-col relative shadow-lg pb-12">
     {{{body}}}
     </main>
     {{#each scripts}}
@@ -12,5 +12,7 @@
     {{#if user}}
       <script type="module" src="/js/logout.js"></script>
     {{/if}}
+    {{> footer}}
   </body>
+
 </html>

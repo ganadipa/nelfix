@@ -68,13 +68,19 @@ export class RestApiController {
   @Get('films')
   @Roles(['ADMIN'])
   async getFilms(
-    @Query('q') q: string,
+    @Query('q') q?: string,
   ): Promise<TResponseStatus<Omit<TFilmJson, 'video_url'>[] | null>> {
+    const films = await this.filmService.getFilms(q);
+    const filmsWithoutVideoUrl = films.map((film) => {
+      const { video_url, ...rest } = film;
+      return rest;
+    });
+
     try {
       return {
         status: 'success',
         message: 'Films retrieved',
-        data: await this.filmService.getFilms(q),
+        data: filmsWithoutVideoUrl,
       };
     } catch (e) {
       return {

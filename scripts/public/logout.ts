@@ -11,8 +11,9 @@ document.addEventListener('DOMContentLoaded', () => {
         'Content-Type': 'application/json',
       },
     });
+    const data = await response.json();
 
-    if (response.ok) {
+    if (data.status === 'success') {
       location.reload();
     }
   });

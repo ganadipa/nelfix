@@ -65,7 +65,7 @@ export class FilmService {
     return new Film(film).toJSON();
   }
 
-  async getFilms(q: string): Promise<Omit<TFilmJson, 'video_url'>[]> {
+  async getFilms(q?: string): Promise<TFilmJson[]> {
     const byTitle = await this.filmRepository.getFilmsLikeTitle(q);
     const byDirector = await this.filmRepository.getFilmsLikeDirector(q);
 
@@ -83,9 +83,11 @@ export class FilmService {
       (film) => new Film(film),
     );
 
+    // sort by release year descending
+    filmInstances.sort((a, b) => b.releaseYear - a.releaseYear);
+
     return filmInstances.map((film) => {
       const filmJson = film.toJSON();
-      delete filmJson.video_url;
       return filmJson;
     });
   }

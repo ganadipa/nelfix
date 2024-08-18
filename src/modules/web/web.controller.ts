@@ -4,6 +4,13 @@ import { BoughtFilmService } from '../bought-film/bought-film.service';
 import { ExtendedRequest } from 'src/common/interfaces/request.interface';
 import { WebService } from './web.service';
 import { FilmService } from '../film/film.service';
+import { TBaseViewData, TFilmJson, TUser } from 'src/common/types';
+
+type TFilmsViewData = {
+  films: (TFilmJson & { is_bought: boolean })[];
+  page: number;
+  total_pages: number;
+};
 
 @Controller('web')
 export class WebController {
@@ -15,39 +22,50 @@ export class WebController {
 
   @Get('films')
   @Render('films')
-  @Roles(['USER', 'ADMIN'], '/auth/login')
-  async getFilms(@Req() req: ExtendedRequest, @Query('page') page: number) {
-    const films = await this.boughtFilmService.getFilmsRelative(req.user.id);
-    const paginationData = this.webService.getPaginatedData(films, page);
-
+  @Roles(['USER', 'ADMIN', 'GUEST'])
+  async getFilms(
+    @Req() req: ExtendedRequest,
+    @Query('page') pageStr?: string,
+    @Query('q') q?: string,
+  ): Promise<TBaseViewData & TFilmsViewData> {
+    const paginationData = await this.webService.getPaginationData({
+      pageStr,
+      q,
+      req,
+    });
     return {
       films: paginationData.films,
       user: req.user,
       pathname: req.path,
       title: 'Films',
       page: paginationData.page,
-      totalPages: paginationData.totalPages,
-      scripts: ['/js/pagination-logic.js'],
-      no_film_desc: "Oops, there's no film available.",
+      total_pages: paginationData.total_pages,
+      scripts: ['/js/pagination/pagination-logic.js', '/js/search-films.js'],
+      description: 'Watch your favorite films on Nelfix.',
     };
   }
 
-  @Get('films/:id')
+  @Get('films/:filmid')
   @Render('films/details')
-  @Roles(['USER', 'ADMIN'], '/auth/login')
-  async getFilm(@Req() req: ExtendedRequest, @Param('id') id: string) {
-    const hadBought = await this.boughtFilmService.hadBought(req.user.id, id);
-    const film = await this.filmService.getFilm(id);
+  @Roles(['USER', 'ADMIN', 'GUEST'])
+  async getFilm(
+    @Req() req: ExtendedRequest,
+    @Param('filmid') filmId: string,
+  ): Promise<TBaseViewData & { film: TFilmJson & { is_bought: boolean } }> {
+    const film = await this.filmService.getFilm(filmId);
 
     return {
       film: {
         ...film,
-        is_bought: hadBought,
+        is_bought: req.user
+          ? await this.boughtFilmService.hadBought(req.user.id, film.id)
+          : false,
       },
       user: req.user,
       pathname: req.path,
       title: film.title,
       scripts: ['/js/film-details.js'],
+      description: film.description,
     };
   }
 
@@ -73,7 +91,7 @@ export class WebController {
       pathname: req.path,
       title: 'My List',
       page: paginationData.page,
-      totalPages: paginationData.totalPages,
+      total_pages: paginationData.total_pages,
       scripts: ['/js/pagination-logic.js'],
       no_film_desc: "You haven't bought any film yet.",
     };

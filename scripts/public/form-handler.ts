@@ -1,16 +1,13 @@
-import { AjaxRequest } from './ajax-request.js';
+import { AjaxRequest } from './request/ajax-request.js';
+import { RequestHandlerFactory } from './request/request-factory.js';
 
 /**
  * FormHandler class
- * U is the type of the response data
+ * T is the form data
+ * V is the type of the response.data
  */
-export class FormHandler<
-  T extends {
-    status: 'success' | 'error';
-    message: string;
-  },
-> {
-  private onSuccess: (data: T) => void;
+export class FormHandler<T, V> {
+  private onSuccess: (data: V, payload: T) => void;
   private onFail: ({
     status,
     message,
@@ -24,6 +21,7 @@ export class FormHandler<
   constructor(
     private readonly form: HTMLFormElement,
     private url: string,
+    private method: 'GET' | 'POST',
   ) {
     this.onSuccess = () => {};
     this.onFail = () => {};
@@ -33,7 +31,7 @@ export class FormHandler<
     this.form.addEventListener('submit', this.handleSubmit.bind(this));
   }
 
-  public setOnSuccess(callback: (data: T) => void): void {
+  public setOnSuccess(callback: (data: V, payload: T) => void): void {
     this.onSuccess = callback;
   }
 
@@ -55,6 +53,7 @@ export class FormHandler<
 
   private async handleSubmit(event: Event): Promise<void> {
     event.preventDefault();
+    console.log('Form submitted');
 
     const formData = new FormData(this.form);
     const data: { [key: string]: unknown } = {};
@@ -63,15 +62,20 @@ export class FormHandler<
       data[key] = value;
     });
 
-    const ajaxRequest = new AjaxRequest<T>(this.url);
+    const strategy = RequestHandlerFactory.create<V>(this.url, this.method);
+    const ajaxRequest = new AjaxRequest<V>(this.url, strategy);
+
     this.loading(this.form);
-    const resp = await ajaxRequest.post(data);
+    const resp = await ajaxRequest.request(data);
     this.loaded(this.form, resp.status);
 
-    if (resp.status === 'success') {
-      this.onSuccess(resp);
+    if (resp.status === 'success' && resp.data !== null) {
+      this.onSuccess(resp.data, data as T);
     } else {
-      this.onFail(resp);
+      this.onFail({
+        status: resp.status,
+        message: resp.message,
+      });
     }
   }
 }

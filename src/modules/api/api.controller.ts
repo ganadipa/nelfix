@@ -1,17 +1,28 @@
-import { Body, Controller, Get, Post, Req, Res } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  ParseIntPipe,
+  Post,
+  Query,
+  Req,
+  Res,
+} from '@nestjs/common';
 import { Response } from 'express';
 import { AuthService } from '../auth/auth.service';
 import { RegisterDto, SignInDto } from '../auth/dto';
-import { TLoginPostData, TResponseStatus } from 'src/common/types';
+import { TFilmJson, TLoginPostData, TResponseStatus } from 'src/common/types';
 import { Roles } from 'src/common/decorator/roles.decorator';
 import { ExtendedRequest } from 'src/common/interfaces/request.interface';
 import { BoughtFilmService } from '../bought-film/bought-film.service';
+import { FilmService } from '../film/film.service';
 
 @Controller('api')
 export class ApiController {
   constructor(
     private authService: AuthService,
     private boughtFilmService: BoughtFilmService,
+    private filmService: FilmService,
   ) {}
 
   @Post('register')
@@ -96,5 +107,48 @@ export class ApiController {
         token: req.user.token,
       },
     });
+  }
+
+  @Get('search-films')
+  @Roles(['ADMIN', 'USER', 'GUEST'])
+  async getFilms(
+    @Query('q') q?: string,
+    @Query('page') pageStr: string = '1',
+  ): Promise<
+    TResponseStatus<{
+      films: Omit<TFilmJson, 'video_url'>[];
+      total: number;
+    }>
+  > {
+    const page = parseInt(pageStr, 10);
+
+    const films = await this.filmService.getFilms(q);
+    const filmsWithoutVideoUrl = films.map((film) => {
+      const { video_url, ...rest } = film;
+      return rest;
+    });
+
+    const numberOfFilmsPerPage = 12;
+    const paginatedFilms = filmsWithoutVideoUrl.slice(
+      (page - 1) * numberOfFilmsPerPage,
+      page * numberOfFilmsPerPage,
+    );
+
+    try {
+      return {
+        status: 'success',
+        message: 'Films retrieved',
+        data: {
+          films: paginatedFilms,
+          total: filmsWithoutVideoUrl.length,
+        },
+      };
+    } catch (e) {
+      return {
+        status: 'error',
+        message: e.message,
+        data: null,
+      };
+    }
   }
 }

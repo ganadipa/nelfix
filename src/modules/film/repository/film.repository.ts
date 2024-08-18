@@ -32,7 +32,11 @@ export class FilmRepository implements IFilmRepository {
     return this.prismaService.film.findMany();
   }
 
-  async getFilmsLikeTitle(title: string): Promise<TPrismaFilm[]> {
+  async getFilmsLikeTitle(title?: string): Promise<TPrismaFilm[]> {
+    if (!title) {
+      return this.prismaService.film.findMany();
+    }
+
     return this.prismaService.film.findMany({
       where: {
         title: {
@@ -43,7 +47,11 @@ export class FilmRepository implements IFilmRepository {
     });
   }
 
-  async getFilmsLikeDirector(director: string): Promise<TPrismaFilm[]> {
+  async getFilmsLikeDirector(director?: string): Promise<TPrismaFilm[]> {
+    if (!director) {
+      return this.prismaService.film.findMany();
+    }
+
     return this.prismaService.film.findMany({
       where: {
         director: {
