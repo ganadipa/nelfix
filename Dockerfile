@@ -10,10 +10,10 @@ RUN pnpm install
 
 COPY . .
 
-COPY scripts/private/wait-for-postgres.sh /usr/local/bin/wait-for-postgres.sh
-RUN chmod +x /usr/local/bin/wait-for-postgres.sh
+COPY scripts/private/wait-for-db.sh /usr/local/bin/wait-for-db.sh
+RUN chmod +x /usr/local/bin/wait-for-db.sh
 
-RUN /usr/local/bin/wait-for-postgres.sh
+RUN /usr/local/bin/wait-for-db.sh
 
 
 EXPOSE 3333
