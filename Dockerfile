@@ -6,16 +6,17 @@ COPY package*.json ./
 
 RUN npm install -g pnpm
 
+
 RUN pnpm install
 
 COPY . .
 
-COPY scripts/private/wait-for-db.sh /usr/local/bin/wait-for-db.sh
-RUN chmod +x /usr/local/bin/wait-for-db.sh
+RUN pnpm prisma generate && pnpm prisma migrate dev && pnpm prisma migrate deploy
 
-RUN /usr/local/bin/wait-for-db.sh
+RUN pnpm build
+
 
 
 EXPOSE 3333
 
-CMD ["pnpm", "start:dev"]
+CMD ["pnpm", "start:prod"]
