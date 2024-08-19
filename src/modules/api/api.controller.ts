@@ -16,6 +16,8 @@ import { Roles } from 'src/common/decorator/roles.decorator';
 import { ExtendedRequest } from 'src/common/interfaces/request.interface';
 import { BoughtFilmService } from '../bought-film/bought-film.service';
 import { FilmService } from '../film/film.service';
+import { CreateReviewDto } from '../film-review/dto/film-review.dto';
+import { FilmReviewService } from '../film-review/film-review.service';
 
 @Controller('api')
 export class ApiController {
@@ -23,6 +25,7 @@ export class ApiController {
     private authService: AuthService,
     private boughtFilmService: BoughtFilmService,
     private filmService: FilmService,
+    private reviewFilmService: FilmReviewService,
   ) {}
 
   @Post('register')
@@ -142,6 +145,42 @@ export class ApiController {
           films: paginatedFilms,
           total: filmsWithoutVideoUrl.length,
         },
+      };
+    } catch (e) {
+      return {
+        status: 'error',
+        message: e.message,
+        data: null,
+      };
+    }
+  }
+
+  @Post('review')
+  @Roles(['USER', 'ADMIN'])
+  async reviewFilm(
+    @Req() req: ExtendedRequest,
+    @Body() review: CreateReviewDto,
+  ) {
+    const boughtFilm = req.user
+      ? await this.boughtFilmService.hadBought(req.user.id, review.filmId)
+      : false;
+    if (!boughtFilm) {
+      return {
+        status: 'error',
+        message: 'You have to buy the film first',
+        data: null,
+      };
+    }
+
+    try {
+      return {
+        status: 'success',
+        message: 'Review was successfully added',
+        data: await this.reviewFilmService.createReview({
+          userId: req.user.id,
+          filmId: review.filmId,
+          rating: review.rating,
+        }),
       };
     } catch (e) {
       return {

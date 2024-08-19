@@ -86,6 +86,7 @@ export class BoughtFilmService {
         userId,
         filmId,
       );
+
     if (boughtFilm) {
       throw new Error('Film already bought!');
     }
@@ -153,5 +154,33 @@ export class BoughtFilmService {
 
     // OK
     return returnedFilms;
+  }
+
+  async deleteFilm(filmId: string) {
+    const film = await this.filmRepository.findById(filmId);
+    if (!film) {
+      throw new HttpException('Film not found!', 404);
+    }
+
+    // Increment all the user's balance who bought the film
+    const boughtFilms =
+      await this.boughtFilmRepository.getBoughtFilmsByFilmId(filmId);
+
+    for (const boughtFilm of boughtFilms) {
+      await this.userService.addBalance(boughtFilm.userId, film.price);
+    }
+
+    // Finally delete the film
+    const deleted = await this.filmRepository.delete(filmId);
+
+    if (!deleted) {
+      throw new HttpException('Failed to delete film!', 500);
+    }
+
+    // OK
+    const ret = new Film(film).toJSON();
+    delete ret.cover_image_url;
+
+    return ret;
   }
 }

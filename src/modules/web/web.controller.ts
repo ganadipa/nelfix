@@ -4,12 +4,22 @@ import { BoughtFilmService } from '../bought-film/bought-film.service';
 import { ExtendedRequest } from 'src/common/interfaces/request.interface';
 import { WebService } from './web.service';
 import { FilmService } from '../film/film.service';
-import { TBaseViewData, TFilmJson, TUser } from 'src/common/types';
+import { TBaseViewData, TFilmJson, TReviewJson, TUser } from 'src/common/types';
+import { FilmReviewService } from '../film-review/film-review.service';
 
 type TFilmsViewData = {
   films: (TFilmJson & { is_bought: boolean })[];
   page: number;
   total_pages: number;
+};
+
+type TDetailsViewData = {
+  film: TFilmJson & {
+    is_bought: boolean;
+    rating: number;
+    rated?: number;
+    total_voters: number;
+  };
 };
 
 @Controller('web')
@@ -18,6 +28,7 @@ export class WebController {
     private readonly boughtFilmService: BoughtFilmService,
     private readonly webService: WebService,
     private readonly filmService: FilmService,
+    private readonly filmReviewService: FilmReviewService,
   ) {}
 
   @Get('films')
@@ -51,8 +62,10 @@ export class WebController {
   async getFilm(
     @Req() req: ExtendedRequest,
     @Param('filmid') filmId: string,
-  ): Promise<TBaseViewData & { film: TFilmJson & { is_bought: boolean } }> {
+  ): Promise<TBaseViewData & TDetailsViewData> {
     const film = await this.filmService.getFilm(filmId);
+    const dataReview =
+      await this.filmReviewService.getAverageRatingAndTotalVoters(film.id);
 
     return {
       film: {
@@ -60,11 +73,16 @@ export class WebController {
         is_bought: req.user
           ? await this.boughtFilmService.hadBought(req.user.id, film.id)
           : false,
+        rating: dataReview.avg,
+        total_voters: dataReview.total,
+        rated: req.user
+          ? await this.filmReviewService.hadRatedFilm(req.user.id, film.id)
+          : undefined,
       },
       user: req.user,
       pathname: req.path,
       title: film.title,
-      scripts: ['/js/film-details.js'],
+      scripts: ['/js/film-details.js', '/js/reviews.js', '/js/star-review.js'],
       description: film.description,
     };
   }

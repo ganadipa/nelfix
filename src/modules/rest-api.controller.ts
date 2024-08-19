@@ -25,6 +25,7 @@ import { ExtendedRequest } from 'src/common/interfaces/request.interface';
 import { SignInDto } from './auth/dto';
 import { AuthService } from './auth/auth.service';
 import { UserService } from './user/user.service';
+import { BoughtFilmService } from './bought-film/bought-film.service';
 
 @Controller('')
 export class RestApiController {
@@ -32,6 +33,7 @@ export class RestApiController {
     private filmService: FilmService,
     private authService: AuthService,
     private userService: UserService,
+    private boughtFilmService: BoughtFilmService,
   ) {}
 
   @Post('films')
@@ -152,7 +154,7 @@ export class RestApiController {
       return {
         status: 'success',
         message: 'Film deleted',
-        data: await this.filmService.deleteFilm(id),
+        data: await this.boughtFilmService.deleteFilm(id),
       };
     } catch (e) {
       return {
@@ -164,7 +166,7 @@ export class RestApiController {
   }
 
   @Post('login')
-  @Roles(['GUEST'])
+  @Roles(['GUEST', 'USER', 'ADMIN'])
   async signIn(
     @Body() body: SignInDto,
   ): Promise<TResponseStatus<TLoginPostData>> {
@@ -176,7 +178,7 @@ export class RestApiController {
   }
 
   @Get('self')
-  @Roles(['USER', 'ADMIN'])
+  @Roles(['ADMIN'])
   async self(@Req() req: ExtendedRequest) {
     if (!req.user) {
       return {

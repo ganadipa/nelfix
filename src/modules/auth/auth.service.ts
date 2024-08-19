@@ -22,6 +22,18 @@ export class AuthService {
   async register(dto: RegisterDto) {
     const hashed = await argon.hash(dto.password);
 
+    const usernameAndEmail = [dto.username, dto.email];
+
+    for (const field of usernameAndEmail) {
+      const byUsername = await this.userRepo.findByUsername(field);
+      const byEmail = await this.userRepo.findByEmail(field);
+      console.log(byUsername, byEmail);
+      if (byUsername || byEmail)
+        throw new Error(
+          'Please change your username as that identifier is already in use',
+        );
+    }
+
     const usernameExist = await this.userRepo.findByUsername(dto.username);
     const emailExist = await this.userRepo.findByEmail(dto.email);
 
@@ -51,7 +63,18 @@ export class AuthService {
   }
 
   async signIn(dto: SignInDto): Promise<TLoginPostData> {
-    const user = await this.userRepo.findByUsername(dto.username);
+    const byUsername = await this.userRepo.findByUsername(
+      dto.username_or_email,
+    );
+    const byEmail = await this.userRepo.findByEmail(dto.username_or_email);
+
+    if (byUsername && byEmail && byEmail.id !== byUsername.id) {
+      throw new Error(
+        "Database issue: Found two users, but system doesn't know which one to use",
+      );
+    }
+
+    let user = byUsername || byEmail;
 
     if (!user) {
       throw new Error('Invalid credentials');

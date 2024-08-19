@@ -65,6 +65,11 @@ document.addEventListener('DOMContentLoaded', () => {
       'border-red-400',
       'mb-12',
     );
+
+    // Enable the form
+    form.querySelectorAll('input, button').forEach((el) => {
+      el.removeAttribute('disabled');
+    });
   });
 
   // What happens when it is loading?

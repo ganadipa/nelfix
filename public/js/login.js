@@ -28,6 +28,10 @@ document.addEventListener('DOMContentLoaded', () => {
         responseContainer.classList.remove('bg-green-100', 'text-green-800', 'border-green-400', 'mb-12');
         // add the error classes
         responseContainer.classList.add('bg-red-100', 'text-red-800', 'border-red-400', 'mb-12');
+        // Enable the form
+        form.querySelectorAll('input, button').forEach((el) => {
+            el.removeAttribute('disabled');
+        });
     });
     // What happens when it is loading?
     handler.setLoading((form) => {

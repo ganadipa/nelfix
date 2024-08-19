@@ -6,9 +6,10 @@ import { JwtAuthStrategy } from '../auth/strategy/jwt.strategy';
 import { FilmModule } from '../film/film.module';
 import { WebService } from './web.service';
 import { BoughtFilmModule } from '../bought-film/bought-film.module';
+import { FilmReviewModule } from '../film-review/film-review.module';
 
 @Module({
-  imports: [BoughtFilmModule],
+  imports: [BoughtFilmModule, FilmReviewModule],
   controllers: [WebController],
   providers: [WebService],
   exports: [BoughtFilmModule],

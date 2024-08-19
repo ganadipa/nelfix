@@ -106,3 +106,19 @@ export type TBaseViewData = {
   pathname: string;
   user?: TUser;
 };
+
+export type TPrismaReviewFilm = {
+  id: string;
+  createdAt: Date;
+  userId: string;
+  filmId: string;
+  rating: number;
+};
+
+export type TReviewJson = {
+  id: string;
+  created_at: Date;
+  user_id: string;
+  film_id: string;
+  rating: number;
+};

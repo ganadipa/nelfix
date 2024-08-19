@@ -1,17 +1,17 @@
-<section id="trendings" class="w-full relative mb-12 h-screen max-h-[1000px]">
+<section id="trendings" class="w-full relative mb-12 h-screen max-h-[1000px] min-h-[650px]">
     {{#each highlighted_films}}
-        <div id="trendings-{{@index}}" class="absolute w-full h-full overflow-hidden transition-opacity duration-1000 ease-in-out {{#if @index}}opacity-0{{else}}opacity-100{{/if}}">
-            <img src="{{#if this.cover_image_url}}{{this.cover_image_url}}{{else}}/placeholder.jpg{{/if}}" alt="{{this.title}}" class="w-full h-full object-cover ">
+        <div id="trendings-{{@index}}" class="absolute w-full h-full overflow-hidden transition-opacity duration-1000 ease-in-out {{#if @index}}opacity-0{{else}}opacity-100 z-10{{/if}}">
+            <img src="{{#if this.cover_image_url}}{{this.cover_image_url}}{{else}}/placeholder.jpg{{/if}}" alt="{{this.title}}" class="w-full h-full object-cover">
             <div class="absolute w-4/5 h-full top-0 left-0 bg-gradient-to-r from-black via-80% via-black/60 to-black/0 overflow-hidden p-12 flex flex-col justify-between pb-24">
                 <div class=" flex flex-col gap-2">
-                    <div class="p-6 text-4xl font-bold text-gray-300 border-l-8 border-blue-500 bg-gradient-to-r from-blue-900/50 to-blue-900/2 flex items-center gap-4 w-[450px] mb-6">
-                        <img src="/logo.png" alt="Logo" class="w-16">
-                        Only on <span class="text-blue-500">Nelfix</span>
+                    <div class="lg:p-6 p-2.5 text-2xl md:text-4xl font-bold text-gray-300 border-l-8 border-blue-500 bg-gradient-to-r from-blue-900/50 to-blue-900/2 flex items-center gap-4 md:w-[450px] mb-6">
+                        <img src="/logo.png" alt="Logo" class="md:w-16 w-10">
+                        <span>Only on <span class="text-blue-500">Nelfix</span></span>
                     </div>
-                    <h2 class="text-6xl font-bold text-white line-clamp-2 ">{{this.title}}</h2>
+                    <h2 class="md:text-6xl text-5xl font-bold text-white line-clamp-2 ">{{this.title}}</h2>
                     <div class="mt-6">
                         <span class="text-gray-300">
-                            <i class="fa-solid fa-star text-yellow-400"></i> 9.00 (all time),
+                            <i class="fa-solid fa-star text-yellow-400"></i> {{this.rating_all_time}} ({{this.votes_all_time}}),
                         </span>
                         <span class="text-gray-300">{{this.duration}} min</span>
                         <br>
@@ -27,40 +27,41 @@
                         </div>
                         <span class="text-gray-300">Director: {{this.director}}</span>
                     </div>
-                    <div class="h-[8.25em] w-[1/2]">
+                    <div class="h-[8.25em] md:w-1/2 w-4/5">
                         <p class="text-gray-300 line-clamp-6 leading-snug">{{this.description}}</p>
                     </div>
                 </div>
-                <div>
-                    <button class="bg-gray-800 border-2 px-4 py-2.5 border-blue-500 font-semibold text-blue-500 rounded-lg hover:bg-gray-700 transition-colors ">More details</button>
+                <div class="md:mb-24">
+                    <a href="/web/films" class="mt-4 inline-block bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition">More details</a>
                 </div>
             </div>
         </div>
     {{/each}}
 </section>
 
-<section id="trendings-table" class="w-full mx-auto py-12 max-w-6xl">
+<section id="trendings-table" class="w-full mx-auto py-12 px-4 max-w-6xl">
     <div class="text-start mb-8 text-blue-500">
-        <div class="flex gap-4  text-3xl font-semibold ">
+        <div class="flex gap-4  text-xl md:text-3xl font-semibold ">
           <div class="bg-blue-500  text-gray-900 inline-block px-2 rounded-sm shadow-lg shadow-blue-500">
             Nelfix
           </div>
           <h2 class="uppercase">Top 5 highest-rated</h2>
         </div>
-        <h2 class="text-6xl font-bold mt-2 uppercase ">films of the month <i class="fa-solid fa-star text-yellow-400"></i></h2>
+        <h2 class="md:text-6xl text-3xl font-bold md:mt-2 uppercase ">films of the month <i class="fa-solid fa-star text-yellow-400"></i></h2>
     </div>
     <ol class="list-decimal list-inside text-white font-semibold">
       {{#each highlighted_films}}
-        <a href="/web/films/{{this.id}}" class="block transition duration-300 ease-in-out transform hover:scale-105 hover:bg-gray-800 hover:shadow-lg rounded-lg">
+
             <li class="flex justify-between items-center py-2.5 border-b border-gray-700 hover:border-blue-500">
+                <a href="/web/films/{{this.id}}" class="w-full transition duration-300 ease-in-out transform hover:scale-105 hover:bg-gray-800 hover:shadow-lg rounded-lg flex justify-between items-center md:px-4 px-2 md:py-2.5 py-1">
                 <div class="flex gap-4 items-center">
-                    <span class="text-3xl text-blue-500">{{addOne @index}}</span>
-                    <img src="{{#if this.cover_image_url}}{{this.cover_image_url}}{{else}}/placeholder.jpg{{/if}}" alt="{{this.title}}" class="w-10 h-10 object-cover rounded-full border-2 border-blue-500">
-                    <span class="text-2xl text-blue-300">{{this.title}}</span>
+                    <span class="md:text-3xl text-xl text-blue-500">{{addOne @index}}</span>
+                    <img src="{{#if this.cover_image_url}}{{this.cover_image_url}}{{else}}/placeholder.jpg{{/if}}" alt="{{this.title}}" class="w-10 h-10 object-cover rounded-full border-2 border-blue-500" loading="lazy">
+                    <span class="md:text-2xl text-lg text-blue-300">{{this.title}}</span>
                 </div>
-                <span class="text-2xl text-yellow-400"><i class="fa-solid fa-star"></i> {{this.rating}}</span>
+                <span class="md:text-2xl text-lg text-yellow-400"> {{this.rating_this_month}} <i class="fa-solid fa-star"></i><span class="text-fuchsia-50">{{#if this.votes_this_month}} ({{this.votes_this_month}}){{/if}}</span></span>
+                </a>
             </li>
-        </a>
       {{/each}}
     </ol>
 

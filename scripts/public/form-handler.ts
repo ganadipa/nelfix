@@ -17,14 +17,19 @@ export class FormHandler<T, V> {
   }) => void;
   private loading: (form: HTMLFormElement) => void;
   private loaded: (form: HTMLFormElement, status: 'success' | 'error') => void;
+  private additional: Object;
 
   constructor(
     private readonly form: HTMLFormElement,
     private url: string,
     private method: 'GET' | 'POST',
+    additional?: Object,
   ) {
     this.onSuccess = () => {};
     this.onFail = () => {};
+    this.loading = () => {};
+    this.loaded = () => {};
+    if (additional) this.additional = additional;
   }
 
   public set(): void {
@@ -56,6 +61,15 @@ export class FormHandler<T, V> {
     console.log('Form submitted');
 
     const formData = new FormData(this.form);
+
+    // for each additional data, append it to the formData
+    if (this.additional !== undefined) {
+      for (const key in this.additional) {
+        formData.append(key, this.additional[key]);
+      }
+    }
+    console.log('Form data:', formData);
+
     const data: { [key: string]: unknown } = {};
 
     formData.forEach((value, key) => {

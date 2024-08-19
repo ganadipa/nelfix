@@ -5,11 +5,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const intervalTime = 5000;
     const showNextTrending = () => {
         trendings[currentIndex].classList.add('opacity-0');
+        trendings[currentIndex].classList.remove('opacity-100');
         trendings[currentIndex].classList.remove('z-10');
         currentIndex = (currentIndex + 1) % trendings.length;
         setTimeout(() => {
             trendings[currentIndex].classList.remove('opacity-0');
             trendings[currentIndex].classList.add('z-10');
+            trendings[currentIndex].classList.add('opacity-100');
         }, 100);
     };
     trendings[currentIndex].classList.remove('opacity-0');

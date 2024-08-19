@@ -57,8 +57,8 @@ model BoughtFilm {
   purchasedAt DateTime @default(now())
   userId      String
   filmId      String
-  user        User     @relation(fields: [userId], references: [id])
-  film        Film     @relation(fields: [filmId], references: [id])
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  film        Film     @relation(fields: [filmId], references: [id], onDelete: Cascade)
 }
 
 model Review {
@@ -67,15 +67,6 @@ model Review {
   userId    String
   filmId    String
   rating    Int
-  comment   String?
-  user      User     @relation(fields: [userId], references: [id])
-  film      Film     @relation(fields: [filmId], references: [id])
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  film      Film     @relation(fields: [filmId], references: [id], onDelete: Cascade)
 }
-
-// model Wishlist {
-//   id     String @id @default(uuid())
-//   userId String
-//   filmId String
-//   user   User   @relation(fields: [userId], references: [id])
-//   film   Film   @relation(fields: [filmId], references: [id])
-// }

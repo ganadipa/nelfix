@@ -15,12 +15,16 @@ import { RequestHandlerFactory } from './request/request-factory.js';
  * V is the type of the response.data
  */
 export class FormHandler {
-    constructor(form, url, method) {
+    constructor(form, url, method, additional) {
         this.form = form;
         this.url = url;
         this.method = method;
         this.onSuccess = () => { };
         this.onFail = () => { };
+        this.loading = () => { };
+        this.loaded = () => { };
+        if (additional)
+            this.additional = additional;
     }
     set() {
         this.form.addEventListener('submit', this.handleSubmit.bind(this));
@@ -42,6 +46,13 @@ export class FormHandler {
             event.preventDefault();
             console.log('Form submitted');
             const formData = new FormData(this.form);
+            // for each additional data, append it to the formData
+            if (this.additional !== undefined) {
+                for (const key in this.additional) {
+                    formData.append(key, this.additional[key]);
+                }
+            }
+            console.log('Form data:', formData);
             const data = {};
             formData.forEach((value, key) => {
                 data[key] = value;

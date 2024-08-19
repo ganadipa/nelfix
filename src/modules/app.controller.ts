@@ -5,9 +5,17 @@ import { ExtendedRequest } from 'src/common/interfaces/request.interface';
 import { TBaseViewData, TFilmJson } from 'src/common/types';
 import { FilmService } from './film/film.service';
 import { BoughtFilmService } from './bought-film/bought-film.service';
+import { FilmReviewService } from './film-review/film-review.service';
 
 type THomeViewData = {
-  highlighted_films: (TFilmJson & { is_bought: boolean })[];
+  highlighted_films: (TFilmJson & {
+    is_bought: boolean;
+    votes_this_month: number;
+    rating_this_month: number;
+    votes_all_time: number;
+    rating_all_time: number;
+  })[];
+  preload_images: string[];
 };
 
 @Controller('')
@@ -15,6 +23,7 @@ export class AppController {
   constructor(
     private readonly filmService: FilmService,
     private readonly boughtFilmService: BoughtFilmService,
+    private readonly filmReviewService: FilmReviewService,
   ) {}
 
   @Get('404')
@@ -30,19 +39,36 @@ export class AppController {
   async getIndex(
     @Req() req: ExtendedRequest,
   ): Promise<TBaseViewData & THomeViewData> {
-    // const top5Films = await this.filmService.getTop5Films();
-    const allFilms = await this.filmService.getFilms();
-    console.log(allFilms.length);
-    const top5Films = allFilms.slice(0, 5);
+    // Get the highest rated
+    const topReviewFilms = await this.filmReviewService.getTopFilmsThisMonth();
+
+    // Get the top 5
+    const top5 = topReviewFilms.slice(0, 5);
+
+    const preload_images: string[] = [];
+
+    // Highlight!
     const highlighted_films = await Promise.all(
-      top5Films.map(async (f) => {
+      top5.map(async (item) => {
+        const film = await this.filmService.getFilm(item.filmId);
         const is_bought = req.user
-          ? await this.boughtFilmService.hadBought(req.user.id, f.id)
+          ? await this.boughtFilmService.hadBought(req.user?.id, item.filmId)
           : false;
+        const allTimeRatingAndVoters =
+          await this.filmReviewService.getAverageRatingAndTotalVoters(
+            item.filmId,
+          );
+
+        preload_images.push(film.cover_image_url);
+
         return {
-          ...f,
+          ...film,
           is_bought,
-          duration: Math.round(f.duration / 60),
+          duration: Math.round(film.duration / 60),
+          votes_this_month: item.count,
+          rating_this_month: item.rating,
+          votes_all_time: allTimeRatingAndVoters.total,
+          rating_all_time: allTimeRatingAndVoters.avg,
         };
       }),
     );
@@ -55,6 +81,7 @@ export class AppController {
       scripts: ['/js/trendings.js'],
       description:
         'Nelfix is a streaming service that offers a wide variety of award-winning TV shows, movies, anime, documentaries, and more on thousands of internet-connected devices.',
+      preload_images,
     };
   }
 }

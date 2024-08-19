@@ -39,7 +39,7 @@ export class WebService {
     if (req.user) {
       films = await this.boughtFilmService.queryFilmsRelative(req.user.id, q);
     } else {
-      const filmsReturned = await this.filmService.getFilms();
+      const filmsReturned = await this.filmService.getFilms(q);
       films = filmsReturned.map((f) => ({
         ...f,
         is_bought: false,

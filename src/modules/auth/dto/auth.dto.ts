@@ -32,7 +32,7 @@ export class RegisterDto {
 
 export class SignInDto {
   @IsNotEmpty()
-  username: string;
+  username_or_email: string;
 
   @IsNotEmpty()
   password: string;
