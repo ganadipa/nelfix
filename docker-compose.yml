@@ -1,12 +1,12 @@
 version: '3.8'
 
 services:
-  # db:
-  #   image: postgres:13
-  #   ports:
-  #     - '5432:5432'
-  #   env_file:
-  #     - .env.docker
+  db:
+    image: postgres:13
+    ports:
+      - '5432:5432'
+    env_file:
+      - .env.docker
 
   monolith:
     build: .
@@ -15,12 +15,16 @@ services:
     volumes:
       - .:/app
       - /app/node_modules
-    # depends_on:
-    #   - db
+    depends_on:
+      - db
     env_file:
       - .env.docker
     command: >
       sh -c "
+      until nc -z db 5432; do
+        echo 'Waiting for Postgres...';
+        sleep 2;
+      done &&
       pnpm prisma generate &&
       pnpm prisma migrate dev --name init &&
       pnpm prisma migrate deploy &&
