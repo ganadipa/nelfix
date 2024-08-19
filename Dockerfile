@@ -10,10 +10,7 @@ RUN pnpm install
 
 COPY . .
 
-RUN pnpm prisma generate && pnpm prisma migrate dev && pnpm prisma generate
-
 RUN pnpm build
-
 
 EXPOSE 3333
 
