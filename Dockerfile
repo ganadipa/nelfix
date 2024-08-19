@@ -13,6 +13,8 @@ COPY . .
 
 RUN pnpm build
 
+ENV DATABASE_URL=$DATABASE_URL
+
 RUN pnpm prisma migrate deploy
 
 EXPOSE 3333
