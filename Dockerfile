@@ -10,7 +10,7 @@ RUN pnpm install
 
 COPY . .
 
-COPY wait-for-postgres.sh /usr/local/bin/wait-for-postgres.sh
+COPY scripts/private/wait-for-postgres.sh /usr/local/bin/wait-for-postgres.sh
 RUN chmod +x /usr/local/bin/wait-for-postgres.sh
 
 RUN /usr/local/bin/wait-for-postgres.sh
