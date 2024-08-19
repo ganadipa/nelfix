@@ -21,10 +21,6 @@ services:
       - .env.docker
     command: >
       sh -c "
-      until nc -z db 5432; do
-        echo 'Waiting for Postgres...';
-        sleep 2;
-      done &&
       pnpm prisma generate &&
       pnpm prisma migrate dev --name init &&
       pnpm prisma migrate deploy &&

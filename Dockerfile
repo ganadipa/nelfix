@@ -10,9 +10,11 @@ RUN pnpm install
 
 COPY . .
 
-RUN pnpm prisma generate
+COPY scripts/private/wait-for-db.sh /usr/local/bin/wait-for-db.sh
+RUN chmod +x /usr/local/bin/wait-for-db.sh
 
-RUN pnpm prisma migrate deploy 
+RUN /usr/local/bin/wait-for-db.sh
+
 
 EXPOSE 3333
 
