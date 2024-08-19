@@ -10,9 +10,11 @@ RUN pnpm install
 
 COPY . .
 
-RUN pnpm prisma generate
+COPY wait-for-postgres.sh /usr/local/bin/wait-for-postgres.sh
+RUN chmod +x /usr/local/bin/wait-for-postgres.sh
 
-RUN pnpm prisma migrate deploy 
+RUN /usr/local/bin/wait-for-postgres.sh
+
 
 EXPOSE 3333
 
