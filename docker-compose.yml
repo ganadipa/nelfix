@@ -28,5 +28,5 @@ services:
       pnpm prisma generate &&
       pnpm prisma migrate dev --name init &&
       pnpm prisma migrate deploy &&
-      pnpm build && pnpm start:prod
+      pnpm start:dev
       "

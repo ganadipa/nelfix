@@ -20,6 +20,9 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!currentPage) {
         throw new Error('Current page not found!');
     }
+    if (parseInt(currentPage) < 1 || isNaN(parseInt(currentPage))) {
+        return;
+    }
     const totalPages = paginationContainers[0].getAttribute('data-total-pages');
     if (!totalPages) {
         throw new Error('Total pages not found!');

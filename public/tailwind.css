@@ -835,6 +835,14 @@ video {
   height: 100vh;
 }
 
+.h-\[300px\] {
+  height: 300px;
+}
+
+.h-\[500px\] {
+  height: 500px;
+}
+
 .max-h-\[1000px\] {
   max-height: 1000px;
 }
@@ -859,6 +867,14 @@ video {
   min-height: 650px;
 }
 
+.min-h-\[200px\] {
+  min-height: 200px;
+}
+
+.min-h-\[300px\] {
+  min-height: 300px;
+}
+
 .w-1\/2 {
   width: 50%;
 }
@@ -881,6 +897,10 @@ video {
 
 .min-w-16 {
   min-width: 4rem;
+}
+
+.min-w-full {
+  min-width: 100%;
 }
 
 .max-w-6xl {
@@ -945,6 +965,10 @@ video {
   grid-template-columns: repeat(4, minmax(0, 1fr));
 }
 
+.grid-cols-2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
 .flex-col {
   flex-direction: column;
 }
@@ -1003,6 +1027,14 @@ video {
 
 .gap-8 {
   gap: 2rem;
+}
+
+.gap-12 {
+  gap: 3rem;
+}
+
+.gap-2\.5 {
+  gap: 0.625rem;
 }
 
 .space-x-4 > :not([hidden]) ~ :not([hidden]) {
@@ -1239,6 +1271,11 @@ video {
      object-fit: cover;
 }
 
+.object-fill {
+  -o-object-fit: fill;
+     object-fit: fill;
+}
+
 .p-12 {
   padding: 3rem;
 }
@@ -1316,6 +1353,11 @@ video {
 .py-3 {
   padding-top: 0.75rem;
   padding-bottom: 0.75rem;
+}
+
+.px-8 {
+  padding-left: 2rem;
+  padding-right: 2rem;
 }
 
 .pb-12 {
@@ -1723,6 +1765,42 @@ video {
   .max-md\:hidden {
     display: none;
   }
+
+  .max-md\:h-\[600px\] {
+    height: 600px;
+  }
+
+  .max-md\:h-\[450px\] {
+    height: 450px;
+  }
+
+  .max-md\:h-\[550px\] {
+    height: 550px;
+  }
+
+  .max-md\:min-h-\[500px\] {
+    min-height: 500px;
+  }
+
+  .max-md\:min-h-\[400px\] {
+    min-height: 400px;
+  }
+
+  .max-md\:flex-col-reverse {
+    flex-direction: column-reverse;
+  }
+}
+
+@media not all and (min-width: 640px) {
+  .max-sm\:hidden {
+    display: none;
+  }
+}
+
+@media (min-width: 640px) {
+  .sm\:grid-cols-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
 @media (min-width: 768px) {
@@ -1740,6 +1818,10 @@ video {
 
   .md\:hidden {
     display: none;
+  }
+
+  .md\:min-h-\[800px\] {
+    min-height: 800px;
   }
 
   .md\:w-1\/2 {
@@ -1766,8 +1848,16 @@ video {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
+  .md\:grid-cols-3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
   .md\:flex-row {
     flex-direction: row;
+  }
+
+  .md\:p-12 {
+    padding: 3rem;
   }
 
   .md\:px-4 {
@@ -1802,8 +1892,29 @@ video {
 }
 
 @media (min-width: 1024px) {
+  .lg\:w-1\/2 {
+    width: 50%;
+  }
+
+  .lg\:max-w-lg {
+    max-width: 32rem;
+  }
+
+  .lg\:grid-cols-4 {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .lg\:gap-12 {
+    gap: 3rem;
+  }
+
   .lg\:p-6 {
     padding: 1.5rem;
+  }
+
+  .lg\:px-8 {
+    padding-left: 2rem;
+    padding-right: 2rem;
   }
 }
 

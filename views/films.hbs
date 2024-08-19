@@ -1,9 +1,9 @@
 
-<section id="films" class='w-full mx-auto flex flex-col gap-8 pt-12 max-w-6xl self-start min-h-[600px]'>
-  <div  class="flex justify-beetween">
+<section id="films" class='w-full mx-auto flex flex-col gap-8 pt-12 max-w-6xl self-start min-h-[600px] px-4 lg:px-8'>
+  <div  class="flex justify-beetween gap-6 lg:gap-12 max-md:flex-col-reverse">
       <div id="pagination-top" data-current-page="{{page}}" data-total-pages="{{total_pages}}" class="flex justify-center items-center gap-3">
       </div>
-    <form id="search-form" class="flex w-full max-w-lg gap-4 ml-auto">
+    <form id="search-form" class="flex w-full lg:max-w-lg gap-4 ml-auto">
       <input 
         type="text" 
         name="q" 
@@ -21,17 +21,20 @@
   </div>
   <div id="results" class="w-full">
   {{#if films.length}}
-    <div class="font-sans font-semibold mx-auto grid grid-cols-4 gap-3.5 auto-cols-max min-h-[800px]">
+    <div class="font-sans font-semibold mx-auto grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3.5 auto-cols-max md:min-h-[800px] max-md:min-h-[500px]">
       {{#each films}}
-        <a class='bg-gray-700 hover:bg-gray-600 rounded-lg shadow-lg hover:shadow-2xl transition relative duration-300 ease-in-out overflow-hidden cursor-pointer flex flex-col justify-between h-[400px]' href="/web/films/{{this.id}}">
-          <img src='{{#if this.cover_image_url}}{{this.cover_image_url}}{{else}}/placeholder.jpg{{/if}}' alt='{{this.title}}' class='w-full h-[200px] object-cover' />
-          <div class='p-4 text-gray-300 flex flex-col gap-1.5'>
-            <h2 class="text-xl font-bold line-clamp-2">{{this.title}} ({{this.release_year}})</h2>
-            <p class="text-sm mt-1 font-normal">{{this.director}}</p>
-            <div class="flex flex-wrap gap-2 mt-1">
-              {{#each this.genre}}
-                <div class="bg-blue-800 text-xs font-medium py-1 px-3 rounded-full">{{this}}</div>
-              {{/each}}
+        <a class='bg-gray-700 hover:bg-gray-600 rounded-lg shadow-lg hover:shadow-2xl transition relative duration-300 ease-in-out overflow-hidden cursor-pointer flex flex-col h-[500px] max-md:h-[550px]' href="/web/films/{{this.id}}">
+        
+          <img src='{{#if this.cover_image_url}}{{this.cover_image_url}}{{else}}/placeholder.jpg{{/if}}' alt='{{this.title}}' class='w-full min-h-[300px] h-[300px] object-cover' />
+          <div class='p-4 text-gray-300 flex flex-col gap-1.5 justify-between h-full'>
+            <div class="flex flex-col gap-2.5">
+              <h2 class="text-xl font-bold line-clamp-2">{{this.title}} ({{this.release_year}})</h2>
+              <p class="text-sm mt-1 font-normal">{{this.director}}</p>
+              <div class="flex flex-wrap gap-2 mt-1">
+                {{#each this.genre}}
+                  <div class="bg-blue-800 text-xs font-medium py-1 px-3 rounded-full">{{this}}</div>
+                {{/each}}
+              </div>
             </div>
               <div class="bg-cyan-950 px-4 py-1 border-2 border-emerald-900 rounded-full min-w-16 text-center flex items-center justify-around self-end">
                 <span class="text-white">{{this.price}}</span>
@@ -46,14 +49,16 @@
         </a>
       {{/each}}
     </div>
-    <div id="pagination-bottom" data-current-page="{{page}}" data-total-pages="{{total_pages}}" class="flex justify-center items-center gap-3 mt-12">
-    </div>
-    
-
   {{else}}
     <div id='response-when-empty' class="text-center py-10">
-      
+      {{#if (eq page 0)}}
+        <h2 class="text-2xl font-semibold text-gray-300">No films found</h2>
+
+      {{/if}}
     </div>
   {{/if}}
   </div>
+
+    <div id="pagination-bottom" data-current-page="{{page}}" data-total-pages="{{total_pages}}" class="flex justify-center items-center gap-3 mt-12">
+    </div>
 </section>

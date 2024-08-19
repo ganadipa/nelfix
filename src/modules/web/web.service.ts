@@ -30,10 +30,12 @@ export class WebService {
     pageStr,
     q,
     req,
+    boughtOnly,
   }: {
     pageStr: string;
     q: string;
     req: ExtendedRequest;
+    boughtOnly?: boolean;
   }) {
     let films: (TFilmJson & { is_bought: boolean })[] = [];
     if (req.user) {
@@ -44,6 +46,10 @@ export class WebService {
         ...f,
         is_bought: false,
       }));
+    }
+
+    if (boughtOnly) {
+      films = films.filter((f) => f.is_bought);
     }
 
     const sortedFilms =
@@ -60,6 +66,10 @@ export class WebService {
     }
 
     const paginationData = this.getPaginatedData(sortedFilms, page);
+
+    if (paginationData.page > paginationData.total_pages) {
+      paginationData.page = paginationData.total_pages;
+    }
     return paginationData;
   }
 }

@@ -1,3 +1,4 @@
+import { parse } from 'path';
 import { V1StylePagination } from './v1-style.js';
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -28,6 +29,10 @@ document.addEventListener('DOMContentLoaded', () => {
   const currentPage = paginationContainers[0].getAttribute('data-current-page');
   if (!currentPage) {
     throw new Error('Current page not found!');
+  }
+
+  if (parseInt(currentPage) < 1 || isNaN(parseInt(currentPage))) {
+    return;
   }
 
   const totalPages = paginationContainers[0].getAttribute('data-total-pages');

@@ -14,6 +14,7 @@ export class PaginationManager {
 
   private renderPagination(container: HTMLElement, totalPages: number): void {
     container.innerHTML = '';
+    if (totalPages < 1) return;
     container.setAttribute('data-current-page', '1');
     container.setAttribute('data-total-pages', `${totalPages}`);
     const pagination = new V1StylePagination(

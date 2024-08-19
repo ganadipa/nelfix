@@ -44,8 +44,17 @@ export class WebController {
       q,
       req,
     });
+    const twoGenresPaginationData = {
+      films: paginationData.films.map((film) => ({
+        ...film,
+        genres: film.genre.slice(0, 2),
+      })),
+      page: paginationData.page,
+      total_pages: paginationData.total_pages,
+    };
+
     return {
-      films: paginationData.films,
+      films: twoGenresPaginationData.films,
       user: req.user,
       pathname: req.path,
       title: 'Films',
@@ -90,28 +99,37 @@ export class WebController {
   @Get('my-list')
   @Render('films')
   @Roles(['USER', 'ADMIN'], '/auth/login')
-  async getMyList(@Req() req: ExtendedRequest, @Query('page') page: number) {
-    const films = await this.boughtFilmService.getBoughtFilmsByUserId(
-      req.user.id,
-    );
+  async getPurchase(
+    @Req() req: ExtendedRequest,
+    @Query('page') pageStr?: string,
+    @Query('q') q?: string,
+  ): Promise<TBaseViewData & TFilmsViewData> {
+    const paginationData = await this.webService.getPaginationData({
+      pageStr,
+      q,
+      req,
+      boughtOnly: true,
+    });
+    const boughtOnly = paginationData.films.filter((film) => film.is_bought);
 
-    const paginationData = this.webService.getPaginatedData(
-      films.map((f) => ({
-        ...f,
-        is_bought: true,
+    const twoGenresPaginationData = {
+      films: boughtOnly.map((film) => ({
+        ...film,
+        genres: film.genre.slice(0, 2),
       })),
-      page,
-    );
-
-    return {
-      films: paginationData.films,
-      user: req.user,
-      pathname: req.path,
-      title: 'My List',
       page: paginationData.page,
       total_pages: paginationData.total_pages,
-      scripts: ['/js/pagination-logic.js'],
-      no_film_desc: "You haven't bought any film yet.",
+    };
+
+    return {
+      films: twoGenresPaginationData.films,
+      user: req.user,
+      pathname: req.path,
+      title: 'Purchased Films',
+      page: paginationData.page,
+      total_pages: paginationData.total_pages,
+      scripts: ['/js/pagination/pagination-logic.js', '/js/search-films.js'],
+      description: 'Watch your favorite films on Nelfix.',
     };
   }
 
