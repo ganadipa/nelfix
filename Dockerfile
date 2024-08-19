@@ -3,6 +3,7 @@ FROM node:18-alpine
 WORKDIR /app
 
 COPY package*.json ./
+COPY prisma ./prisma
 
 RUN npm install -g pnpm
 
@@ -13,4 +14,4 @@ COPY . .
 
 EXPOSE 3333
 
-CMD ["pnpm", "start:dev"]
+CMD ["pnpm", "start:prod"]
