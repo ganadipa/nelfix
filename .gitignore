@@ -3,3 +3,4 @@ dist
 .env
 .env.docker
 nelfix-firebase-adminsdk.json
+docker-compose.yml
