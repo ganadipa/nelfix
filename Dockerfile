@@ -13,6 +13,7 @@ COPY . .
 
 RUN pnpm build
 
+ARG DATABASE_URL
 ENV DATABASE_URL=$DATABASE_URL
 
 RUN pnpm prisma migrate deploy
