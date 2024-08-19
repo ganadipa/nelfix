@@ -1,61 +1,134 @@
-<section class="max-w-5xl mx-auto p-6 text-gray-200 flex flex-col gap-8">
-    <div class="flex flex-col md:flex-row gap-6 overflow-x-hidden">
-      <img src="{{#if film.cover_image_url}}{{film.cover_image_url}}{{else}}/placeholder.jpg{{/if}}" alt="{{film.title}}" class="w-full md:w-1/3 h-auto object-cover rounded">
-      <div class="flex flex-col w-1/2 ">
-        <h1 class="text-4xl font-bold text-blue-800 mb-4">{{film.title}}</h1>
-        <div class="text-lg mb-4">
-          <span class="font-semibold">Release Date: </span><span>{{film.release_year}}</span>
-        </div>
-        <div class="mb-4">
-          <p class="font-semibold text-lg">Director:</p>
-          <p class="text-sm mt-2">{{film.director}}</p>
-        </div>
-        <div class="mb-4">
-          <p class="font-semibold text-lg">Genres:</p>
-          <div class="flex flex-wrap gap-2 mt-2">
-            {{#each film.genre}}
-              <div class="bg-blue-800 text-xs font-medium py-1 px-3 rounded-full">{{this}}</div>
-            {{/each}}
-          </div>
-        </div>
-        <div class="mb-4">
-          <p class="font-semibold text-lg">Duration:</p>
-          <p class="text-sm mt-2">{{film.duration}} minutes</p>
-        </div>
-        <div class="mb-4">
-          <p class="font-semibold text-lg">Price:</p>
-          <div class="bg-cyan-950 px-4 py-1 border-2 border-emerald-900 rounded-full inline-flex items-center mt-2">
-            <span class="text-white mr-2">{{film.price}}</span>
-            <img src="/coin.png" alt="Coin" class="h-4">
-          </div>
+<section class="max-w-6xl mx-auto text-gray-200 flex flex-col gap-8 ">
+  <div class="flex flex-col md:flex-row gap-6 overflow-x-hidden bg-gray-800 rounded-lg shadow-lg p-4">
+    <img src="{{#if film.cover_image_url}}{{film.cover_image_url}}{{else}}/placeholder.jpg{{/if}}" alt="{{film.title}}" class="w-full md:w-1/3 h-auto object-cover rounded-lg shadow-md">
+    <div class="flex flex-col w-full md:w-2/3 px-6">
+      <h1 class="text-4xl font-bold text-cyan-400 mb-2">{{film.title}}</h1>
+      
+      {{#if film.rating}}
+      <div class="flex items-center gap-2 mb-4">
+        <span class="text-yellow-400 text-lg">{{film.rating}}/10</span>
+        <i class="fa-solid fa-star text-yellow-400"></i>
+        <span class="text-gray-300 text-sm">({{film.total_voters}} votes)</span>
+      </div>
+      {{/if}}
+
+      <div class="text-lg text-gray-300 mb-4">
+        <span class="font-semibold">Release Date: </span><span>{{film.release_year}}</span>
+      </div>
+
+      <div class="mb-4 text-gray-300">
+        <p class="font-semibold text-lg">Director:</p>
+        <p class="text-sm mt-2">{{film.director}}</p>
+      </div>
+
+      <div class="mb-4 text-gray-300">
+        <p class="font-semibold text-lg">Genres:</p>
+        <div class="flex flex-wrap gap-2 mt-2">
+          {{#each film.genre}}
+            <div class="bg-blue-800 text-xs font-medium py-1 px-3 rounded-full">{{this}}</div>
+          {{/each}}
         </div>
       </div>
+
+      <div class="mb-4 text-gray-300">
+        <p class="font-semibold text-lg">Duration:</p>
+        <p class="text-sm mt-2">{{film.duration}} minutes</p>
+      </div>
+
+      <div class="mb-4 text-gray-300">
+        <p class="font-semibold text-lg">Price:</p>
+        <div class="bg-cyan-950 px-4 py-1 border-2 border-emerald-900 rounded-full inline-flex items-center mt-2">
+          <span class="text-white mr-2">{{film.price}}</span>
+          <img src="/coin.png" alt="Coin" class="h-4">
+        </div>
+      </div>
+
+      <div class="mt-6">
+        {{#if user}}
+          {{#if film.is_bought}}
+            <a class="bg-blue-800 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-300 ease-in-out shadow-md" href="{{film.video_url}}" target="_blank">Watch Film</a>
+          {{else}}
+            <button class="bg-blue-800 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-300 ease-in-out shadow-md" id="purchaseButton">Buy Now</button>
+          {{/if}}
+        {{else}}
+          <a class="bg-blue-800 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-300 ease-in-out shadow-md" href="/auth/login">Watch Film</a>
+        {{/if}}
+      </div>
     </div>
-    <div class="mb-4">
-      <p class="font-semibold text-lg">Description:</p>
-      <p class="text-sm mt-2 line-clamp-6">{{film.description}}</p>
-    </div>
-    <div class="self-end">
-      {{#if film.is_bought}}
-        <a class="bg-blue-800 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-300 ease-in-out" href={{film.video_url}} target="_blank">Watch Film</a>
-      {{else}}
-        <button class="bg-blue-800 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-300 ease-in-out" id="purchaseButton">Buy Now</button>
-      {{/if}}
-    </div>
+  </div>
+
+  <div class="mb-4 mx-24 text-gray-300 overflow-hidden max-w-6xl">
+    <p class="font-semibold text-xl">Description:</p>
+    <p class="text-lg mt-2">{{film.description}}</p>
+  </div>
 </section>
 
-<div id="purchaseModal" class="fixed inset-0 bg-black bg-opacity-50 justify-center items-center hidden">
-    <div class="bg-gray-800 p-6 rounded-lg shadow-lg max-w-md w-full text-white flex flex-col gap-3">
-        <h2 class="text-2xl font-bold mb-4">Confirm Purchase</h2>
-        <p>Are you sure you want to buy this film?</p>
-        <p>Your current balance: <span id="currentBalance">{{user.balance}}</span></p>
-        <p>Price: <span id="filmPrice">{{film.price}}</span></p>
-        <div id="response-container" class="p-2 text-center"></div>
-        <div class="flex justify-end gap-4">
-            <button class="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-lg" id="closeModalButton">Cancel</button>
-            <button class="bg-green-700 hover:bg-green-600 text-white px-4 py-2 rounded-lg" id="confirmPurchaseButton" >Confirm</button>
-        </div>
+{{#if film.is_bought}}
+<section id="reviews" class="mt-24 w-full max-w-6xl flex flex-col  items-center">
+  {{#if film.rated}}
+    <div class="bg-gray-800 p-6 rounded-lg shadow-lg text-gray-300">
+      <p class="text-lg font-semibold">You have rated this movie:</p>
+      <div class="flex items-center gap-2 mt-2">
+        <span class="text-yellow-400 text-lg">{{film.rated}}/10</span>
+        <i class="fa-solid fa-star text-yellow-400"></i>
+      </div>
     </div>
+  {{else}}
+    <form id="review-form" class="bg-gray-800 p-6 rounded-lg shadow-lg w-1/2">
+      <div class="flex flex-col gap-4 items-center">
+        <p class="text-lg text-gray-300 font-semibold">Rate this movie:</p>
+        <div class="self-center flex items-center justify-between gap-1" id="starRatingContainer">
+          {{#each (range 1 10)}}
+            <i
+              class="fa-solid fa-star text-gray-400 star hover:cursor-pointer hover:text-yellow-500 transition duration-300"
+              data-value="{{this}}"
+            ></i>
+          {{/each}}
+        </div>
+
+        <input type="hidden" name="rating" id="starRating" value="0" />
+
+        <button
+          type="submit"
+          class="self-center bg-blue-800 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-300 ease-in-out shadow-md"
+          id="submitReviewButton"
+        >
+          Submit Review
+        </button>
+      </div>
+    </form>
+  {{/if}}
+</section>
+{{/if}}
+
+<div id="purchaseModal" class="fixed inset-0 bg-black bg-opacity-50 justify-center items-center hidden">
+  <div class="bg-gray-800 p-6 rounded-lg shadow-lg max-w-md w-full text-white flex flex-col gap-3">
+    <h2 class="text-2xl font-bold mb-4">Confirm Purchase</h2>
+    <p>Are you sure you want to buy this film?</p>
+    <p>Your current balance: <span id="currentBalance">{{user.balance}}</span></p>
+    <p>Price: <span id="filmPrice">{{film.price}}</span></p>
+    <div id="response-container" class="p-2 text-center"></div>
+    <div class="flex justify-end gap-4">
+      <button class="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-lg" id="closeModalButton">Cancel</button>
+      <button class="bg-green-700 hover:bg-green-600 text-white px-4 py-2 rounded-lg" id="confirmPurchaseButton">Confirm</button>
+    </div>
+  </div>
 </div>
 
+<div id="purchaseModal" class="fixed inset-0 bg-black bg-opacity-50 justify-center items-center hidden">
+  <div class="bg-gray-800 p-6 rounded-lg shadow-lg max-w-md w-full text-white flex flex-col gap-3">
+    <h2 class="text-2xl font-bold mb-4">Confirm Purchase</h2>
+    <p>Are you sure you want to buy this film?</p>
+    <p>Your current balance: <span id="currentBalance">{{user.balance}}</span></p>
+    <p>Price: <span id="filmPrice">{{film.price}}</span></p>
+    <div id="response-container" class="p-2 text-center"></div>
+    <div class="flex justify-end gap-4">
+      <button class="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-lg" id="closeModalButton">Cancel</button>
+      <button class="bg-green-700 hover:bg-green-600 text-white px-4 py-2 rounded-lg" id="confirmPurchaseButton">Confirm</button>
+    </div>
+  </div>
+</div>
 
+<script>
+
+</script>

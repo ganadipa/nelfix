@@ -1,14 +1,12 @@
-<div class="bg-white p-8 rounded shadow-md w-full max-w-md">
-  <h2 class="text-2xl font-bold mb-6 text-center">Login</h2>
+<div class="bg-transparent p-8 rounded w-full max-w-md">
+  <h2 class="font-bold mb-6 text-start text-3xl text-white ml-2">Login</h2>
   <form id="login-form">
-    {{> input type="text" name="username" id="username" label="Username" required=true}}
+    {{> input type="text" name="username_or_email" id="username" label="Username/Email" required=true}}
     {{> input type="password" name="password" id="password" label="Password" required=true}}
     <div id="response-container" class="mt-4 p-4 rounded-sm text-xs"></div>
     <div class="flex items-center justify-between">
-      <button type="submit" class="bg-blue-700 hover:bg-blue-200 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline disabled:bg-blue-200 disabled:cursor-not-allowed">Login</button>
+      <button type="submit" class="bg-blue-700 hover:bg-blue-200 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline disabled:bg-blue-200 disabled:cursor-not-allowed mr-4">Login</button>
       <a href="/auth/register" class="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800">Don't have an account?</a>
     </div>
   </form>
-  
 </div>
-<script type="module" src="/js/login.js"></script>

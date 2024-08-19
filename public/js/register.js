@@ -5,11 +5,12 @@ document.addEventListener('DOMContentLoaded', () => {
     // response container is the div element inside the form that have id 'response-container', and must be inside the form element
     const responseContainer = form.querySelector('div#response-container');
     // create new FormHandler instance
-    const handler = new FormHandler(form, '/api/register');
+    const url = '/api/register';
+    const handler = new FormHandler(form, url, 'POST');
     // What happens when it is successful?
-    handler.setOnSuccess((data) => {
+    handler.setOnSuccess(() => {
         // set the response message
-        responseContainer.innerText = `Success: ${data.message}`;
+        responseContainer.innerText = `Success: Register successful!`;
         // remove the error classes
         responseContainer.classList.remove('bg-red-100', 'text-red-800', 'border-red-400', 'mb-12');
         // add the success classes
@@ -34,12 +35,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const loginLink = form.querySelector('a');
         loginLink.setAttribute('href', '#');
         loginLink.classList.add('hidden');
-        // set the response message
-        responseContainer.innerText = 'Loading...';
-        // remove the success and error classes
-        responseContainer.classList.remove('bg-green-100', 'text-green-800', 'border-green-400', 'bg-red-100', 'text-red-800', 'border-red-400');
-        // Add the loading classes
-        responseContainer.classList.add('bg-blue-100', 'text-blue-800', 'border-blue-400', 'mb-12');
     });
     // What happens when it is loaded?
     handler.setLoaded((form) => {
@@ -51,8 +46,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const loginLink = form.querySelector('a');
         loginLink.setAttribute('href', '/auth/login');
         loginLink.classList.remove('hidden');
-        // remove the loading classes
-        responseContainer.classList.remove('bg-blue-100', 'text-blue-800', 'border-blue-400');
     });
     // Ok, we are ready
     handler.set();

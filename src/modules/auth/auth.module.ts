@@ -8,7 +8,7 @@ import { UserModule } from '../user/user.module';
 import { AuthGuard } from './auth.guard';
 
 @Module({
-  imports: [UserModule, PrismaModule, JwtModule.register({})],
+  imports: [UserModule, JwtModule.register({})],
   controllers: [AuthController],
   providers: [
     {
@@ -18,6 +18,6 @@ import { AuthGuard } from './auth.guard';
     AuthService,
     AuthGuard,
   ],
-  exports: ['AUTH_STRATEGY', UserModule, AuthGuard],
+  exports: ['AUTH_STRATEGY', UserModule, AuthGuard, AuthService],
 })
 export class AuthModule {}

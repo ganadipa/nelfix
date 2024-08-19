@@ -1,33 +1,47 @@
-import { Body, Controller, Post, Req, Res } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-import { Request, Response } from 'express';
+import {
+  Body,
+  Controller,
+  Get,
+  ParseIntPipe,
+  Post,
+  Query,
+  Req,
+  Res,
+} from '@nestjs/common';
+import { Response } from 'express';
 import { AuthService } from '../auth/auth.service';
 import { RegisterDto, SignInDto } from '../auth/dto';
-import { TLoginPostData, TResponseStatus } from 'src/common/types';
+import { TFilmJson, TLoginPostData, TResponseStatus } from 'src/common/types';
 import { Roles } from 'src/common/decorator/roles.decorator';
-import { FilmService } from '../film/film.service';
 import { ExtendedRequest } from 'src/common/interfaces/request.interface';
+import { BoughtFilmService } from '../bought-film/bought-film.service';
+import { FilmService } from '../film/film.service';
+import { CreateReviewDto } from '../film-review/dto/film-review.dto';
+import { FilmReviewService } from '../film-review/film-review.service';
 
 @Controller('api')
 export class ApiController {
   constructor(
     private authService: AuthService,
+    private boughtFilmService: BoughtFilmService,
     private filmService: FilmService,
+    private reviewFilmService: FilmReviewService,
   ) {}
 
   @Post('register')
   @Roles(['GUEST'])
-  register(@Body() body: RegisterDto) {
+  async register(@Body() body: RegisterDto) {
     try {
       return {
         status: 'success',
         message: 'User registered successfully',
-        data: this.authService.register(body),
+        data: await this.authService.register(body),
       };
     } catch (e) {
       return {
         status: 'error',
         message: e.message,
+        data: null,
       };
     }
   }
@@ -38,17 +52,26 @@ export class ApiController {
     @Body() body: SignInDto,
     @Res() res: Response,
   ): Promise<TResponseStatus<TLoginPostData>> {
-    const resp = await this.authService.signIn(body);
-
-    if (resp.status === 'success') {
-      res.cookie('token', resp.data.token, {
+    try {
+      const resp = await this.authService.signIn(body);
+      res.cookie('token', resp.token, {
         httpOnly: true,
         secure: true,
         sameSite: 'strict',
       });
+      res.status(200).json({
+        status: 'success',
+        message: 'User logged in successfully',
+        data: resp,
+      });
+    } catch (e) {
+      res.status(400).json({
+        status: 'error',
+        message: e.message,
+        data: null,
+      });
     }
 
-    res.status(200).json(resp);
     return;
   }
 
@@ -59,7 +82,105 @@ export class ApiController {
       return {
         status: 'success',
         message: 'Film was successfully bought',
-        data: await this.filmService.buyFilm(req.user.id, req.body.filmId),
+        data: await this.boughtFilmService.buyFilm(
+          req.user.id,
+          req.body.filmId,
+        ),
+      };
+    } catch (e) {
+      return {
+        status: 'error',
+        message: e.message,
+        data: null,
+      };
+    }
+  }
+
+  @Get('logout')
+  @Roles(['USER', 'ADMIN'])
+  async logout(@Res() res: Response, @Req() req: ExtendedRequest) {
+    res.clearCookie('token');
+    res.status(200).json({
+      status: 'success',
+      message: 'User logged out successfully',
+      data: {
+        id: req.user.id,
+        email: req.user.email,
+        username: req.user.username,
+        token: req.user.token,
+      },
+    });
+  }
+
+  @Get('search-films')
+  @Roles(['ADMIN', 'USER', 'GUEST'])
+  async getFilms(
+    @Query('q') q?: string,
+    @Query('page') pageStr: string = '1',
+  ): Promise<
+    TResponseStatus<{
+      films: Omit<TFilmJson, 'video_url'>[];
+      total: number;
+    }>
+  > {
+    const page = parseInt(pageStr, 10);
+
+    const films = await this.filmService.getFilms(q);
+    const filmsWithoutVideoUrl = films.map((film) => {
+      const { video_url, ...rest } = film;
+      return rest;
+    });
+
+    const numberOfFilmsPerPage = 12;
+    const paginatedFilms = filmsWithoutVideoUrl.slice(
+      (page - 1) * numberOfFilmsPerPage,
+      page * numberOfFilmsPerPage,
+    );
+
+    try {
+      return {
+        status: 'success',
+        message: 'Films retrieved',
+        data: {
+          films: paginatedFilms,
+          total: filmsWithoutVideoUrl.length,
+        },
+      };
+    } catch (e) {
+      return {
+        status: 'error',
+        message: e.message,
+        data: null,
+      };
+    }
+  }
+
+  @Post('review')
+  @Roles(['USER', 'ADMIN'])
+  async reviewFilm(
+    @Req() req: ExtendedRequest,
+    @Body() review: CreateReviewDto,
+  ) {
+    const boughtFilm = req.user
+      ? await this.boughtFilmService.hadBought(req.user.id, review.filmId)
+      : false;
+    if (!boughtFilm) {
+      return {
+        status: 'error',
+        message: 'You have to buy the film first',
+        data: null,
+      };
+    }
+
+    try {
+      return {
+        status: 'success',
+        message: 'Review was successfully added',
+        data: await this.reviewFilmService.createReview({
+          userId: req.user.id,
+          filmId: review.filmId,
+          rating: review.rating,
+        }),
       };
     } catch (e) {
       return {

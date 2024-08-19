@@ -1,14 +1,13 @@
 import { Module } from '@nestjs/common';
 import { ApiController } from './api.controller';
-import { JwtService } from '@nestjs/jwt';
 import { AuthModule } from '../auth/auth.module';
-import { AuthService } from '../auth/auth.service';
-import { FilmService } from '../film/film.service';
-import { FilmModule } from '../film/film.module';
+import { BoughtFilmModule } from '../bought-film/bought-film.module';
+import { FilmReviewModule } from '../film-review/film-review.module';
 
 @Module({
-  imports: [AuthModule, FilmModule],
+  imports: [AuthModule, BoughtFilmModule, FilmReviewModule],
   controllers: [ApiController],
-  providers: [AuthService, JwtService],
+  providers: [],
+  exports: [AuthModule, BoughtFilmModule, FilmReviewModule],
 })
 export class ApiModule {}

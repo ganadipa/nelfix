@@ -127,3 +127,13 @@ export interface IErrorResponse {
   message: string;
   data: null;
 }
+
+export type TReviewPayload = {
+  filmId: string;
+  rating: number;
+};
+
+export type TReviewPostData = {
+  filmId: string;
+  rating: number;
+};

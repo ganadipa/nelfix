@@ -5,10 +5,8 @@ services:
     image: postgres:13
     ports:
       - '5432:5432'
-    environment:
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_DB: ${POSTGRES_DB}
+    env_file:
+      - .env.docker
 
   monolith:
     build: .
@@ -19,22 +17,16 @@ services:
       - /app/node_modules
     depends_on:
       - db
-    environment:
-      DATABASE_URL: ${DATABASE_URL}
-      JWT_SECRET: ${JWT_SECRET}
-      AUTH_METHOD: ${AUTH_METHOD}
-      PORT: ${PORT}
-      DOMAIN_URL: ${DOMAIN_URL}
-      STORAGE_BUCKET: ${STORAGE_BUCKET}
-      FIREBASE_TYPE: ${FIREBASE_TYPE}
-      FIREBASE_PROJECT_ID: ${FIREBASE_PROJECT_ID}
-      FIREBASE_PRIVATE_KEY_ID: ${FIREBASE_PRIVATE_KEY_ID}
-      FIREBASE_PRIVATE_KEY: ${FIREBASE_PRIVATE_KEY}
-      FIREBASE_CLIENT_EMAIL: ${FIREBASE_CLIENT_EMAIL}
-      FIREBASE_CLIENT_ID: ${FIREBASE_CLIENT_ID}
-      FIREBASE_AUTH_URI: ${FIREBASE_AUTH_URI}
-      FIREBASE_TOKEN_URI: ${FIREBASE_TOKEN_URI}
-      FIREBASE_AUTH_PROVIDER_X509_CERT_URL: ${FIREBASE_AUTH_PROVIDER_X509_CERT_URL}
-      FIREBASE_CLIENT_X509_CERT_URL: ${FIREBASE_CLIENT_X509_CERT_URL}
-      FIREBASE_UNIVERSE_DOMAIN: ${FIREBASE_UNIVERSE_DOMAIN}
-    command: npm run start:dev
+    env_file:
+      - .env.docker
+    command: >
+      sh -c "
+      until nc -z db 5432; do
+        echo 'Waiting for Postgres...';
+        sleep 2;
+      done &&
+      pnpm prisma generate &&
+      pnpm prisma migrate dev --name init &&
+      pnpm prisma migrate deploy &&
+      pnpm start:dev
+      "
