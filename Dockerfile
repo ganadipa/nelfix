@@ -13,6 +13,8 @@ COPY . .
 
 RUN pnpm build
 
+RUN pnpm prisma migrate deploy
+
 EXPOSE 3333
 
-CMD ["pnpm", "start:dev"]
+CMD ["pnpm", "start:prod"]
