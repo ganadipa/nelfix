@@ -5,7 +5,7 @@ import {
   Post,
   Req,
 } from '@nestjs/common';
-import { RegisterDto, SignInDto } from './dto';
+import { RegisterDto, RestApiSignInDto, SignInDto } from './dto';
 import * as argon from 'argon2';
 import { ConfigService } from '@nestjs/config';
 import { IAuthStrategy } from './strategy';
@@ -90,6 +90,13 @@ export class AuthService {
       username: user.username,
       token: await this.signToken(user.id),
     };
+  }
+
+  async signInUsingUsername(dto: RestApiSignInDto) {
+    return this.signIn({
+      username_or_email: dto.username,
+      password: dto.password,
+    });
   }
 
   async signToken(id: string) {

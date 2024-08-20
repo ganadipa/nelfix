@@ -7,6 +7,7 @@ import { BaseResponseExceptionFilter } from './common/filters/base-response-exce
 import { AuthGuard } from './modules/auth/auth.guard';
 import * as hbs from 'hbs';
 import './hbs-helper';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 async function bootstrap() {
   // init app
@@ -37,6 +38,26 @@ async function bootstrap() {
   app.setViewEngine('hbs');
 
   hbs.registerPartials(join(__dirname, '..', 'views', 'partials'));
+
+  // Swagger docs
+  const config = new DocumentBuilder()
+    .setTitle('Nelfix API')
+    .setDescription('The Nelfix API description')
+    .setVersion('1.0')
+    .addTag('nelfix')
+    .addBearerAuth(
+      {
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: 'JWT',
+        description: 'Enter only the JWT token, without the Bearer string',
+      },
+      'JWT-auth',
+    )
+    .build();
+
+  const doc = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('api', app, doc);
 
   // listen to port
   await app.listen(3333);

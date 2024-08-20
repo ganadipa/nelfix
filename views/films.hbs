@@ -1,5 +1,6 @@
 
 <section id="films" class='w-full mx-auto flex flex-col gap-8 pt-12 max-w-6xl self-start min-h-[600px] px-4 lg:px-8'>
+  {{!-- Searchbar and Pagination --}}
   <div  class="flex justify-beetween gap-6 lg:gap-12 max-md:flex-col-reverse">
       <div id="pagination-top" data-current-page="{{page}}" data-total-pages="{{total_pages}}" class="flex justify-center items-center gap-3">
       </div>
@@ -19,6 +20,8 @@
       </button>
     </form>
   </div>
+
+  {{!-- Grids of films for the given query --}}
   <div id="results" class="w-full">
   {{#if films.length}}
     <div class="font-sans font-semibold mx-auto grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3.5 auto-cols-max md:min-h-[800px] max-md:min-h-[500px]">
@@ -50,6 +53,7 @@
       {{/each}}
     </div>
   {{else}}
+  {{!-- If empty, you will see this --}}
     <div id='response-when-empty' class="text-center py-10">
       {{#if (eq page 0)}}
         <h2 class="text-2xl font-semibold text-gray-300">No films found</h2>
@@ -59,6 +63,7 @@
   {{/if}}
   </div>
 
+  {{!-- Pagination --}}
     <div id="pagination-bottom" data-current-page="{{page}}" data-total-pages="{{total_pages}}" class="flex justify-center items-center gap-3 mt-12">
     </div>
 </section>

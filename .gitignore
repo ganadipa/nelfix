@@ -4,3 +4,5 @@ dist
 .env.docker
 nelfix-firebase-adminsdk.json
 docker-compose.yml
+.env.staging
+.pnpm-store

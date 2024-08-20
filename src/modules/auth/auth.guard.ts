@@ -3,7 +3,6 @@ import {
   CanActivate,
   ExecutionContext,
   Inject,
-  ForbiddenException,
   HttpException,
 } from '@nestjs/common';
 import { IAuthStrategy } from './strategy';
@@ -32,6 +31,8 @@ export class AuthGuard implements CanActivate {
     const request: ExtendedRequest = context.switchToHttp().getRequest();
     const tokenFromHeader = this.extractTokenFromHeader(request);
     const tokenFromCookie = this.extractTokenFromCookie(request);
+
+    console.log('request', request.headers);
 
     let creds: TUser[] = [];
 
