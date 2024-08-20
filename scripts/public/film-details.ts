@@ -96,7 +96,6 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   document.getElementById('purchaseButton')?.addEventListener('click', () => {
-    console.log('clicked');
     modalHandler.show();
   });
 });

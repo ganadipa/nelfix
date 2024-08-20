@@ -10,7 +10,7 @@ run_staging() {
 
 run_dev() {
     gnome-terminal -- bash -c "pnpm build:css; exec bash" &
-    gnome-terminal -- bash -c "tsc -p tsconfig.client.json; exec bash" &
+    gnome-terminal -- bash -c "tsc -p tsconfig.client.json --watch; exec bash" &
     gnome-terminal -- bash -c "pnpm prisma studio; exec bash" &
 }
 

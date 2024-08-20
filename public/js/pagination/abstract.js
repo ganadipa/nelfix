@@ -11,7 +11,6 @@ export class PaginationContainer {
     // Template method
     render() {
         const pivot = [1, this.currentPage, this.totalPages];
-        console.log(pivot);
         const elements = Array.from({ length: this.totalPages }).map((_, index) => {
             return {
                 page: index + 1,
@@ -24,7 +23,7 @@ export class PaginationContainer {
         // render the page buttons
         elements.forEach((element, index) => {
             if (element.willBeShown) {
-                console.log(index);
+                index;
                 const pageLink = document.createElement('a');
                 this.pageButtonGenerator(pageLink, element.page, element.active);
                 this.paginationContainer.appendChild(pageLink);

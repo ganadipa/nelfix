@@ -27,7 +27,6 @@ export class AuthService {
     for (const field of usernameAndEmail) {
       const byUsername = await this.userRepo.findByUsername(field);
       const byEmail = await this.userRepo.findByEmail(field);
-      console.log(byUsername, byEmail);
       if (byUsername || byEmail)
         throw new Error(
           'Please change your username as that identifier is already in use',

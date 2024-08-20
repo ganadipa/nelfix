@@ -65,7 +65,6 @@ document.addEventListener('DOMContentLoaded', () => {
         modalHandler.hide();
     });
     (_b = document.getElementById('purchaseButton')) === null || _b === void 0 ? void 0 : _b.addEventListener('click', () => {
-        console.log('clicked');
         modalHandler.show();
     });
 });

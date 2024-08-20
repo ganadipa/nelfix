@@ -8,9 +8,7 @@ async function bootstrap() {
 
   try {
     await seeder.run();
-    console.log('Seeding completed!');
   } catch (error) {
-    console.error('Seeding failed!', error);
   } finally {
     await appContext.close();
   }

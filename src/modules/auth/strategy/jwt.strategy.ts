@@ -21,6 +21,10 @@ export class JwtAuthStrategy implements IAuthStrategy {
     });
 
     const user = await this.userRepo.findById(payload.id);
+    console.log('user', user);
+    if (!user) {
+      throw new Error('User not found, perhaps they were deleted?');
+    }
 
     return {
       id: user.id,

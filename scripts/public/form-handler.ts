@@ -58,7 +58,6 @@ export class FormHandler<T, V> {
 
   private async handleSubmit(event: Event): Promise<void> {
     event.preventDefault();
-    console.log('Form submitted');
 
     const formData = new FormData(this.form);
 
@@ -68,7 +67,6 @@ export class FormHandler<T, V> {
         formData.append(key, this.additional[key]);
       }
     }
-    console.log('Form data:', formData);
 
     const data: { [key: string]: unknown } = {};
 

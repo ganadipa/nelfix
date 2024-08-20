@@ -30,7 +30,6 @@ import {
   ApiBearerAuth,
   ApiBody,
   ApiConsumes,
-  ApiCookieAuth,
   ApiOperation,
   ApiParam,
   ApiQuery,
