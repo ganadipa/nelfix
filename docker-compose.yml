@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   # PostgreSQL service for local development
   postgres-local:
@@ -41,7 +39,11 @@ services:
   # Monolith service for staging environment (use the staging postgres service)
   # Make sure the database is running, and the migrations are applied before starting the monolith
   nelfix-monolith-staging:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - DATABASE_PUBLIC_URL=${DATABASE_URL}
     ports:
       - '3334:3333'
     volumes:
