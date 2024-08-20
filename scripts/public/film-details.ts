@@ -10,6 +10,7 @@ class ModalHandler {
   constructor(private modal: HTMLDivElement) {
     this.onSubmit = () => {};
     this.onSuccess = () => {};
+
     this.onFail = () => {};
   }
 
@@ -38,10 +39,16 @@ class ModalHandler {
 
 document.addEventListener('DOMContentLoaded', () => {
   const modal = document.querySelector('#purchaseModal') as HTMLDivElement;
+  if (!modal) {
+    return;
+  }
   const modalHandler = new ModalHandler(modal);
   const responseContainer = modal.querySelector(
     'div#response-container',
   ) as HTMLDivElement;
+  if (!responseContainer) {
+    return;
+  }
 
   const url = '/api/buy-film';
   const filmId = window.location.pathname.split('/').pop() as string;
@@ -86,6 +93,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const confirmPurchaseButton = document.getElementById(
     'confirmPurchaseButton',
   ) as HTMLButtonElement;
+  if (!confirmPurchaseButton) {
+    return;
+  }
 
   confirmPurchaseButton.addEventListener('click', () => {
     modalHandler.onSubmit();

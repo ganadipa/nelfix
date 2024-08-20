@@ -19,7 +19,8 @@ document.addEventListener('DOMContentLoaded', () => {
         label.classList.remove('text-xl');
         label.classList.add('text-xs');
 
-        input.classList.remove('h-0');
+        input.classList.remove('h-1');
+        input.classList.remove('opacity-0');
       });
 
       // Handle the blur event
@@ -28,7 +29,8 @@ document.addEventListener('DOMContentLoaded', () => {
           label.classList.remove('text-xs');
           label.classList.add('text-xl');
 
-          input.classList.add('h-0');
+          input.classList.add('h-1');
+          input.classList.add('opacity-0');
         }
       });
 

@@ -12,6 +12,7 @@ type TFilmsViewData = {
   films: (TFilmJson & { is_bought: boolean })[];
   page: number;
   total_pages: number;
+  query?: string;
 };
 
 type TDetailsViewData = {
@@ -41,6 +42,7 @@ export class WebController {
     @Query('page') pageStr?: string,
     @Query('q') q?: string,
   ): Promise<TBaseViewData & TFilmsViewData> {
+    console.log('query is', q);
     const paginationData = await this.webService.getPaginationData({
       pageStr,
       q,
@@ -56,13 +58,14 @@ export class WebController {
     };
 
     return {
+      query: q,
       films: twoGenresPaginationData.films,
       user: req.user,
       pathname: req.path,
       title: 'Films',
       page: paginationData.page,
       total_pages: paginationData.total_pages,
-      scripts: ['/js/pagination/pagination-logic.js', '/js/search-films.js'],
+      scripts: ['/js/pagination/pagination-logic.js'],
       description: 'Watch your favorite films on Nelfix.',
     };
   }
@@ -124,13 +127,14 @@ export class WebController {
     };
 
     return {
+      query: q,
       films: twoGenresPaginationData.films,
       user: req.user,
       pathname: req.path,
       title: 'Purchased Films',
       page: paginationData.page,
       total_pages: paginationData.total_pages,
-      scripts: ['/js/pagination/pagination-logic.js', '/js/search-films.js'],
+      scripts: ['/js/pagination/pagination-logic.js'],
       description: 'Watch your favorite films on Nelfix.',
     };
   }
