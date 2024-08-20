@@ -11,6 +11,13 @@ RUN pnpm install
 
 COPY . .
 
+RUN pnpm build
+
+ARG DATABASE_PUBLIC_URL
+ENV DATABASE_URL=$DATABASE_PUBLIC_URL
+
+RUN pnpm prisma migrate deploy
+
 EXPOSE 3333
 
-CMD ["pnpm", "start:dev"]
+CMD ["pnpm", "start:prod"]
