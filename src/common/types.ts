@@ -22,6 +22,13 @@ export type TUser = {
   balance: number;
 };
 
+export type TGetUser = {
+  id: string;
+  username: string;
+  email: string;
+  balance: number;
+};
+
 export type TSelfGetData = {
   username: string;
   token: string;
@@ -39,7 +46,7 @@ export type TFilmJson = {
   price: number;
   duration: number;
   video_url: string;
-  cover_image_url?: string;
+  cover_image_url: string | null;
   created_at: Date;
   updated_at: Date;
 };
@@ -90,4 +97,28 @@ export type TPrismaBoughtFilm = {
   purchasedAt: Date;
   userId: string;
   filmId: string;
+};
+
+export type TBaseViewData = {
+  title: string;
+  scripts: string[];
+  description: string;
+  pathname: string;
+  user?: TUser;
+};
+
+export type TPrismaReviewFilm = {
+  id: string;
+  createdAt: Date;
+  userId: string;
+  filmId: string;
+  rating: number;
+};
+
+export type TReviewJson = {
+  id: string;
+  created_at: Date;
+  user_id: string;
+  film_id: string;
+  rating: number;
 };

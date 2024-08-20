@@ -4,28 +4,14 @@ hbs.registerHelper('eq', function (a, b) {
   return a === b;
 });
 
-hbs.registerHelper('lt', function (a, b) {
-  return a < b;
+hbs.registerHelper('addOne', function (value) {
+  return value + 1;
 });
 
-hbs.registerHelper('gt', function (a, b) {
-  return a > b;
-});
-
-hbs.registerHelper('increment', function (value) {
-  return parseInt(value) + 1;
-});
-
-hbs.registerHelper('decrement', function (value) {
-  return parseInt(value) - 1;
-});
-
-hbs.registerHelper('paginationRange', function (currentPage, totalPages) {
-  const rangeStart = Math.max(1, currentPage - 2);
-  const rangeEnd = Math.min(totalPages, currentPage + 2);
-  let pages = [];
-  for (let i = rangeStart; i <= rangeEnd; i++) {
-    pages.push(i);
+hbs.registerHelper('range', function (start, end) {
+  const list = [];
+  for (let i = start; i <= end; i++) {
+    list.push(i);
   }
-  return pages;
+  return list;
 });

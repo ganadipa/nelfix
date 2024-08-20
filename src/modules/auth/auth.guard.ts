@@ -3,7 +3,6 @@ import {
   CanActivate,
   ExecutionContext,
   Inject,
-  ForbiddenException,
   HttpException,
 } from '@nestjs/common';
 import { IAuthStrategy } from './strategy';

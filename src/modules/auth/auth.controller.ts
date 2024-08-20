@@ -1,15 +1,30 @@
 import { Controller, Get, Post, Render, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { Roles } from 'src/common/decorator/roles.decorator';
+import { TBaseViewData } from 'src/common/types';
+import { ApiTags } from '@nestjs/swagger';
 
+type TLoginViewsData = {
+  title: string;
+  fields: { name: string; label: string; type: string; required: boolean }[];
+  scripts: string[];
+};
+
+type TRegisterViewsData = {
+  title: string;
+  fields: { name: string; label: string; type: string; required: boolean }[];
+  scripts: string[];
+};
+
+@ApiTags('Front End')
 @Controller('auth')
 export class AuthController {
-  constructor(private authService: AuthService) {}
+  constructor() {}
 
   @Get('login')
   @Render('auth/login')
   @Roles(['GUEST'], '/web/films')
-  getLogin() {
+  getLogin(): TBaseViewData & TLoginViewsData {
     return {
       title: 'Login',
 
@@ -22,13 +37,19 @@ export class AuthController {
           required: true,
         },
       ],
+
+      scripts: ['/js/login.js', '/js/input.js', '/js/navbar.js'],
+
+      pathname: '/auth/login',
+
+      description: 'Login to Nelfix',
     };
   }
 
   @Get('register')
   @Render('auth/register')
   @Roles(['GUEST'], '/web/films')
-  getRegister() {
+  getRegister(): TRegisterViewsData & TBaseViewData {
     return {
       title: 'Register',
       fields: [
@@ -54,6 +75,11 @@ export class AuthController {
           required: true,
         },
       ],
+      scripts: ['/js/register.js', '/js/input.js'],
+
+      pathname: '/auth/register',
+
+      description: 'Register for Nelfix',
     };
   }
 }

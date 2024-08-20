@@ -5,11 +5,12 @@ document.addEventListener('DOMContentLoaded', () => {
     // response container is the div element inside the form that have id 'response-container', and must be inside the form element
     const responseContainer = form.querySelector('div#response-container');
     // create new FormHandler instance
-    const handler = new FormHandler(form, '/api/register');
+    const url = '/api/register';
+    const handler = new FormHandler(form, url, 'POST');
     // What happens when it is successful?
-    handler.setOnSuccess((data) => {
+    handler.setOnSuccess(() => {
         // set the response message
-        responseContainer.innerText = `Success: ${data.message}`;
+        responseContainer.innerText = `Success: Register successful!`;
         // remove the error classes
         responseContainer.classList.remove('bg-red-100', 'text-red-800', 'border-red-400', 'mb-12');
         // add the success classes

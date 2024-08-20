@@ -8,30 +8,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 export class AjaxRequest {
-    constructor(url) {
+    constructor(url, context) {
         this.url = url;
+        this.context = context;
     }
-    post(data) {
+    request(data) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const response = yield fetch(this.url, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(data),
-                });
-                const jsonData = yield response.json();
-                if (this.isValidSuccessResponse(jsonData)) {
-                    return jsonData;
-                }
-                else {
-                    return {
-                        status: 'error',
-                        message: jsonData.message,
-                        data: null,
-                    };
-                }
+                const resp = yield this.context.send(data);
+                return resp;
             }
             catch (error) {
                 return {
@@ -41,9 +26,6 @@ export class AjaxRequest {
                 };
             }
         });
-    }
-    isValidSuccessResponse(data) {
-        return 'status' in data && data.status === 'success' && 'data' in data;
     }
 }
 //# sourceMappingURL=ajax-request.js.map

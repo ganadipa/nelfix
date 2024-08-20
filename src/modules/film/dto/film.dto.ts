@@ -6,7 +6,7 @@ import {
   Max,
   ArrayNotEmpty,
 } from 'class-validator';
-import { Type, Transform } from 'class-transformer';
+import { Transform } from 'class-transformer';
 
 export class FilmDto {
   @IsString()
@@ -26,8 +26,11 @@ export class FilmDto {
 
   @IsArray()
   @ArrayNotEmpty()
-  @IsString({ each: true })
-  @Transform(({ value }) => (Array.isArray(value) ? value : [value]))
+  @Transform(({ value }) =>
+    Array.isArray(value)
+      ? value
+      : value.split(',').map((genre) => genre.trim()),
+  )
   genre: string[];
 
   @Transform(({ value }) => parseFloat(value), { toClassOnly: true })

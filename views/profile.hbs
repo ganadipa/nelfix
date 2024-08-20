@@ -1,8 +1,10 @@
+{{! Display the user's profile }}
 <section
-  class='w-full bg-white rounded-lg shadow-lg py-10 px-4 flex items-center justify-center'
+  class='max-w-6xl w-full bg-white rounded-lg shadow-lg py-10 mt-6 px-4 flex items-center justify-center'
 >
-  <div class='p-8 w-1/2'>
-    <div class='flex items-center justify-between'>
+
+  <div class='p-8 lg:w-1/2 w4/5'>
+    <div class='flex items-center justify-between gap-4'>
       <div class='flex items-center'>
         <div class='ml-2'>
           <h2 class='text-2xl font-bold text-gray-800 inline-block'>
@@ -12,9 +14,10 @@
         </div>
       </div>
       <div
-        class='bg-cyan-950 px-4 py-2 border-2 border-emerald-900 rounded-full text-center flex items-center justify-around'
+        class='bg-cyan-950 px-4 py-2 border-2 border-emerald-900 rounded-full text-center flex items-center justify-around text-white'
       >
-        <span class='text-white text-lg font-semibold'>{{user.balance}}
+        {{user.balance}}
+        <span class='text-lg font-semibold max-sm:hidden'>
           Coins</span>
         <img src='/coin.png' alt='Coin' class='h-6 ml-2 inline' />
       </div>

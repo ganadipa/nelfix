@@ -11,15 +11,17 @@ document.addEventListener('DOMContentLoaded', () => {
   ) as HTMLDivElement;
 
   // create new FormHandler instance
-  const handler = new FormHandler<TResponseStatus<TAuthPostData>>(
+  const url = '/api/register';
+  const handler = new FormHandler<TRegisterForm, TAuthPostData>(
     form,
-    '/api/register',
+    url,
+    'POST',
   );
 
   // What happens when it is successful?
-  handler.setOnSuccess((data) => {
+  handler.setOnSuccess(() => {
     // set the response message
-    responseContainer.innerText = `Success: ${data.message}`;
+    responseContainer.innerText = `Success: Register successful!`;
 
     // remove the error classes
     responseContainer.classList.remove(

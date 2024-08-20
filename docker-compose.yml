@@ -1,14 +1,18 @@
-version: '3.8'
-
 services:
-  db:
+  # PostgreSQL service for local development
+  postgres-local:
     image: postgres:13
     ports:
       - '5432:5432'
     env_file:
-      - .env
+      - .env.docker
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - nelfix-network
 
-  monolith:
+  # Monolith service for local development (use the local postgres service)
+  nelfix-monolith-local:
     build: .
     ports:
       - '3333:3333'
@@ -16,17 +20,47 @@ services:
       - .:/app
       - /app/node_modules
     depends_on:
-      - db
+      - postgres-local
     env_file:
-      - .env
+      - .env.docker
     command: >
       sh -c "
-      until nc -z db 5432; do 
-        echo 'Waiting for Postgres...'; 
-        sleep 2; 
-      done && 
+      until nc -z postgres-local 5432; do
+        echo 'Waiting for Postgres...';
+        sleep 2;
+      done &&
       pnpm prisma generate &&
-      pnpm prisma migrate dev && 
-      pnpm prisma migrate deploy && 
+      pnpm prisma migrate deploy &&
       pnpm start:dev
       "
+    networks:
+      - nelfix-network
+
+  # Monolith service for staging environment (use the staging postgres service)
+  # Make sure the database is running, and the migrations are applied before starting the monolith
+  nelfix-monolith-staging:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - DATABASE_PUBLIC_URL=${DATABASE_URL}
+    ports:
+      - '3334:3333'
+    volumes:
+      - .:/app
+      - /app/node_modules
+    env_file:
+      - .env.staging
+    command: >
+      sh -c "
+      pnpm prisma generate &&
+      pnpm prisma migrate deploy &&
+      pnpm start:prod
+      "
+
+volumes:
+  postgres_data:
+
+networks:
+  nelfix-network:
+    driver: bridge

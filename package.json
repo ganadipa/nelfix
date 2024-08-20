@@ -25,7 +25,8 @@
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "build:css": "tailwindcss -i ./public/styles.css -o ./public/tailwind.css --watch",
     "gana:dev": "service postgresql stop && pnpm db:dev:restart && pnpm start:dev",
-    "start:migrate:dev": "pnpm prisma migrate deploy && pnpm start:dev"
+    "start:migrate:dev": "pnpm prisma migrate deploy && pnpm start:dev",
+    "postinstall": "pnpm prisma generate"
   },
   "dependencies": {
     "@nestjs/common": "^10.0.0",
@@ -34,6 +35,7 @@
     "@nestjs/jwt": "^10.2.0",
     "@nestjs/passport": "^10.0.3",
     "@nestjs/platform-express": "^10.0.0",
+    "@nestjs/swagger": "^7.4.0",
     "@prisma/client": "^5.18.0",
     "argon2": "^0.40.3",
     "class-transformer": "^0.5.1",
@@ -41,6 +43,7 @@
     "firebase": "^10.12.5",
     "firebase-admin": "^12.3.1",
     "passport": "^0.7.0",
+    "pg": "^8.12.0",
     "reflect-metadata": "^0.2.0",
     "rxjs": "^7.8.1",
     "tsc-alias": "^1.8.10"

@@ -5,7 +5,7 @@ import {
   Post,
   Req,
 } from '@nestjs/common';
-import { RegisterDto, SignInDto } from './dto';
+import { RegisterDto, RestApiSignInDto, SignInDto } from './dto';
 import * as argon from 'argon2';
 import { ConfigService } from '@nestjs/config';
 import { IAuthStrategy } from './strategy';
@@ -20,77 +20,82 @@ export class AuthService {
   ) {}
 
   async register(dto: RegisterDto) {
-    try {
-      const hashed = await argon.hash(dto.password);
+    const hashed = await argon.hash(dto.password);
 
-      const usernameExist = await this.userRepo.findByUsername(dto.username);
-      const emailExist = await this.userRepo.findByEmail(dto.email);
+    const usernameAndEmail = [dto.username, dto.email];
 
-      if (usernameExist) {
-        throw new ForbiddenException('Username already exists');
-      }
-
-      if (emailExist) {
-        throw new ForbiddenException('Email already exists');
-      }
-
-      const user = await this.userRepo.create({
-        username: dto.username,
-        email: dto.email,
-        hashedPassword: hashed,
-        firstName: dto.firstName,
-        lastName: dto.lastName,
-        balance: 0,
-      });
-
-      return {
-        status: 'success',
-        message: 'User created',
-        data: {
-          id: user.id,
-          username: user.username,
-          email: user.email,
-          token: await this.signToken(user.id),
-        },
-      };
-    } catch (error) {
-      return {
-        status: 'error',
-        message: error.message,
-        data: null,
-      };
+    for (const field of usernameAndEmail) {
+      const byUsername = await this.userRepo.findByUsername(field);
+      const byEmail = await this.userRepo.findByEmail(field);
+      if (byUsername || byEmail)
+        throw new Error(
+          'Please change your username as that identifier is already in use',
+        );
     }
+
+    const usernameExist = await this.userRepo.findByUsername(dto.username);
+    const emailExist = await this.userRepo.findByEmail(dto.email);
+
+    if (usernameExist) {
+      throw new Error('Username already exists');
+    }
+
+    if (emailExist) {
+      throw new Error('Email already exists');
+    }
+
+    const user = await this.userRepo.create({
+      username: dto.username,
+      email: dto.email,
+      hashedPassword: hashed,
+      firstName: dto.firstName,
+      lastName: dto.lastName,
+      balance: 0,
+    });
+
+    return {
+      id: user.id,
+      username: user.username,
+      email: user.email,
+      token: await this.signToken(user.id),
+    };
   }
 
-  async signIn(dto: SignInDto): Promise<TResponseStatus<TLoginPostData>> {
-    const user = await this.userRepo.findByUsername(dto.username);
+  async signIn(dto: SignInDto): Promise<TLoginPostData> {
+    const byUsername = await this.userRepo.findByUsername(
+      dto.username_or_email,
+    );
+    const byEmail = await this.userRepo.findByEmail(dto.username_or_email);
+
+    if (byUsername && byEmail && byEmail.id !== byUsername.id) {
+      throw new Error(
+        "Database issue: Found two users, but system doesn't know which one to use",
+      );
+    }
+
+    let user = byUsername || byEmail;
 
     if (!user) {
-      return {
-        status: 'error',
-        message: 'Invalid credentials',
-        data: null,
-      };
+      throw new Error('Invalid credentials');
     }
 
     const valid = await argon.verify(user.hashedPassword, dto.password);
 
     if (!valid) {
-      return {
-        status: 'error',
-        message: 'Invalid credentials',
-        data: null,
-      };
+      throw new Error('Invalid credentials');
     }
 
     return {
-      status: 'success',
-      message: "User's credentials are valid",
-      data: {
-        username: user.username,
-        token: await this.signToken(user.id),
-      },
+      username: user.username,
+      token: await this.signToken(user.id),
     };
+  }
+
+  async signInUsingUsername(dto: RestApiSignInDto) {
+    return this.signIn({
+      username_or_email: dto.username,
+      password: dto.password,
+    });
   }
 
   async signToken(id: string) {
