@@ -6,6 +6,7 @@ import { TBaseViewData, TFilmJson } from 'src/common/types';
 import { FilmService } from './film/film.service';
 import { BoughtFilmService } from './bought-film/bought-film.service';
 import { FilmReviewService } from './film-review/film-review.service';
+import { ApiTags } from '@nestjs/swagger';
 
 type THomeViewData = {
   highlighted_films: (TFilmJson & {
@@ -18,6 +19,7 @@ type THomeViewData = {
   preload_images: string[];
 };
 
+@ApiTags('Front End')
 @Controller('')
 export class AppController {
   constructor(

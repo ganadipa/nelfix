@@ -6,6 +6,7 @@ import { WebService } from './web.service';
 import { FilmService } from '../film/film.service';
 import { TBaseViewData, TFilmJson, TReviewJson, TUser } from 'src/common/types';
 import { FilmReviewService } from '../film-review/film-review.service';
+import { ApiTags } from '@nestjs/swagger';
 
 type TFilmsViewData = {
   films: (TFilmJson & { is_bought: boolean })[];
@@ -22,6 +23,7 @@ type TDetailsViewData = {
   };
 };
 
+@ApiTags('Front End')
 @Controller('web')
 export class WebController {
   constructor(

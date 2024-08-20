@@ -33,7 +33,6 @@ export class BaseResponseExceptionFilter implements ExceptionFilter {
     const exceptionResponse = exception.getResponse() as TExceptionResponse;
 
     let message: string = '';
-    console.log('exceptionResponse:', exceptionResponse);
     if (typeof exceptionResponse.message === 'string') {
       message = exceptionResponse.message;
     } else {

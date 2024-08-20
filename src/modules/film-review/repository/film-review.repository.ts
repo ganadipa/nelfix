@@ -104,7 +104,7 @@ export class FilmReviewRepository implements IFilmReviewRepository {
       ],
       where,
     });
-    console.log(result);
+    result;
 
     const ret = await Promise.all(
       result.map(async (item) => {

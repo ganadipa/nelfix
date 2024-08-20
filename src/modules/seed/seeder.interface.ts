@@ -9,7 +9,5 @@ export interface ISeeder<T> {
 export abstract class Seeder<T> implements ISeeder<T> {
   abstract seed(): Promise<void>;
 
-  logSeeding(entityName: string, entity: T): void {
-    console.log(`Seeded ${entityName}:`, entity);
-  }
+  logSeeding(entityName: string, entity: T): void {}
 }

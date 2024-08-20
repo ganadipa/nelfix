@@ -44,7 +44,6 @@ export class FormHandler {
     handleSubmit(event) {
         return __awaiter(this, void 0, void 0, function* () {
             event.preventDefault();
-            console.log('Form submitted');
             const formData = new FormData(this.form);
             // for each additional data, append it to the formData
             if (this.additional !== undefined) {
@@ -52,7 +51,6 @@ export class FormHandler {
                     formData.append(key, this.additional[key]);
                 }
             }
-            console.log('Form data:', formData);
             const data = {};
             formData.forEach((value, key) => {
                 data[key] = value;

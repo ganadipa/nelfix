@@ -18,7 +18,16 @@ import { BoughtFilmService } from '../bought-film/bought-film.service';
 import { FilmService } from '../film/film.service';
 import { CreateReviewDto } from '../film-review/dto/film-review.dto';
 import { FilmReviewService } from '../film-review/film-review.service';
+import {
+  ApiBearerAuth,
+  ApiBody,
+  ApiConsumes,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 
+@ApiTags('Internal API')
 @Controller('api')
 export class ApiController {
   constructor(
@@ -28,6 +37,52 @@ export class ApiController {
     private reviewFilmService: FilmReviewService,
   ) {}
 
+  @ApiBearerAuth('JWT-auth')
+  @ApiOperation({ summary: 'Create a new film. Allowed roles: Guest only.' })
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    description: 'Register data',
+    type: RegisterDto,
+  })
+  @ApiResponse({
+    status: 201,
+    description: 'The film has been successfully created.',
+    schema: {
+      example: {
+        status: 'success',
+        message: 'Film created successfully',
+        data: {
+          id: '1',
+          username: 'test',
+          email: 'example@example.com',
+          token: '<some_jwt_token>',
+        },
+      },
+    },
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Bad request',
+    schema: {
+      example: {
+        status: 'error',
+        message:
+          'Please change your username as that identifier is already in use',
+        data: null,
+      },
+    },
+  })
+  @ApiResponse({
+    status: 500,
+    description: 'Internal server error',
+    schema: {
+      example: {
+        status: 'error',
+        message: 'Internal server error',
+        data: null,
+      },
+    },
+  })
   @Post('register')
   @Roles(['GUEST'])
   async register(@Body() body: RegisterDto) {
@@ -46,6 +101,28 @@ export class ApiController {
     }
   }
 
+  @ApiBearerAuth('JWT-auth')
+  @ApiOperation({ summary: 'Sign in. Allowed roles: Guest only.' })
+  @ApiBody({
+    description: 'Sign in data',
+    type: SignInDto,
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'The user has been successfully logged in.',
+    schema: {
+      example: {
+        status: 'success',
+        message: 'User logged in successfully',
+        data: {
+          id: '1',
+          username: 'test',
+          email: 'test@example.com',
+          token: '<some_jwt_token>',
+        },
+      },
+    },
+  })
   @Post('login')
   @Roles(['GUEST'])
   async signIn(
@@ -75,6 +152,43 @@ export class ApiController {
     return;
   }
 
+  @ApiBearerAuth('JWT-auth')
+  @ApiOperation({ summary: 'Buy a film. Allowed roles: User and Admin.' })
+  @ApiResponse({
+    status: 200,
+    description: 'The film has been successfully bought.',
+    schema: {
+      example: {
+        status: 'success',
+        message: 'Film was successfully bought',
+        data: {
+          id: '123',
+          title: 'Inception',
+          description: 'A mind-bending thriller',
+          release_year: 2010,
+          director: 'Christopher Nolan',
+          genre: ['Action', 'Sci-Fi'],
+          price: 100,
+          duration: 3600,
+          video_url: 'http://example.com/video.mp4',
+          cover_image_url: 'http://example.com/cover.jpg',
+          created_at: '2021-09-01T00:00:00.000Z',
+          updated_at: '2021-09-01T00:00:00.000Z',
+        },
+      },
+    },
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Bad request',
+    schema: {
+      example: {
+        status: 'error',
+        message: 'Balance is not enough',
+        data: null,
+      },
+    },
+  })
   @Post('buy-film')
   @Roles(['USER', 'ADMIN'])
   async buyFilm(@Req() req: ExtendedRequest) {
@@ -96,6 +210,24 @@ export class ApiController {
     }
   }
 
+  @ApiBearerAuth('JWT-auth')
+  @ApiOperation({ summary: 'Logout. Allowed roles: User and Admin.' })
+  @ApiResponse({
+    status: 200,
+    description: 'The user has been successfully logged out.',
+    schema: {
+      example: {
+        status: 'success',
+        message: 'User logged out successfully',
+        data: {
+          id: '1',
+          email: 'example@example.com',
+          username: 'test',
+          token: '<some_jwt_token>',
+        },
+      },
+    },
+  })
   @Get('logout')
   @Roles(['USER', 'ADMIN'])
   async logout(@Res() res: Response, @Req() req: ExtendedRequest) {
@@ -112,6 +244,36 @@ export class ApiController {
     });
   }
 
+  @ApiBearerAuth('JWT-auth')
+  @ApiOperation({ summary: 'Get films. Allowed roles: User and Admin.' })
+  @ApiResponse({
+    status: 200,
+    description: 'Films retrieved',
+    schema: {
+      example: {
+        status: 'success',
+        message: 'Films retrieved',
+        data: {
+          films: [
+            {
+              id: '123',
+              title: 'Inception',
+              description: 'A mind-bending thriller',
+              release_year: 2010,
+              director: 'Christopher Nolan',
+              genre: ['Action', 'Sci-Fi'],
+              price: 100,
+              duration: 3600,
+              cover_image_url: 'http://example.com/cover.jpg',
+              created_at: '2021-09-01T00:00:00.000Z',
+              updated_at: '2021-09-01T00:00:00.000Z',
+            },
+          ],
+          total: 1,
+        },
+      },
+    },
+  })
   @Get('search-films')
   @Roles(['ADMIN', 'USER', 'GUEST'])
   async getFilms(
@@ -155,6 +317,23 @@ export class ApiController {
     }
   }
 
+  @ApiBearerAuth('JWT-auth')
+  @ApiOperation({ summary: 'Get film details. Allowed roles: User and Admin.' })
+  @ApiResponse({
+    status: 200,
+    description: 'Review was successfully added',
+    schema: {
+      example: {
+        status: 'success',
+        message: 'Review was successfully added',
+        data: {
+          userId: '1',
+          filmId: '1',
+          rating: 5,
+        },
+      },
+    },
+  })
   @Post('review')
   @Roles(['USER', 'ADMIN'])
   async reviewFilm(

@@ -2,6 +2,7 @@ import { Controller, Get, Post, Render, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { Roles } from 'src/common/decorator/roles.decorator';
 import { TBaseViewData } from 'src/common/types';
+import { ApiTags } from '@nestjs/swagger';
 
 type TLoginViewsData = {
   title: string;
@@ -15,6 +16,7 @@ type TRegisterViewsData = {
   scripts: string[];
 };
 
+@ApiTags('Front End')
 @Controller('auth')
 export class AuthController {
   constructor() {}

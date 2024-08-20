@@ -32,8 +32,6 @@ export class AuthGuard implements CanActivate {
     const tokenFromHeader = this.extractTokenFromHeader(request);
     const tokenFromCookie = this.extractTokenFromCookie(request);
 
-    console.log('request', request.headers);
-
     let creds: TUser[] = [];
 
     // Check token from header
@@ -51,7 +49,6 @@ export class AuthGuard implements CanActivate {
     } catch (e) {
       // Do nothing
     }
-    console.log('creds', creds);
 
     if (creds.length === 1) {
       request.user = creds[0];
@@ -68,7 +65,6 @@ export class AuthGuard implements CanActivate {
     const roles = metadata.roles;
     const redirectPath = metadata.redirectPath;
     const isAllowed = this.checkCondition(roles, creds);
-    console.log('isAllowed', isAllowed);
 
     if (!isAllowed && redirectPath) {
       const response = context.switchToHttp().getResponse();
