@@ -4,11 +4,9 @@ import { TReviewPayload, TReviewPostData } from './types.js';
 document.addEventListener('DOMContentLoaded', () => {
   // get the form element
   const form = document.getElementById('review-form') as HTMLFormElement;
-
-  // response container is the div element inside the form that have id 'response-container', and must be inside the form element
-  const responseContainer = form.querySelector(
-    'div#response-container',
-  ) as HTMLDivElement;
+  if (!form) {
+    return;
+  }
 
   // create new FormHandler instance
   const url = '/api/review';

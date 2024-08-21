@@ -1,6 +1,9 @@
 "use strict";
 document.addEventListener('DOMContentLoaded', () => {
     const trendings = document.querySelectorAll('#trendings > div');
+    if (!trendings || trendings.length === 0) {
+        return;
+    }
     let currentIndex = 0;
     const intervalTime = 5000;
     const showNextTrending = () => {

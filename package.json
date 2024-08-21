@@ -26,7 +26,10 @@
     "build:css": "tailwindcss -i ./public/styles.css -o ./public/tailwind.css --watch",
     "gana:dev": "service postgresql stop && pnpm db:dev:restart && pnpm start:dev",
     "start:migrate:dev": "pnpm prisma migrate deploy && pnpm start:dev",
-    "postinstall": "pnpm prisma generate"
+    "postinstall": "pnpm prisma generate",
+    "scripts": {
+      "cy:open": "cypress open"
+    }
   },
   "dependencies": {
     "@nestjs/common": "^10.0.0",
@@ -62,6 +65,7 @@
     "@typescript-eslint/eslint-plugin": "^7.0.0",
     "@typescript-eslint/parser": "^7.0.0",
     "autoprefixer": "^10.4.20",
+    "cypress": "^13.13.3",
     "eslint": "^8.42.0",
     "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-prettier": "^5.0.0",

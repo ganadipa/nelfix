@@ -23,12 +23,12 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   if (!paginationContainers[0]) {
-    throw new Error('"some" method doesn\'t work properly!');
+    return;
   }
 
   const currentPage = paginationContainers[0].getAttribute('data-current-page');
   if (!currentPage) {
-    throw new Error('Current page not found!');
+    return;
   }
 
   if (parseInt(currentPage) < 1 || isNaN(parseInt(currentPage))) {
@@ -37,12 +37,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const totalPages = paginationContainers[0].getAttribute('data-total-pages');
   if (!totalPages) {
-    throw new Error('Total pages not found!');
+    return;
   }
 
   paginationContainers.forEach((container) => {
     if (!container) {
-      throw new Error('Container not found!');
+      return;
     }
 
     const pagination = new V1StylePagination(

@@ -1,6 +1,6 @@
 /* public/styles.css */
 
-/* ! tailwindcss v3.4.9 | MIT License | https://tailwindcss.com */
+/* ! tailwindcss v3.4.10 | MIT License | https://tailwindcss.com */
 
 /*
 1. Prevent padding and border from affecting element width. (https://github.com/mozdevs/cssremedy/issues/4)
@@ -791,8 +791,8 @@ video {
   display: none;
 }
 
-.h-0 {
-  height: 0px;
+.h-1 {
+  height: 0.25rem;
 }
 
 .h-10 {
