@@ -43,7 +43,7 @@ export class AuthController {
         },
       ],
 
-      scripts: ['/js/login.js', '/js/input.js', '/js/navbar.js'],
+      scripts: ['/js/login.js', '/js/input.js'],
 
       pathname: '/auth/login',
 
