@@ -43,7 +43,6 @@ export class WebController {
     @Query('page') pageStr?: string,
     @Query('q') q?: string,
   ): Promise<TBaseViewData & TFilmsViewData> {
-    console.log('query is', q);
     const paginationData = await this.webService.getPaginationData({
       pageStr,
       q,
