@@ -34,7 +34,7 @@
 
       <div class="mb-4 text-gray-300">
         <p class="font-semibold text-lg">Duration:</p>
-        <p class="text-sm mt-2">{{film.duration}} minutes</p>
+        <p class="text-sm mt-2">{{film.duration_in_minutes}} minutes</p>
       </div>
 
       <div class="mb-4 text-gray-300">
@@ -48,12 +48,12 @@
       <div class="mt-6">
         {{#if user}}
           {{#if film.is_bought}}
-            <a class="bg-blue-800 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-300 ease-in-out shadow-md" href="{{film.video_url}}" target="_blank">Watch Film</a>
+            <a id="watch-film" class="bg-blue-800 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-300 ease-in-out shadow-md" href="{{film.video_url}}" target="_blank">Watch Film</a>
           {{else}}
-            <button class="bg-blue-800 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-300 ease-in-out shadow-md" id="purchaseButton">Buy Now</button>
+            <button id="buy-now" class="bg-blue-800 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-300 ease-in-out shadow-md" id="purchaseButton">Buy Now</button>
           {{/if}}
         {{else}}
-          <a class="bg-blue-800 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-300 ease-in-out shadow-md" href="/auth/login">Watch Film</a>
+          <a id="watch-film" class="bg-blue-800 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-300 ease-in-out shadow-md" href="/auth/login">Watch Film</a>
         {{/if}}
       </div>
     </div>

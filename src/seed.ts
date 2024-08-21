@@ -9,6 +9,7 @@ async function bootstrap() {
   try {
     await seeder.run();
   } catch (error) {
+    console.error(error);
   } finally {
     await appContext.close();
   }

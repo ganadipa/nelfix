@@ -29,7 +29,12 @@ export class AuthController {
       title: 'Login',
 
       fields: [
-        { name: 'username', label: 'Username', type: 'text', required: true },
+        {
+          name: 'username_or_email',
+          label: 'Username/ Email',
+          type: 'text',
+          required: true,
+        },
         {
           name: 'password',
           label: 'Password',
@@ -38,7 +43,7 @@ export class AuthController {
         },
       ],
 
-      scripts: ['/js/login.js', '/js/input.js', '/js/navbar.js'],
+      scripts: ['/js/login.js', '/js/input.js'],
 
       pathname: '/auth/login',
 

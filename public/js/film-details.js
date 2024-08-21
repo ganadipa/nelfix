@@ -28,8 +28,14 @@ class ModalHandler {
 document.addEventListener('DOMContentLoaded', () => {
     var _a, _b;
     const modal = document.querySelector('#purchaseModal');
+    if (!modal) {
+        return;
+    }
     const modalHandler = new ModalHandler(modal);
     const responseContainer = modal.querySelector('div#response-container');
+    if (!responseContainer) {
+        return;
+    }
     const url = '/api/buy-film';
     const filmId = window.location.pathname.split('/').pop();
     const strategy = RequestHandlerFactory.create(url, 'POST');
@@ -58,6 +64,9 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
     const confirmPurchaseButton = document.getElementById('confirmPurchaseButton');
+    if (!confirmPurchaseButton) {
+        return;
+    }
     confirmPurchaseButton.addEventListener('click', () => {
         modalHandler.onSubmit();
     });

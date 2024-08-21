@@ -1,6 +1,6 @@
 /* public/styles.css */
 
-/* ! tailwindcss v3.4.9 | MIT License | https://tailwindcss.com */
+/* ! tailwindcss v3.4.10 | MIT License | https://tailwindcss.com */
 
 /*
 1. Prevent padding and border from affecting element width. (https://github.com/mozdevs/cssremedy/issues/4)
@@ -791,8 +791,8 @@ video {
   display: none;
 }
 
-.h-0 {
-  height: 0px;
+.h-1 {
+  height: 0.25rem;
 }
 
 .h-10 {
@@ -841,6 +841,10 @@ video {
 
 .h-screen {
   height: 100vh;
+}
+
+.h-0 {
+  height: 0px;
 }
 
 .max-h-\[1000px\] {
@@ -1211,6 +1215,11 @@ video {
 .bg-white {
   --tw-bg-opacity: 1;
   background-color: rgb(255 255 255 / var(--tw-bg-opacity));
+}
+
+.bg-gray-400 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(156 163 175 / var(--tw-bg-opacity));
 }
 
 .bg-opacity-50 {

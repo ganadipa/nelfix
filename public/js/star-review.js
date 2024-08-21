@@ -1,9 +1,12 @@
 "use strict";
 document.addEventListener('DOMContentLoaded', function () {
     const stars = document.querySelectorAll('.star');
+    if (!stars || stars.length === 0) {
+        return;
+    }
     const starRatingInput = document.getElementById('starRating');
     if (!starRatingInput) {
-        throw new Error('Could not find star rating input');
+        return;
     }
     stars.forEach((star, index) => {
         star.addEventListener('click', () => {
