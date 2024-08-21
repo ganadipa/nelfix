@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
     return;
   }
 
-  paginationContainers.forEach((container) => {
+  paginationContainers.forEach((container, index) => {
     if (!container) {
       return;
     }
@@ -49,6 +49,7 @@ document.addEventListener('DOMContentLoaded', () => {
       container as HTMLDivElement,
       parseInt(currentPage),
       parseInt(totalPages),
+      index === 0 ? 'top' : 'bottom',
     );
     pagination.prepare();
     pagination.render();

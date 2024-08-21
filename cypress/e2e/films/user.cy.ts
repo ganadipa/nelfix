@@ -152,7 +152,7 @@ describe('Films Tests for User', () => {
       if ($responseWhenEmpty.length === 0) {
         cy.get('#pagination-top a').eq(1).should('have.class', 'bg-blue-500');
 
-        cy.get('#pagination-top #left-arrow').click();
+        cy.get('#pagination-top #left-arrow-top').click();
 
         cy.get('#pagination-top a').eq(1).should('have.class', 'bg-blue-500');
 
@@ -187,7 +187,7 @@ describe('Films Tests for User', () => {
 
         cy.get('#pagination-top a').eq(-2).should('have.class', 'bg-blue-500');
 
-        cy.get('#pagination-top #right-arrow').click();
+        cy.get('#pagination-top #right-arrow-top').click();
 
         cy.get('#pagination-top a').eq(-2).should('have.class', 'bg-blue-500');
 
