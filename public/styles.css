@@ -2,3 +2,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+input:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0px 1000px #4b5563 inset; /* Match your background color (#4B5563 is Tailwind's bg-gray-600) */
+  -webkit-text-fill-color: #f9fafb; /* Match your text color (#F9FAFB is Tailwind's text-gray-50) */
+  transition: background-color 5000s ease-in-out 0s;
+}
