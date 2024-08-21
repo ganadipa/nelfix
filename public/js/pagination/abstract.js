@@ -1,8 +1,9 @@
 export class PaginationContainer {
-    constructor(paginationContainer, currentPage, totalPages) {
+    constructor(paginationContainer, currentPage, totalPages, additionalId) {
         this.paginationContainer = paginationContainer;
         this.currentPage = currentPage;
         this.totalPages = totalPages;
+        this.additionalId = additionalId;
         this.prev = document.createElement('a');
         this.next = document.createElement('a');
         this.dotsGenerator = () => { };

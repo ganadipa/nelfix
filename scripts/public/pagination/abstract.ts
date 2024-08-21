@@ -12,6 +12,7 @@ export abstract class PaginationContainer {
     protected readonly paginationContainer: HTMLDivElement,
     protected readonly currentPage: number,
     protected readonly totalPages: number,
+    protected readonly additionalId: string,
   ) {
     this.prev = document.createElement('a');
     this.next = document.createElement('a');
