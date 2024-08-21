@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from 'uuid';
 describe('Login Tests', () => {
   beforeEach(() => {
     // Visit the login page before each test
-    cy.visit('http://localhost:3333/auth/register'); // Update with the correct path if needed
+    cy.visit('/auth/register'); // Update with the correct path if needed
   });
 
   it('should fail to register using an existing username', () => {

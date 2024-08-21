@@ -1,7 +1,7 @@
 describe('Login Tests', () => {
   beforeEach(() => {
     // Visit the login page before each test
-    cy.visit('http://localhost:3333/auth/login'); // Update with the correct path if needed
+    cy.visit('/auth/login'); // Update with the correct path if needed
   });
 
   it('should fail to login with invalid credentials', () => {

@@ -1,7 +1,10 @@
 describe('Profile Tests', () => {
   beforeEach(() => {
     cy.login();
-    cy.visit('http://localhost:3333/web/profile');
+    cy.url().should('include', '/web/films');
+
+    // Visit the profile page before each test
+    cy.visit('/web/profile');
   });
 
   it('should display the full name', () => {
