@@ -5,11 +5,13 @@
   <title>{{title}} | Nelfix</title>
   <link rel='icon' href='/favicon.ico' type='image/x-icon' />
   <link href='/tailwind.css' rel='stylesheet' />
+  <link href='/styles.css' rel='stylesheet' />
   <script
     src='https://kit.fontawesome.com/c24f1013b4.js'
     crossorigin='anonymous'
     defer
   ></script>
+
   {{#if preload_images}}
     {{#each preload_images}}
       <link rel='preload' href='{{this}}' as='image' />

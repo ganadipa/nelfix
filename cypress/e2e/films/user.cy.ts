@@ -1,7 +1,9 @@
 describe('Films Tests for User', () => {
   beforeEach(() => {
     cy.login();
-    cy.visit('http://localhost:3333/web/films');
+    cy.url().should('include', '/web/films');
+
+    cy.visit('/web/films');
   });
 
   // Search bar

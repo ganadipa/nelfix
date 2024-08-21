@@ -38,7 +38,7 @@
 
 Cypress.Commands.add('login', () => {
   cy.fixture('creds').then((credentials) => {
-    cy.visit('http://localhost:3333/auth/login');
+    cy.visit('/auth/login');
     cy.get('#username_or_email').type(credentials.username);
     cy.get('#password').type(credentials.password);
     cy.get('button[type="submit"]').click();

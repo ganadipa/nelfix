@@ -23,16 +23,21 @@ export class AuthService {
   async register(dto: RegisterDto) {
     const hashed = await argon.hash(dto.password);
 
-    const usernameAndEmail = [dto.username, dto.email];
+    const username = dto.username;
+    const byUsername = await this.userRepo.findByUsername(username);
+    const byEmail = await this.userRepo.findByEmail(username);
+    if (byUsername || byEmail)
+      throw new Error(
+        'Please change your username as that identifier is already in use',
+      );
 
-    for (const field of usernameAndEmail) {
-      const byUsername = await this.userRepo.findByUsername(field);
-      const byEmail = await this.userRepo.findByEmail(field);
-      if (byUsername || byEmail)
-        throw new Error(
-          'Please change your username as that identifier is already in use',
-        );
-    }
+    const email = dto.email;
+    const byUsername2 = await this.userRepo.findByUsername(email);
+    const byEmail2 = await this.userRepo.findByEmail(email);
+    if (byUsername2 || byEmail2)
+      throw new Error(
+        'Please change your email as that identifier is already in use',
+      );
 
     const usernameExist = await this.userRepo.findByUsername(dto.username);
     const emailExist = await this.userRepo.findByEmail(dto.email);

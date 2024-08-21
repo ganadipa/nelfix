@@ -13,6 +13,6 @@ import { UserModule } from '../user/user.module';
     },
     BoughtFilmService,
   ],
-  exports: ['BoughtFilmRepository', BoughtFilmService, FilmModule],
+  exports: ['BoughtFilmRepository', BoughtFilmService, FilmModule, UserModule],
 })
 export class BoughtFilmModule {}

@@ -1,7 +1,7 @@
 describe('Home Tests', () => {
   beforeEach(() => {
     // Visit the page
-    cy.visit('http://localhost:3333');
+    cy.visit('/');
   });
 
   it('should handle the presence or absence of highlighted films', () => {

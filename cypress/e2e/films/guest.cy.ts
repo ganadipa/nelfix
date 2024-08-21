@@ -1,6 +1,6 @@
 describe('Films Tests for User', () => {
   beforeEach(() => {
-    cy.visit('http://localhost:3333/web/films');
+    cy.visit('/web/films');
   });
 
   // Search bar
