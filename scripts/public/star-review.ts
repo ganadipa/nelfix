@@ -1,11 +1,15 @@
 document.addEventListener('DOMContentLoaded', function () {
   const stars = document.querySelectorAll('.star') as NodeListOf<HTMLElement>;
+  if (!stars || stars.length === 0) {
+    return;
+  }
+
   const starRatingInput = document.getElementById(
     'starRating',
   ) as HTMLInputElement | null;
 
   if (!starRatingInput) {
-    throw new Error('Could not find star rating input');
+    return;
   }
 
   stars.forEach((star, index) => {

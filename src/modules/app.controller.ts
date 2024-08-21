@@ -28,13 +28,6 @@ export class AppController {
     private readonly filmReviewService: FilmReviewService,
   ) {}
 
-  @Get('404')
-  @Roles(['GUEST', 'USER', 'ADMIN'])
-  get404(@Res() res: Response) {
-    res.send('404');
-    return;
-  }
-
   @Get('')
   @Render('index')
   @Roles(['GUEST', 'USER', 'ADMIN'])

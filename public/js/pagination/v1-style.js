@@ -8,6 +8,7 @@ export class V1StylePagination extends PaginationContainer {
             url.hash = 'films';
             element.href = url.toString();
             element.textContent = '<';
+            element.id = 'left-arrow';
             element.className =
                 'bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded transition duration-300 ease-in-out shadow hover:shadow-md';
             element.setAttribute('aria-label', 'Previous Page');
@@ -15,6 +16,7 @@ export class V1StylePagination extends PaginationContainer {
         else {
             element.href = '#';
             element.textContent = '<';
+            element.id = 'left-arrow';
             element.className =
                 'bg-gray-500 text-white px-4 py-2 rounded cursor-not-allowed';
         }
@@ -27,6 +29,7 @@ export class V1StylePagination extends PaginationContainer {
             url.hash = 'films';
             element.href = url.toString();
             element.textContent = '>';
+            element.id = 'right-arrow';
             element.className =
                 'bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded transition duration-300 ease-in-out shadow hover:shadow-md';
             element.setAttribute('aria-label', 'Next Page');
@@ -34,6 +37,7 @@ export class V1StylePagination extends PaginationContainer {
         else {
             element.href = '#';
             element.textContent = '>';
+            element.id = 'right-arrow';
             element.className =
                 'bg-gray-500 text-white px-4 py-2 rounded cursor-not-allowed';
         }

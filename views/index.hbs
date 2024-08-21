@@ -60,7 +60,7 @@
                     <div class="flex gap-4 items-center">
                         <span class="md:text-3xl text-xl text-blue-500">{{addOne @index}}</span>
                         <img src="{{#if this.cover_image_url}}{{this.cover_image_url}}{{else}}/placeholder.jpg{{/if}}" alt="{{this.title}}" class="w-10 h-10 object-cover rounded-full border-2 border-blue-500" loading="lazy">
-                        <span class="md:text-2xl text-lg text-blue-300">{{this.title}}</span>
+                        <h3 class="md:text-2xl text-lg text-blue-300 inline-block">{{this.title}}</h3>
                     </div>
                     <span class="md:text-2xl text-lg text-yellow-400"> {{this.rating_this_month}} <i class="fa-solid fa-star"></i><span class="text-fuchsia-50">{{#if this.votes_this_month}} ({{this.votes_this_month}}){{/if}}</span></span>
                     </a>
