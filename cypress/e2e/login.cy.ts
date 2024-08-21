@@ -20,8 +20,8 @@ describe('Login Tests', () => {
 
   it('should login successfully with valid credentials', () => {
     // Enter valid username and password
-    cy.get('input[name="username_or_email"]').type('validUser');
-    cy.get('input[name="password"]').type('correctPassword');
+    cy.get('input[name="username_or_email"]').type('johndoe');
+    cy.get('input[name="password"]').type('password1');
 
     // Submit the form
     cy.get('button[type="submit"]').click();

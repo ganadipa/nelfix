@@ -9,7 +9,7 @@ describe('Login Tests', () => {
   it('should fail to register using an existing username', () => {
     // Enter a valid inputs with an existing username
     cy.get('input[name="email"]').type('validUser@example.com');
-    cy.get('input[name="username"]').click().type('validUser');
+    cy.get('input[name="username"]').click().type('johndoe');
     cy.get('input[name="firstName"]').type('valid');
     cy.get('input[name="lastName"]').type('user');
     cy.get('input[name="password"]').type('Password');
@@ -25,7 +25,7 @@ describe('Login Tests', () => {
 
   it('should fail to register using an existing email', () => {
     // Enter a valid inputs with an existing email
-    cy.get('input[name="email"]').type('validuser@test.com');
+    cy.get('input[name="email"]').type('johndoe@example.com');
     cy.get('input[name="username"]').click().type('validUser2');
     cy.get('input[name="firstName"]').type('valid');
     cy.get('input[name="lastName"]').type('user');

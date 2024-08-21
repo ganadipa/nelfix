@@ -202,12 +202,22 @@ describe('Films Tests for User', () => {
       const $responseWhenEmpty = $body.find('#response-when-empty');
 
       if ($responseWhenEmpty.length === 0) {
-        cy.get('.film-card').first().click();
+        cy.get('#results h2')
+          .first()
+          .invoke('text')
+          .then((title) => {
+            const filmTitle = title.split('(')[0].trim();
 
-        cy.url().should('include', '/web/films/');
+            cy.get('#results a').first().click();
+
+            cy.url().should('include', '/web/films/');
+
+            cy.get('h1').should('have.text', filmTitle);
+          });
       }
     });
   });
+
   /**
    * --- end
    */

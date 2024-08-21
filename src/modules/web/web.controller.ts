@@ -21,6 +21,7 @@ type TDetailsViewData = {
     rating: number;
     rated?: number;
     total_voters: number;
+    duration_in_minutes: number;
   };
 };
 
@@ -92,6 +93,7 @@ export class WebController {
         rated: req.user
           ? await this.filmReviewService.hadRatedFilm(req.user.id, film.id)
           : undefined,
+        duration_in_minutes: Math.round(film.duration / 60),
       },
       user: req.user,
       pathname: req.path,
