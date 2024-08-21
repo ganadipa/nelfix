@@ -1,10 +1,10 @@
 import { TPrismaUser, TRole } from 'src/common/types';
 import { IUserRepository } from '.';
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from '../../../modules/prisma/prisma.service';
+import { PrismaService } from '../../prisma/prisma.service';
 
 @Injectable()
-export class UserRepository implements IUserRepository {
+export class DbUserRepository implements IUserRepository {
   constructor(private readonly prisma: PrismaService) {}
 
   create(

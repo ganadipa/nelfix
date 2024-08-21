@@ -4,7 +4,7 @@ import { TPrismaBoughtFilm } from 'src/common/types';
 import { PrismaService } from 'src/modules/prisma/prisma.service';
 
 @Injectable()
-export class BoughtFilmRepository implements IBoughtFilmRepository {
+export class DbBoughtFilmRepository implements IBoughtFilmRepository {
   constructor(private readonly prisma: PrismaService) {}
 
   async create(boughtInfo: {

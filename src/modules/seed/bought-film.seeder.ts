@@ -1,8 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { Seeder } from './seeder.interface';
-import { BoughtFilmRepository } from '../bought-film/repository';
-import { FilmRepository } from '../film/repository';
-import { UserRepository } from '../user/repository';
+import { IBoughtFilmRepository } from '../bought-film/repository';
+import { IFilmRepository } from '../film/repository';
+import { IUserRepository } from '../user/repository';
 
 @Injectable()
 export class BoughtFilmSeeder extends Seeder<{
@@ -10,9 +10,12 @@ export class BoughtFilmSeeder extends Seeder<{
   userId: string;
 }> {
   constructor(
-    private readonly boughtFilmRepository: BoughtFilmRepository,
-    private readonly filmRepository: FilmRepository,
-    private readonly userRepository: UserRepository,
+    @Inject('BoughtFilmRepository')
+    private readonly boughtFilmRepository: IBoughtFilmRepository,
+    @Inject('FilmRepository')
+    private readonly filmRepository: IFilmRepository,
+    @Inject('UserRepository')
+    private readonly userRepository: IUserRepository,
   ) {
     super();
   }

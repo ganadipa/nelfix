@@ -1,13 +1,17 @@
 import { Module } from '@nestjs/common';
 import { FilmService } from './film.service';
 import { FirebaseModule } from '../firebase/firebase.module';
-import { FilmRepository } from './repository/film.repository';
-import { UserModule } from '../user/user.module';
-import { BoughtFilmModule } from '../bought-film/bought-film.module';
+import { DbFilmRepository } from './repository/db-film.repository';
 
 @Module({
   imports: [FirebaseModule],
-  providers: [FilmService, FilmRepository],
-  exports: [FilmService, FirebaseModule, FilmRepository],
+  providers: [
+    {
+      provide: 'FilmRepository',
+      useClass: DbFilmRepository,
+    },
+    FilmService,
+  ],
+  exports: [FilmService, FirebaseModule, 'FilmRepository'],
 })
 export class FilmModule {}

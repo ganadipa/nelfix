@@ -1,6 +1,6 @@
 import { TPrismaBoughtFilm } from 'src/common/types';
 
-export * from './bought-film.repository';
+export * from './db-bought-film.repository';
 
 export interface IBoughtFilmRepository {
   create(boughtInfo: {

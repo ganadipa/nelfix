@@ -15,4 +15,11 @@ export interface IFilmReviewRepository {
     userId: string,
     filmId: string,
   ): Promise<TPrismaReviewFilm | null>;
+  getFilmsSortedByRating({
+    startDate,
+    endDate,
+  }: {
+    startDate?: Date;
+    endDate?: Date;
+  }): Promise<{ filmId: string; rating: number; count: number }[]>;
 }

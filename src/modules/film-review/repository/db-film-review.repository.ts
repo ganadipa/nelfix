@@ -4,7 +4,7 @@ import { TPrismaReviewFilm } from 'src/common/types';
 import { PrismaService } from 'src/modules/prisma/prisma.service';
 
 @Injectable()
-export class FilmReviewRepository implements IFilmReviewRepository {
+export class DbFilmReviewRepository implements IFilmReviewRepository {
   constructor(private readonly prisma: PrismaService) {}
 
   async create(reviewInfo: {
