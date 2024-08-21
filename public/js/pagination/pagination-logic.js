@@ -27,11 +27,11 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!totalPages) {
         return;
     }
-    paginationContainers.forEach((container) => {
+    paginationContainers.forEach((container, index) => {
         if (!container) {
             return;
         }
-        const pagination = new V1StylePagination(container, parseInt(currentPage), parseInt(totalPages));
+        const pagination = new V1StylePagination(container, parseInt(currentPage), parseInt(totalPages), index === 0 ? 'top' : 'bottom');
         pagination.prepare();
         pagination.render();
     });
