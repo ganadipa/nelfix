@@ -1,8 +1,12 @@
-import { TPrismaUser } from '../../../common/types';
-export * from './user.repository';
+import { TPrismaUser, TRole } from '../../../common/types';
+export * from './db-user.repository';
 
 export interface IUserRepository {
-  create(filmData: TPrismaUser): Promise<TPrismaUser>;
+  create(
+    filmData: Omit<TPrismaUser, 'id' | 'createdAt' | 'updatedAt' | 'role'> & {
+      role?: TRole;
+    },
+  ): Promise<TPrismaUser>;
   findById(id: string): Promise<TPrismaUser | null>;
   findByUsername(username: string): Promise<TPrismaUser | null>;
   findByEmail(email: string): Promise<TPrismaUser | null>;

@@ -1,16 +1,18 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { IAuthStrategy } from '.';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { TUser } from 'src/common/types';
-import { UserRepository } from 'src/modules/user/repository';
+import { IUserRepository } from 'src/modules/user/repository';
 
 @Injectable()
 export class JwtAuthStrategy implements IAuthStrategy {
   constructor(
     private jwt: JwtService,
     private config: ConfigService,
-    private userRepo: UserRepository,
+
+    @Inject('UserRepository')
+    private userRepo: IUserRepository,
   ) {}
 
   async validate(token: string): Promise<TUser> {

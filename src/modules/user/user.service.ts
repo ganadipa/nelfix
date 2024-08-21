@@ -1,9 +1,12 @@
-import { HttpException, Injectable, Query } from '@nestjs/common';
-import { UserRepository } from './repository';
+import { HttpException, Inject, Injectable, Query } from '@nestjs/common';
+import { IUserRepository } from './repository';
 
 @Injectable()
 export class UserService {
-  constructor(private readonly userRepository: UserRepository) {}
+  constructor(
+    @Inject('UserRepository')
+    private readonly userRepository: IUserRepository,
+  ) {}
 
   async getUsers(q: string) {
     const prismaUsers = await this.userRepository.getUsersLikeUsername(q);

@@ -10,12 +10,13 @@ import * as argon from 'argon2';
 import { ConfigService } from '@nestjs/config';
 import { IAuthStrategy } from './strategy';
 import { TLoginPostData, TResponseStatus, TRole } from 'src/common/types';
-import { UserRepository } from '../user/repository';
+import { IUserRepository } from '../user/repository';
 
 @Injectable()
 export class AuthService {
   constructor(
-    private userRepo: UserRepository,
+    @Inject('UserRepository')
+    private userRepo: IUserRepository,
     @Inject('AUTH_STRATEGY') private authStrategy: IAuthStrategy,
   ) {}
 

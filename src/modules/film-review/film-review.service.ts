@@ -1,13 +1,15 @@
-import { Injectable } from '@nestjs/common';
-import { FilmReviewRepository } from './repository/film-review.repository';
-import { UserRepository } from '../user/repository';
+import { Inject, Injectable } from '@nestjs/common';
 import { User } from '../user/user.entity';
+import { IUserRepository } from '../user/repository';
+import { IFilmReviewRepository } from './repository';
 
 @Injectable()
 export class FilmReviewService {
   constructor(
-    private readonly filmReviewRepository: FilmReviewRepository,
-    private readonly userRepository: UserRepository,
+    @Inject('FilmReviewRepository')
+    private readonly filmReviewRepository: IFilmReviewRepository,
+    @Inject('UserRepository')
+    private readonly userRepository: IUserRepository,
   ) {}
 
   async createReview(reviewInfo: {

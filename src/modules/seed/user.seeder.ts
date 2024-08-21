@@ -1,12 +1,15 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { Seeder } from './seeder.interface';
-import { UserRepository } from '../user/repository';
 import { TPrismaUser, TRole, TUser } from 'src/common/types';
 import * as argon from 'argon2';
+import { IUserRepository } from '../user/repository';
 
 @Injectable()
 export class UserSeeder extends Seeder<{ id: string; username: string }> {
-  constructor(private readonly userRepository: UserRepository) {
+  constructor(
+    @Inject('UserRepository')
+    private readonly userRepository: IUserRepository,
+  ) {
     super();
   }
 

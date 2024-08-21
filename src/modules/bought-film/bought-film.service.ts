@@ -1,16 +1,18 @@
-import { HttpException, Injectable } from '@nestjs/common';
-import { BoughtFilmRepository } from './repository';
-import { FilmRepository } from '../film/repository';
+import { HttpException, Inject, Injectable } from '@nestjs/common';
 import { TFilmJson, TPrismaFilm } from 'src/common/types';
 import { Film } from '../film/film.entity';
 import { UserService } from '../user/user.service';
 import { FilmService } from '../film/film.service';
+import { IBoughtFilmRepository } from './repository';
+import { IFilmRepository } from '../film/repository';
 
 @Injectable()
 export class BoughtFilmService {
   constructor(
-    private readonly boughtFilmRepository: BoughtFilmRepository,
-    private readonly filmRepository: FilmRepository,
+    @Inject('BoughtFilmRepository')
+    private readonly boughtFilmRepository: IBoughtFilmRepository,
+    @Inject('FilmRepository')
+    private readonly filmRepository: IFilmRepository,
     private readonly userService: UserService,
     private readonly filmService: FilmService,
   ) {}

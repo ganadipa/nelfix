@@ -1,5 +1,5 @@
 import { TPrismaFilm } from '../../../common/types';
-export * from './film.repository';
+export * from './db-film.repository';
 
 export interface IFilmRepository {
   create(
