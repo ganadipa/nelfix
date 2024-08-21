@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { IFilmRepository } from '.';
-import { PrismaService } from '../../..//modules/prisma/prisma.service';
-import { TPrismaFilm } from '../../..//common/types';
+import { PrismaService } from '../../prisma/prisma.service';
+import { TPrismaFilm } from '../../../common/types';
 
 @Injectable()
-export class FilmRepository implements IFilmRepository {
+export class DbFilmRepository implements IFilmRepository {
   constructor(private prismaService: PrismaService) {}
 
   async create(

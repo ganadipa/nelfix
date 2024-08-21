@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { UserRepository } from '../user/repository';
 import { BoughtFilmSeeder } from './bought-film.seeder';
 import { FilmSeeder } from './film.seeder';
 import { ISeeder } from './seeder.interface';

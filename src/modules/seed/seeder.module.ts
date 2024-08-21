@@ -5,14 +5,20 @@ import { FilmSeeder } from './film.seeder';
 import { UserSeeder } from './user.seeder';
 import { SeederFactory } from './seeder.factory';
 import { ConfigService } from '@nestjs/config';
-import { UserRepository } from '../user/repository';
-import { FilmRepository } from '../film/repository';
-import { BoughtFilmRepository } from '../bought-film/repository';
 import { FirebaseModule } from '../firebase/firebase.module';
 import { FileModule } from '../file/file.module';
+import { BoughtFilmModule } from '../bought-film/bought-film.module';
+import { FilmModule } from '../film/film.module';
+import { UserModule } from '../user/user.module';
 
 @Module({
-  imports: [FirebaseModule, FileModule],
+  imports: [
+    FirebaseModule,
+    FileModule,
+    BoughtFilmModule,
+    FilmModule,
+    UserModule,
+  ],
   providers: [
     PrismaService,
     UserSeeder,
@@ -20,9 +26,6 @@ import { FileModule } from '../file/file.module';
     BoughtFilmSeeder,
     SeederFactory,
     ConfigService,
-    UserRepository,
-    FilmRepository,
-    BoughtFilmRepository,
   ],
   exports: [SeederFactory],
 })

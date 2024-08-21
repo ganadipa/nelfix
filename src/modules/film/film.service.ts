@@ -1,18 +1,17 @@
-import { ForbiddenException, Injectable, Query } from '@nestjs/common';
+import { ForbiddenException, Inject, Injectable, Query } from '@nestjs/common';
 import { FilmDto } from './dto/film.dto';
 import { FirebaseRepository } from '../firebase/firebase.repository';
 import { v4 as uuidv4 } from 'uuid';
 import { Film } from './film.entity';
-import { FilmRepository } from './repository/film.repository';
 import { TFilmJson, TPrismaFilm } from 'src/common/types';
-import { UserService } from '../user/user.service';
-import { BoughtFilmRepository } from '../bought-film/repository';
+import { IFilmRepository } from './repository';
 
 @Injectable()
 export class FilmService {
   constructor(
     private firebaseRepository: FirebaseRepository,
-    private readonly filmRepository: FilmRepository,
+    @Inject('FilmRepository')
+    private readonly filmRepository: IFilmRepository,
   ) {}
 
   async createFilm(

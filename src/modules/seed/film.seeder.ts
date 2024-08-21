@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { Seeder } from './seeder.interface';
-import { FilmRepository } from '../film/repository';
 import { FirebaseRepository } from '../firebase/firebase.repository';
 import * as path from 'path';
 import { FileService } from '../file/file.service';
 import { v4 as uuidv4 } from 'uuid';
+import { IFilmRepository } from '../film/repository';
 
 @Injectable()
 export class FilmSeeder extends Seeder<{
@@ -12,7 +12,7 @@ export class FilmSeeder extends Seeder<{
   title: string;
 }> {
   constructor(
-    private readonly filmRepository: FilmRepository,
+    private readonly filmRepository: IFilmRepository,
     private firebaseRepo: FirebaseRepository,
     private readonly fileService: FileService,
   ) {
