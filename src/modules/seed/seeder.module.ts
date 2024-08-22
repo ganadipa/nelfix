@@ -11,22 +11,26 @@ import { BoughtFilmModule } from '../bought-film/bought-film.module';
 import { FilmModule } from '../film/film.module';
 import { UserModule } from '../user/user.module';
 import { PrismaModule } from '../prisma/prisma.module';
+import { FilmReviewModule } from '../film-review/film-review.module';
+import { FilmReviewSeeder } from './film-review.seeder';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
     FirebaseModule,
     FileModule,
     BoughtFilmModule,
     PrismaModule,
-    ConfigModule.forRoot({
-      isGlobal: true,
-    }),
+    FilmReviewModule,
   ],
   providers: [
     PrismaService,
     UserSeeder,
     FilmSeeder,
     BoughtFilmSeeder,
+    FilmReviewSeeder,
     SeederFactory,
     ConfigService,
   ],
