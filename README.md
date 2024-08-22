@@ -45,6 +45,10 @@ pnpm i
 bash run.sh local
 ```
 
+4. Optionally, If you want to seed the web apps, use
+   ```bash
+   bash run.sh seed```
+
 # Design Pattern
 
 ## Decorator pattern
