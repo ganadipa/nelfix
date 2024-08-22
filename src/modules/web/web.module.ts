@@ -12,6 +12,6 @@ import { FilmReviewModule } from '../film-review/film-review.module';
   imports: [BoughtFilmModule, FilmReviewModule],
   controllers: [WebController],
   providers: [WebService],
-  exports: [BoughtFilmModule],
+  exports: [BoughtFilmModule, WebService],
 })
 export class WebModule {}
