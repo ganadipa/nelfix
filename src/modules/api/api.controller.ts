@@ -219,7 +219,7 @@ export class ApiController {
       },
     },
   })
-  @Get('logout')
+  @Post('logout')
   @Roles(['USER', 'ADMIN'])
   async logout(@Res() res: Response, @Req() req: ExtendedRequest) {
     res.clearCookie('token');

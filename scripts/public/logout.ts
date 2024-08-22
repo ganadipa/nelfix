@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   logoutButton.addEventListener('click', async () => {
     const response = await fetch('/api/logout', {
-      method: 'GET',
+      method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
