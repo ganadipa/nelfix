@@ -1623,6 +1623,15 @@ video {
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+input:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0px 1000px #4b5563 inset;
+  /* Match your background color (#4B5563 is Tailwind's bg-gray-600) */
+  -webkit-text-fill-color: #f9fafb;
+  /* Match your text color (#F9FAFB is Tailwind's text-gray-50) */
+  -webkit-transition: background-color 5000s ease-in-out 0s;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
 .hover\:scale-105:hover {
   --tw-scale-x: 1.05;
   --tw-scale-y: 1.05;

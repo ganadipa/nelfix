@@ -40,6 +40,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const filmId = window.location.pathname.split('/').pop();
     const strategy = RequestHandlerFactory.create(url, 'POST');
     const ajaxRequest = new AjaxRequest(url, strategy);
+    const confirmPurchaseButton = document.getElementById('confirmPurchaseButton');
+    if (!confirmPurchaseButton) {
+        return;
+    }
     modalHandler.setOnSuccess((message) => {
         responseContainer.textContent = message;
         responseContainer.className = 'text-green-500';
@@ -52,28 +56,24 @@ document.addEventListener('DOMContentLoaded', () => {
         ajaxRequest.request({ filmId }).then((resp) => {
             if (resp.status === 'success') {
                 modalHandler.onSuccess(resp.message);
-                // then after 2s hide the modal
                 setTimeout(() => {
                     modalHandler.hide();
                     window.location.reload();
-                }, 2000);
+                }, 1000);
+                confirmPurchaseButton.disabled = true;
             }
             else {
                 modalHandler.onFail(resp.message);
             }
         });
     });
-    const confirmPurchaseButton = document.getElementById('confirmPurchaseButton');
-    if (!confirmPurchaseButton) {
-        return;
-    }
     confirmPurchaseButton.addEventListener('click', () => {
         modalHandler.onSubmit();
     });
     (_a = document.getElementById('closeModalButton')) === null || _a === void 0 ? void 0 : _a.addEventListener('click', () => {
         modalHandler.hide();
     });
-    (_b = document.getElementById('purchaseButton')) === null || _b === void 0 ? void 0 : _b.addEventListener('click', () => {
+    (_b = document.getElementById('buy-now')) === null || _b === void 0 ? void 0 : _b.addEventListener('click', () => {
         modalHandler.show();
     });
 });

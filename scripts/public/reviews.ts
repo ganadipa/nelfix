@@ -17,5 +17,10 @@ document.addEventListener('DOMContentLoaded', () => {
     { filmId: window.location.pathname.split('/').pop() },
   );
 
+  // set the form handler
+  handler.setOnSuccess((message) => {
+    location.reload();
+  });
+
   handler.set();
 });

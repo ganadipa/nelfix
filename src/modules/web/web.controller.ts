@@ -1,11 +1,8 @@
 import { Controller, Get, Param, Query, Render, Req } from '@nestjs/common';
 import { Roles } from '../../common/decorator/roles.decorator';
-import { BoughtFilmService } from '../bought-film/bought-film.service';
 import { ExtendedRequest } from 'src/common/interfaces/request.interface';
 import { WebService } from './web.service';
-import { FilmService } from '../film/film.service';
-import { TBaseViewData, TFilmJson, TReviewJson, TUser } from 'src/common/types';
-import { FilmReviewService } from '../film-review/film-review.service';
+import { TBaseViewData, TFilmJson } from 'src/common/types';
 import { ApiTags } from '@nestjs/swagger';
 
 type TFilmsViewData = {
@@ -28,12 +25,7 @@ type TDetailsViewData = {
 @ApiTags('Front End')
 @Controller('web')
 export class WebController {
-  constructor(
-    private readonly boughtFilmService: BoughtFilmService,
-    private readonly webService: WebService,
-    private readonly filmService: FilmService,
-    private readonly filmReviewService: FilmReviewService,
-  ) {}
+  constructor(private readonly webService: WebService) {}
 
   @Get('films')
   @Render('films')
@@ -43,31 +35,7 @@ export class WebController {
     @Query('page') pageStr?: string,
     @Query('q') q?: string,
   ): Promise<TBaseViewData & TFilmsViewData> {
-    const paginationData = await this.webService.getPaginationData({
-      pageStr,
-      q,
-      req,
-    });
-    const twoGenresPaginationData = {
-      films: paginationData.films.map((film) => ({
-        ...film,
-        genres: film.genre.slice(0, 2),
-      })),
-      page: paginationData.page,
-      total_pages: paginationData.total_pages,
-    };
-
-    return {
-      query: q,
-      films: twoGenresPaginationData.films,
-      user: req.user,
-      pathname: req.path,
-      title: 'Films',
-      page: paginationData.page,
-      total_pages: paginationData.total_pages,
-      scripts: ['/js/pagination/pagination-logic.js'],
-      description: 'Watch your favorite films on Nelfix.',
-    };
+    return this.webService.getFilmsViewData(req, pageStr, q);
   }
 
   @Get('films/:filmid')
@@ -77,29 +45,7 @@ export class WebController {
     @Req() req: ExtendedRequest,
     @Param('filmid') filmId: string,
   ): Promise<TBaseViewData & TDetailsViewData> {
-    const film = await this.filmService.getFilm(filmId);
-    const dataReview =
-      await this.filmReviewService.getAverageRatingAndTotalVoters(film.id);
-
-    return {
-      film: {
-        ...film,
-        is_bought: req.user
-          ? await this.boughtFilmService.hadBought(req.user.id, film.id)
-          : false,
-        rating: dataReview.avg,
-        total_voters: dataReview.total,
-        rated: req.user
-          ? await this.filmReviewService.hadRatedFilm(req.user.id, film.id)
-          : undefined,
-        duration_in_minutes: Math.round(film.duration / 60),
-      },
-      user: req.user,
-      pathname: req.path,
-      title: film.title,
-      scripts: ['/js/film-details.js', '/js/reviews.js', '/js/star-review.js'],
-      description: film.description,
-    };
+    return this.webService.getFilmDetailsViewData(req, filmId);
   }
 
   @Get('my-list')
@@ -110,34 +56,7 @@ export class WebController {
     @Query('page') pageStr?: string,
     @Query('q') q?: string,
   ): Promise<TBaseViewData & TFilmsViewData> {
-    const paginationData = await this.webService.getPaginationData({
-      pageStr,
-      q,
-      req,
-      boughtOnly: true,
-    });
-    const boughtOnly = paginationData.films.filter((film) => film.is_bought);
-
-    const twoGenresPaginationData = {
-      films: boughtOnly.map((film) => ({
-        ...film,
-        genres: film.genre.slice(0, 2),
-      })),
-      page: paginationData.page,
-      total_pages: paginationData.total_pages,
-    };
-
-    return {
-      query: q,
-      films: twoGenresPaginationData.films,
-      user: req.user,
-      pathname: req.path,
-      title: 'Purchased Films',
-      page: paginationData.page,
-      total_pages: paginationData.total_pages,
-      scripts: ['/js/pagination/pagination-logic.js'],
-      description: 'Watch your favorite films on Nelfix.',
-    };
+    return this.webService.getMyListViewData(req, pageStr, q);
   }
 
   @Get('profile')

@@ -1,10 +1,12 @@
-import { FormHandler } from './form-handler.js';
-import { SearchManager } from './search-manager.js';
 document.addEventListener('DOMContentLoaded', () => {
-    const formElement = document.getElementById('search-form');
-    if (formElement) {
-        const handler = new FormHandler(formElement, '/api/search-films', 'GET');
-        new SearchManager(formElement, handler);
-    }
+    // const formElement = document.getElementById('search-form') as HTMLFormElement;
+    // if (formElement) {
+    //   const handler = new FormHandler<
+    //     { q: string },
+    //     { films: (TFilmJson & { is_bought: boolean })[]; total: number }
+    //   >(formElement, '/api/search-films', 'GET');
+    //   new SearchManager(formElement, handler);
+    // }
 });
+export {};
 //# sourceMappingURL=search-films.js.map
