@@ -1,13 +1,4 @@
-import {
-  Body,
-  Controller,
-  Get,
-  ParseIntPipe,
-  Post,
-  Query,
-  Req,
-  Res,
-} from '@nestjs/common';
+import { Body, Controller, Get, Post, Query, Req, Res } from '@nestjs/common';
 import { Response } from 'express';
 import { AuthService } from '../auth/auth.service';
 import { RegisterDto, SignInDto } from '../auth/dto';
@@ -242,79 +233,6 @@ export class ApiController {
         token: req.user.token,
       },
     });
-  }
-
-  @ApiBearerAuth('JWT-auth')
-  @ApiOperation({ summary: 'Get films. Allowed roles: User and Admin.' })
-  @ApiResponse({
-    status: 200,
-    description: 'Films retrieved',
-    schema: {
-      example: {
-        status: 'success',
-        message: 'Films retrieved',
-        data: {
-          films: [
-            {
-              id: '123',
-              title: 'Inception',
-              description: 'A mind-bending thriller',
-              release_year: 2010,
-              director: 'Christopher Nolan',
-              genre: ['Action', 'Sci-Fi'],
-              price: 100,
-              duration: 3600,
-              cover_image_url: 'http://example.com/cover.jpg',
-              created_at: '2021-09-01T00:00:00.000Z',
-              updated_at: '2021-09-01T00:00:00.000Z',
-            },
-          ],
-          total: 1,
-        },
-      },
-    },
-  })
-  @Get('search-films')
-  @Roles(['ADMIN', 'USER', 'GUEST'])
-  async getFilms(
-    @Query('q') q?: string,
-    @Query('page') pageStr: string = '1',
-  ): Promise<
-    TResponseStatus<{
-      films: Omit<TFilmJson, 'video_url'>[];
-      total: number;
-    }>
-  > {
-    const page = parseInt(pageStr, 10);
-
-    const films = await this.filmService.getFilms(q);
-    const filmsWithoutVideoUrl = films.map((film) => {
-      const { video_url, ...rest } = film;
-      return rest;
-    });
-
-    const numberOfFilmsPerPage = 12;
-    const paginatedFilms = filmsWithoutVideoUrl.slice(
-      (page - 1) * numberOfFilmsPerPage,
-      page * numberOfFilmsPerPage,
-    );
-
-    try {
-      return {
-        status: 'success',
-        message: 'Films retrieved',
-        data: {
-          films: paginatedFilms,
-          total: filmsWithoutVideoUrl.length,
-        },
-      };
-    } catch (e) {
-      return {
-        status: 'error',
-        message: e.message,
-        data: null,
-      };
-    }
   }
 
   @ApiBearerAuth('JWT-auth')

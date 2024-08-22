@@ -64,6 +64,13 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   >(url, strategy);
 
+  const confirmPurchaseButton = document.getElementById(
+    'confirmPurchaseButton',
+  ) as HTMLButtonElement;
+  if (!confirmPurchaseButton) {
+    return;
+  }
+
   modalHandler.setOnSuccess((message) => {
     responseContainer.textContent = message;
     responseContainer.className = 'text-green-500';
@@ -79,23 +86,17 @@ document.addEventListener('DOMContentLoaded', () => {
       if (resp.status === 'success') {
         modalHandler.onSuccess(resp.message);
 
-        // then after 2s hide the modal
         setTimeout(() => {
           modalHandler.hide();
           window.location.reload();
-        }, 2000);
+        }, 1000);
+
+        confirmPurchaseButton.disabled = true;
       } else {
         modalHandler.onFail(resp.message);
       }
     });
   });
-
-  const confirmPurchaseButton = document.getElementById(
-    'confirmPurchaseButton',
-  ) as HTMLButtonElement;
-  if (!confirmPurchaseButton) {
-    return;
-  }
 
   confirmPurchaseButton.addEventListener('click', () => {
     modalHandler.onSubmit();
@@ -105,7 +106,7 @@ document.addEventListener('DOMContentLoaded', () => {
     modalHandler.hide();
   });
 
-  document.getElementById('purchaseButton')?.addEventListener('click', () => {
+  document.getElementById('buy-now')?.addEventListener('click', () => {
     modalHandler.show();
   });
 });

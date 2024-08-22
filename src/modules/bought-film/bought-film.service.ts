@@ -5,6 +5,7 @@ import { UserService } from '../user/user.service';
 import { FilmService } from '../film/film.service';
 import { IBoughtFilmRepository } from './repository';
 import { IFilmRepository } from '../film/repository';
+import { FirebaseRepository } from '../firebase/firebase.repository';
 
 @Injectable()
 export class BoughtFilmService {
@@ -15,6 +16,7 @@ export class BoughtFilmService {
     private readonly filmRepository: IFilmRepository,
     private readonly userService: UserService,
     private readonly filmService: FilmService,
+    private readonly firebaseRepository: FirebaseRepository,
   ) {}
 
   async getFilmsRelative(
@@ -158,7 +160,9 @@ export class BoughtFilmService {
     return returnedFilms;
   }
 
-  async deleteFilm(filmId: string) {
+  async deleteFilm(
+    filmId: string,
+  ): Promise<Omit<TFilmJson, 'cover_image_url'>> {
     const film = await this.filmRepository.findById(filmId);
     if (!film) {
       throw new HttpException('Film not found!', 404);
@@ -178,6 +182,10 @@ export class BoughtFilmService {
     if (!deleted) {
       throw new HttpException('Failed to delete film!', 500);
     }
+
+    // Then delete the files in the firebase storage
+    await this.firebaseRepository.removeFileByUrl(film.imageUrl);
+    await this.firebaseRepository.removeFileByUrl(film.videoUrl);
 
     // OK
     const ret = new Film(film).toJSON();

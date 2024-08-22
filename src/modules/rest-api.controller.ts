@@ -221,17 +221,17 @@ export class RestApiController {
   })
   @ApiQuery({
     name: 'q',
-    required: false, // Explicitly mark the query parameter as optional
+    required: false,
     description: 'Optional search query to filter films',
   })
   @Get('films')
   @Roles(['ADMIN'])
   async getFilms(
     @Query('q') q?: string,
-  ): Promise<TResponseStatus<Omit<TFilmJson, 'video_url'>[] | null>> {
+  ): Promise<TResponseStatus<Omit<TFilmJson, 'video_url' | 'description'>[]>> {
     const films = await this.filmService.getFilms(q);
-    const filmsWithoutVideoUrl = films.map((film) => {
-      const { video_url, ...rest } = film;
+    const filmsWithoutVideoUrlAndDescription = films.map((film) => {
+      const { video_url, description, ...rest } = film;
       return rest;
     });
 
@@ -239,7 +239,7 @@ export class RestApiController {
       return {
         status: 'success',
         message: 'Films retrieved',
-        data: filmsWithoutVideoUrl,
+        data: filmsWithoutVideoUrlAndDescription,
       };
     } catch (e) {
       return {
@@ -509,12 +509,21 @@ export class RestApiController {
   @Roles(['ADMIN'])
   async deleteFilm(
     @Param('id') id: string,
-  ): Promise<TResponseStatus<Omit<TFilmJson, 'cover_image_url'> | null>> {
+  ): Promise<
+    TResponseStatus<Omit<
+      TFilmJson,
+      'cover_image_url' | 'price' | 'duration'
+    > | null>
+  > {
     try {
+      const filmsWithoutCoverImageUrl =
+        await this.boughtFilmService.deleteFilm(id);
+      const { price, duration, ...rest } = filmsWithoutCoverImageUrl;
+
       return {
         status: 'success',
         message: 'Film deleted',
-        data: await this.boughtFilmService.deleteFilm(id),
+        data: rest,
       };
     } catch (e) {
       return {
