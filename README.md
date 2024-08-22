@@ -179,6 +179,7 @@ bash run.sh local
 
 # Bonus
 
+- B01 - OWASP
 - B02 - Deployment
 - B05 - Lighthouse
 - B06 - Responsive layout
@@ -189,6 +190,20 @@ bash run.sh local
 - B11 - Ember
 
 # Bonus Explanation
+
+## B01 - OWASP
+
+#### Injection
+
+1. Sql Injection
+
+- Use `' OR '1'='1` for both username and password in a naive and insecure website leads to
+
+```sql
+SELECT * FROM users WHERE username = '' OR '1'='1' AND password = '' OR '1'='1';
+```
+
+- But when performed in this web apps, it leads to
 
 ## B02 - Deployment
 
