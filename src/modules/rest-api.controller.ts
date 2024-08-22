@@ -431,7 +431,6 @@ export class RestApiController {
     @Body() updateItemDto: FilmDto,
     @Param('id') id: string,
   ): Promise<TResponseStatus<TFilmJson | null>> {
-    console.log(files);
     try {
       return {
         status: 'success',
