@@ -129,7 +129,7 @@ export class RestApiController {
     },
   })
   @ApiResponse({
-    status: 401,
+    status: 403,
     description: 'Unauthorized',
     schema: {
       example: {
@@ -198,7 +198,7 @@ export class RestApiController {
     },
   })
   @ApiResponse({
-    status: 401,
+    status: 403,
     description: 'Unauthorized',
     schema: {
       example: {
@@ -277,7 +277,7 @@ export class RestApiController {
     },
   })
   @ApiResponse({
-    status: 401,
+    status: 403,
     description: 'Unauthorized',
     schema: {
       example: {
@@ -393,7 +393,7 @@ export class RestApiController {
     },
   })
   @ApiResponse({
-    status: 401,
+    status: 403,
     description: 'Unauthorized',
     schema: {
       example: {
@@ -484,7 +484,7 @@ export class RestApiController {
     },
   })
   @ApiResponse({
-    status: 401,
+    status: 403,
     description: 'Unauthorized',
     schema: {
       example: {
@@ -624,7 +624,7 @@ export class RestApiController {
     },
   })
   @ApiResponse({
-    status: 401,
+    status: 403,
     description: 'Unauthorized',
     schema: {
       example: {
@@ -697,7 +697,7 @@ export class RestApiController {
     },
   })
   @ApiResponse({
-    status: 401,
+    status: 403,
     description: 'Unauthorized',
     schema: {
       example: {
@@ -771,7 +771,7 @@ export class RestApiController {
     },
   })
   @ApiResponse({
-    status: 401,
+    status: 403,
     description: 'Unauthorized',
     schema: {
       example: {
@@ -900,7 +900,7 @@ export class RestApiController {
     },
   })
   @ApiResponse({
-    status: 401,
+    status: 403,
     description: 'Unauthorized',
     schema: {
       example: {

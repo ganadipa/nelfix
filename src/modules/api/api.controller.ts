@@ -1,4 +1,13 @@
-import { Body, Controller, Get, Post, Query, Req, Res } from '@nestjs/common';
+import {
+  BadRequestException,
+  Body,
+  Controller,
+  Get,
+  Post,
+  Query,
+  Req,
+  Res,
+} from '@nestjs/common';
 import { Response } from 'express';
 import { AuthService } from '../auth/auth.service';
 import { RegisterDto, SignInDto } from '../auth/dto';
@@ -17,6 +26,7 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
+import { BuyFilmDto } from '../bought-film/dto/buy-film.dto';
 
 @ApiTags('Internal API')
 @Controller('api')
@@ -24,24 +34,23 @@ export class ApiController {
   constructor(
     private authService: AuthService,
     private boughtFilmService: BoughtFilmService,
-    private filmService: FilmService,
     private reviewFilmService: FilmReviewService,
   ) {}
 
   @ApiBearerAuth('JWT-auth')
-  @ApiOperation({ summary: 'Create a new film. Allowed roles: Guest only.' })
-  @ApiConsumes('multipart/form-data')
+  @ApiOperation({ summary: 'Create a new user. Allowed roles: Guest only.' })
+  @ApiConsumes('application/json')
   @ApiBody({
     description: 'Register data',
     type: RegisterDto,
   })
   @ApiResponse({
     status: 201,
-    description: 'The film has been successfully created.',
+    description: 'The user has been successfully created.',
     schema: {
       example: {
         status: 'success',
-        message: 'Film created successfully',
+        message: 'User created successfully',
         data: {
           id: '1',
           username: 'test',
@@ -59,6 +68,17 @@ export class ApiController {
         status: 'error',
         message:
           'Please change your username as that identifier is already in use',
+        data: null,
+      },
+    },
+  })
+  @ApiResponse({
+    status: 403,
+    description: 'Forbidden resource',
+    schema: {
+      example: {
+        status: 'error',
+        message: 'Forbidden resource.',
         data: null,
       },
     },
@@ -114,6 +134,28 @@ export class ApiController {
       },
     },
   })
+  @ApiResponse({
+    status: 400,
+    description: 'Bad request',
+    schema: {
+      example: {
+        status: 'error',
+        message: 'Invalid credentials',
+        data: null,
+      },
+    },
+  })
+  @ApiResponse({
+    status: 403,
+    description: 'Forbidden resource',
+    schema: {
+      example: {
+        status: 'error',
+        message: 'Forbidden resource.',
+        data: null,
+      },
+    },
+  })
   @Post('login')
   @Roles(['GUEST'])
   async signIn(
@@ -133,18 +175,23 @@ export class ApiController {
         data: resp,
       });
     } catch (e) {
-      res.status(400).json({
-        status: 'error',
-        message: e.message,
-        data: null,
-      });
+      throw new BadRequestException(e.message);
     }
 
-    return;
+    return {
+      status: 'error',
+      message: 'Somehow went here',
+      data: null,
+    };
   }
 
   @ApiBearerAuth('JWT-auth')
   @ApiOperation({ summary: 'Buy a film. Allowed roles: User and Admin.' })
+  @ApiConsumes('application/json')
+  @ApiBody({
+    description: 'Buy film data',
+    type: BuyFilmDto,
+  })
   @ApiResponse({
     status: 200,
     description: 'The film has been successfully bought.',
@@ -180,9 +227,20 @@ export class ApiController {
       },
     },
   })
+  @ApiResponse({
+    status: 403,
+    description: 'Forbidden resource',
+    schema: {
+      example: {
+        status: 'error',
+        message: 'Forbidden resource.',
+        data: null,
+      },
+    },
+  })
   @Post('buy-film')
   @Roles(['USER', 'ADMIN'])
-  async buyFilm(@Req() req: ExtendedRequest) {
+  async buyFilm(@Req() req: ExtendedRequest, @Body() body: BuyFilmDto) {
     try {
       return {
         status: 'success',
@@ -193,11 +251,7 @@ export class ApiController {
         ),
       };
     } catch (e) {
-      return {
-        status: 'error',
-        message: e.message,
-        data: null,
-      };
+      throw new BadRequestException(e.message);
     }
   }
 
@@ -219,6 +273,17 @@ export class ApiController {
       },
     },
   })
+  @ApiResponse({
+    status: 403,
+    description: 'Forbidden resource',
+    schema: {
+      example: {
+        status: 'error',
+        message: 'Forbidden resource.',
+        data: null,
+      },
+    },
+  })
   @Post('logout')
   @Roles(['USER', 'ADMIN'])
   async logout(@Res() res: Response, @Req() req: ExtendedRequest) {
@@ -236,7 +301,12 @@ export class ApiController {
   }
 
   @ApiBearerAuth('JWT-auth')
-  @ApiOperation({ summary: 'Get film details. Allowed roles: User and Admin.' })
+  @ApiOperation({ summary: 'Reviews a film. Allowed roles: User and Admin.' })
+  @ApiConsumes('application/json')
+  @ApiBody({
+    description: 'Film ID',
+    type: CreateReviewDto,
+  })
   @ApiResponse({
     status: 200,
     description: 'Review was successfully added',
@@ -252,6 +322,28 @@ export class ApiController {
       },
     },
   })
+  @ApiResponse({
+    status: 400,
+    description: 'Bad request',
+    schema: {
+      example: {
+        status: 'error',
+        message: 'You have not bought this film',
+        data: null,
+      },
+    },
+  })
+  @ApiResponse({
+    status: 403,
+    description: 'Forbidden',
+    schema: {
+      example: {
+        status: 'error',
+        message: 'Forbidden resource',
+        data: null,
+      },
+    },
+  })
   @Post('review')
   @Roles(['USER', 'ADMIN'])
   async reviewFilm(
@@ -262,11 +354,7 @@ export class ApiController {
       ? await this.boughtFilmService.hadBought(req.user.id, review.filmId)
       : false;
     if (!boughtFilm) {
-      return {
-        status: 'error',
-        message: 'You have to buy the film first',
-        data: null,
-      };
+      throw new BadRequestException('You have not bought this film');
     }
 
     try {
@@ -280,11 +368,7 @@ export class ApiController {
         }),
       };
     } catch (e) {
-      return {
-        status: 'error',
-        message: e.message,
-        data: null,
-      };
+      throw new BadRequestException(e.message);
     }
   }
 }
