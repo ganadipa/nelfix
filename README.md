@@ -14,6 +14,7 @@ We’re not just another platform; we’re a community that brings the joy of ci
 - [Endpoints Made](#️endpoints-made)
 - [Bonus](#bonus)
 - [Bonus Explanation](#bonus-explanation)
+- [Admin Password](#admin)
 
 # Author
 
@@ -335,3 +336,10 @@ pnpm cypress -v
 ## B11 - Ember
 
 - Pada web apps ini, diguankan firebase sebagai cloud storage object yang menyimpan setiap image file dan video file dari setiap films pada aplikasi ini.
+
+
+
+# Admin
+```sql
+username='adminsuer'
+password='password3'
