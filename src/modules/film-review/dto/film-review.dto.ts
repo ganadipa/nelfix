@@ -11,7 +11,7 @@ import {
 
 export class CreateReviewDto {
   @ApiProperty({
-    example: 'Great movie!',
+    example: 5,
     description: 'Review content',
   })
   @Transform(({ value }) => parseFloat(value), { toClassOnly: true })
@@ -21,7 +21,7 @@ export class CreateReviewDto {
   rating: number;
 
   @ApiProperty({
-    example: 'filmId',
+    example: '1',
     description: 'Film ID',
   })
   @IsString()
