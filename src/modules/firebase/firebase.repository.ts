@@ -30,7 +30,9 @@ export class FirebaseRepository {
   async removeFileByUrl(fileUrl: string): Promise<void> {
     const fileName = fileUrl.split('/').pop();
     if (fileName) {
-      await this.removeFile(fileName);
+      try {
+        await this.removeFile(fileName);
+      } catch (error) {}
     }
   }
 }
