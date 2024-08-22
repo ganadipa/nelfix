@@ -21,7 +21,6 @@ export class FilmDto {
   @Transform(({ value }) => parseInt(value), { toClassOnly: true })
   @IsNumber()
   @Min(1900)
-  @Max(new Date().getFullYear())
   release_year: number;
 
   @IsArray()
