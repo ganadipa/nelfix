@@ -175,7 +175,11 @@ export class ApiController {
         data: resp,
       });
     } catch (e) {
-      throw new BadRequestException(e.message);
+      res.send({
+        status: 'error',
+        message: e.message,
+        data: null,
+      });
     }
 
     return {
@@ -251,7 +255,11 @@ export class ApiController {
         ),
       };
     } catch (e) {
-      throw new BadRequestException(e.message);
+      return {
+        status: 'error',
+        message: e.message,
+        data: null,
+      };
     }
   }
 
@@ -368,7 +376,11 @@ export class ApiController {
         }),
       };
     } catch (e) {
-      throw new BadRequestException(e.message);
+      return {
+        status: 'error',
+        message: e.message,
+        data: null,
+      };
     }
   }
 }
