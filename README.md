@@ -203,7 +203,21 @@ bash run.sh local
 SELECT * FROM users WHERE username = '' OR '1'='1' AND password = '' OR '1'='1';
 ```
 
-- But when performed in this web apps, it leads to
+- But when performed on this web app, it leads to an error because of invalid credentials.
+
+2. XSS
+
+Create an account using `<script>alert('XSS');</script>` as the username, as it will be displayed when you log in. However, when it is displayed, it automatically gets escaped because Handlebars handles this.
+
+Additionally, the web app has set httpOnly to true for the token cookie, so even if our app is vulnerable, XSS won't be able to access the cookie.
+
+#### Security Misconfiguration
+
+If someone closely examine my commit history, searching for any mistake committing a `.env`, They won't find it.
+
+#### Broken Access Control
+
+Every endpoint has been configured to grant access only to authorized users.
 
 ## B02 - Deployment
 
