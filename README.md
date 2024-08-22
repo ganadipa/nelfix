@@ -29,7 +29,7 @@ To access the app, you can go to one of the links:
 
 - Or you can use your local, by doing:
 
-1.  clone the repository, then
+1.  clone the repository, then go to the `dev` branch
 
 ```bash
 cp .env.example .env
