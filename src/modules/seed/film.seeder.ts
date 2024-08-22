@@ -37,20 +37,6 @@ export class FilmSeeder extends Seeder<{
       this.fileService.createMulterFile(videoPath),
     );
 
-    const imageUrls = await Promise.all(
-      imageFiles.map((imageFile) => {
-        const coverImageFileName = `cover_image_${uuidv4()}_${path.basename(imageFile.path)}`;
-        return this.firebaseRepo.addFile(imageFile, coverImageFileName);
-      }),
-    );
-
-    const videoUrls = await Promise.all(
-      videoFiles.map((videoFile) => {
-        const videoFileName = `video_${uuidv4()}_${path.basename(videoFile.path)}`;
-        return this.firebaseRepo.addFile(videoFile, videoFileName);
-      }),
-    );
-
     const films = [
       {
         title: 'Eternal Echoes',
@@ -342,11 +328,27 @@ export class FilmSeeder extends Seeder<{
       },
     ];
 
-    const filmsWithImageAndVideo = films.map((film, index) => ({
-      ...film,
-      videoUrl: videoUrls[Math.floor(Math.random() * videoUrls.length)],
-      imageUrl: imageUrls[Math.floor(Math.random() * imageUrls.length)],
-    }));
+    const filmsWithImageAndVideo = await Promise.all(
+      films.map(async (film) => {
+        const whichVideo = Math.floor(Math.random() * videoFiles.length);
+        const whichImage = Math.floor(Math.random() * imageFiles.length);
+
+        const videoFile = videoFiles[whichVideo];
+        const imageFile = imageFiles[whichImage];
+
+        const videoName = `video_${uuidv4()}_${videoFile.originalname}`;
+        const imageName = `image_${uuidv4()}_${imageFile.originalname}`;
+
+        const videoUrl = await this.firebaseRepo.addFile(videoFile, videoName);
+        const imageUrl = await this.firebaseRepo.addFile(imageFile, imageName);
+
+        return {
+          ...film,
+          videoUrl,
+          imageUrl,
+        };
+      }),
+    );
 
     for (const filmData of filmsWithImageAndVideo) {
       const film = await this.filmRepository.create(filmData);

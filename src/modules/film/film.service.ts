@@ -116,7 +116,7 @@ export class FilmService {
 
     let imageUrl = oldFilm.imageUrl;
     if (files.cover_image && files.cover_image.length > 0) {
-      this.firebaseRepository.removeFileByUrl(imageUrl);
+      if (imageUrl) this.firebaseRepository.removeFileByUrl(imageUrl);
       const coverImageFileName = `cover_image_${uuidv4()}_${files.cover_image[0].originalname}`;
       imageUrl = await this.firebaseRepository.addFile(
         files.cover_image[0],
