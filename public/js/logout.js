@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     logoutButton.addEventListener('click', () => __awaiter(void 0, void 0, void 0, function* () {
         const response = yield fetch('/api/logout', {
-            method: 'GET',
+            method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },

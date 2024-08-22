@@ -1,73 +1,304 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# Description
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+Introducing, Nelfix, A fresh take on streaming that redefines how you watch movies and other exclusive contents.
+We’re not just another platform; we’re a community that brings the joy of cinema right to your fingertips.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+# Table Of Contents
 
-## Description
+- [Description](#description)
+- [Table Of Contents](#table-of-contents)
+- [Author](#author)
+- [How To Run](#️how-to-run)
+- [Design Pattern](#design-pattern)
+- [Tech Stack Used](#tech-stack-used)
+- [Endpoints Made](#️endpoints-made)
+- [Bonus](#bonus)
+- [Bonus Explanation](#bonus-explanation)
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+# Author
 
-## Installation
+|   NIM    |           Nama           |
+| :------: | :----------------------: |
+| 13522066 | Nyoman Ganadipa Narayana |
 
-```bash
-$ pnpm install
-```
+# How To Run
 
-## Running the app
+To access the app, you can go to one of the links:
+
+- [labpro.nyomanganadipa.com](https://labpro.nyomanganadipa.com/)
+
+- Or you can use your local, by doing:
+
+1.  clone the repository, then
 
 ```bash
-# development
-$ pnpm run start
-
-# watch mode
-$ pnpm run start:dev
-
-# production mode
-$ pnpm run start:prod
+cp .env.example .env
+cp .env.example .env.docker
 ```
 
-## Test
+2. Then fill in using your own variables.
+
+3. then do
 
 ```bash
-# unit tests
-$ pnpm run test
-
-# e2e tests
-$ pnpm run test:e2e
-
-# test coverage
-$ pnpm run test:cov
+pnpm i
+bash run.sh local
 ```
 
-## Support
+# Design Pattern
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+## Decorator pattern
 
-## Stay in touch
+- Separation of Concern, mengekstensi sebuah fungsionalitas dari sebuah method agar memiliki sebuah mekanisme authentication (Roles decorator)
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+- Scalability, Adanya role baru tidak akan mengubah role yang ada.
 
-## License
+## Singleton pattern
 
-Nest is [MIT licensed](LICENSE).
+- Consistency, Meyakinkan bahwa hanya ada 1 state untuk 1 class yang sama. Sehingga meskipun suatu module dipakai diberbagai module lainnya, state yang digunakan akan tetap sama.
+
+## Strategy pattern
+
+- Scalability, Perubahan metode authorization dari JWT menjadi yang lain (Katakanlah Db session) tidak akan mengubah kode yang lama, tetapi hanya menambah kode yang baru.
+
+## Factory pattern
+
+- Scalability dan Maintainability, semakin aplikasi ini berkembang, seeding untuk development juga akan semakin membesar. Untuk mempercepat seeding, tidak perlu dilakukan seeding ulang, dapat dilakukan incremental seeding. Oleh karena itu saya membuat module seeding ini sedemikian sehingga mengimplementasi factory.
+
+# Tech Stack Used
+
+- TypeScript Compiler (v4.5.4)
+- Docker (v27.1.2)
+- Nest Js CLI (v10.4.2)
+- Argon2 (v0.40.3)
+- Firebase (v10.12.5)
+- Firebase Admin (v12.3.1)
+- Cypress (v13.13.3)
+- Handlebars (v4.2.0)
+- Prisma (v5.18.0)
+- Tailwind CSS (v3.4.9)
+- UUID (v10)
+
+# Endpoints Made
+
+## API Panel (/api)
+
+- For api documentations
+
+## REST API
+
+- For admin role only.
+
+### /films (POST)
+
+- To create a new films
+
+### /films (GET)
+
+- To get all films that matches the given query.
+
+### /films/{id} (GET)
+
+- To get the film that matches the id
+
+### /films/{id} (PUT)
+
+- To update the film that matches the id
+
+### /films/{id} (DELETE)
+
+- To delete the film that matches the id
+
+### /login (POST)
+
+- To get the access token for the related payload
+
+### /self (GET)
+
+- To get the user information based on the authorization bearer token.
+
+### /users (GET)
+
+- To get all the registered users.
+
+### /users/{id} (GET)
+
+- To get the user that matches the given id
+
+## Front End
+
+### / (GET)
+
+- To see the home page
+
+### /web/films (GET)
+
+- To see all the films that matches the query, or all films is the query is not set
+
+### /web/films/{filmid} (GET)
+
+- To see the details of the film that matches the filmid.
+
+### /web/my-list (GET)
+
+- To see the purchased films by the user. (Logged In only)
+
+### /web/profile (GET)
+
+- To see the profile of the user (Logged In only)
+
+### /auth/login (GET)
+
+- To see the login form (Guest only)
+
+### /auth/register (GET)
+
+- To see the register form (Guest only)
+
+## Internal API
+
+### /api/register (POST)
+
+- To register a user.
+
+### /api/login (POST)
+
+- To login
+
+### /api/buy-film (POST)
+
+- To buy a film that matches the payload's film id.
+
+### /api/logout (POST)
+
+- To perform logout
+
+### /api/review (POST)
+
+- To review a film that matches the payload's films id.
+
+# Bonus
+
+- B02 - Deployment
+- B05 - Lighthouse
+- B06 - Responsive layout
+- B07 - Dokumentasi API
+- B08 - SOLID
+- B09 - Automated testing
+- B10 - Fitur Tambahan
+- B11 - Ember
+
+# Bonus Explanation
+
+## B02 - Deployment
+
+Aplikasi web ini telah di-deploy pada [labpro.nyomanganadipa.com](https://labpro.nyomanganadipa.com/)
+
+## B05 - Lighthouse
+
+### Home Page
+
+![Home - Desktop](/assets/lighthouse/home-desktop.png)
+![Home - Mobile](/assets//lighthouse/home-mobile.png)
+
+### Browse Page
+
+![Browse - Desktop](/assets/lighthouse/browse-desktop.png)
+![Browse - Mobile](/assets/lighthouse/browse-mobile.png)
+
+### Profile Page
+
+![Profile - Desktop](/assets/lighthouse/profile-desktop.png)
+![Profile - Mobile](/assets/lighthouse/profile-mobile.png)
+
+### My List Page
+
+![My List - Desktop](/assets/lighthouse/my-list-desktop.png)
+![My List - Mobile](/assets/lighthouse/my-list-mobile.png)
+
+### Login Page
+
+![Login - Desktop](/assets/lighthouse/login-desktop.png)
+![Login - Mobile](/assets/lighthouse/login-mobile.png)
+
+### Register Page
+
+![Register - Desktop](/assets/lighthouse/register-desktop.png)
+![Register - Mobile](/assets/lighthouse/register-mobile.png)
+
+## B06 - Responsive Layout
+
+Responsive layout dapat dicoba pada [labpro.nyomanganadipa.com](https://labpro.nyomanganadipa.com/)
+
+## B07 - Dokumentasi API
+
+Dokumentasi API dapat dilihat pada [labpro.nyomanganadipa.com/api](https://labpro.nyomanganadipa.com/api/)
+
+## B08 - SOLID
+
+#### S: Single Responsibility
+
+- Menggunakan prinsip separation of concern, setiap module hanya bertanggung jawab atas satu area, dan hanya satu.
+- Setiap class di dalam module juga hanya memiliki satu concern, misal service untuk melakukan business logic, controller untuk menghubungkan client dan business logic, dan repository untuk mengakses data terkait.
+
+#### O: Open/Closed Principle
+
+- Strategy pattern yang digunakan untuk strategy authorization membuat aplikasi ini dapat mengganti implementasi authorization tanpa memodifikasi kode yang ada, tetapi menambahnya.
+
+#### L: Liskov Substitution Principle
+
+- Setiap repository yang mengimplementasi interfacenya menandakan bahwa setiap subclass harus memiliki implementasi dari interfacenya. Jadi apabila suatu interface diganti keberadaannya menjadi subclassnya, maka program tetap akan berjalan dengan aman.
+
+#### I: Interface Segregation
+
+- Setiap repository mengimplementasikan interfacenya hanya berdasarkan apa yang dibutuhkan
+- Setiap authorization startegy mengimplementasikan hanya berdasarkan apa yang dibutuhkan
+
+#### D: Dependency Inversion
+
+- Setiap modul yang membutuhkan repository hanya bergantung pada interface daripada implementasinya. Ini memastikan bahwa logika tingkat tinggi tidak bergantung pada logika tingkat rendah. Sehingga suatu waktu saat dibutuhkan bisa mengimplementasikan repository metode lain.
+
+## B09 - Automated testing
+
+Dilakukan Automated e2e testing untuk bagian front end pada 5 dari 7 halaman yang tersedia. To run the test, do
+
+```bash
+npx cypress open
+```
+
+but make sure you have the cypress installed
+
+```bash
+pnpm cypress install
+```
+
+or just check it with
+
+```bash
+pnpm cypress -v
+```
+
+1. Films Page
+   ![Films Page - Guest](/assets/cypress/films/guest.png)
+   ![Films Page - User](/assets/cypress/films/user.png)
+
+2. Home Page
+   ![Home Page](/assets/cypress/home.png)
+
+3. Login Page
+   ![Login Page](/assets/cypress/login.png)
+
+4. Register Page
+   ![Register Page](/assets/cypress/register.png)
+
+5. Profile Page
+   ![Profile Page](/assets/cypress/profile.png)
+
+## B10 - Fitur Tambahan
+
+- Fitur Review Film
+- Fitur Top 5 highest rated movie of the month
+
+## B11 - Ember
+
+- Pada web apps ini, diguankan firebase sebagai cloud storage object yang menyimpan setiap image file dan video file dari setiap films pada aplikasi ini.
