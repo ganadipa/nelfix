@@ -26,7 +26,6 @@ We’re not just another platform; we’re a community that brings the joy of ci
 
 To access the app, you can go to one of the links:
 
-- [labpro.nyomanganadipa.com](https://labpro.nyomanganadipa.com/)
 
 - Or you can use your local, by doing:
 
@@ -182,21 +181,10 @@ bash run.sh local
 
 - To review a film that matches the payload's films id.
 
-# Bonus
-
-- B01 - OWASP
-- B02 - Deployment
-- B05 - Lighthouse
-- B06 - Responsive layout
-- B07 - Dokumentasi API
-- B08 - SOLID
-- B09 - Automated testing
-- B10 - Fitur Tambahan
-- B11 - Ember
 
 # Bonus Explanation
 
-## B01 - OWASP
+## OWASP
 
 #### Injection
 
@@ -224,11 +212,8 @@ If someone closely examine my commit history, searching for any mistake committi
 
 Every endpoint has been configured to grant access only to authorized users.
 
-## B02 - Deployment
 
-Aplikasi web ini telah di-deploy pada [labpro.nyomanganadipa.com](https://labpro.nyomanganadipa.com/)
-
-## B05 - Lighthouse
+## Lighthouse
 
 ### Home Page
 
@@ -260,15 +245,15 @@ Aplikasi web ini telah di-deploy pada [labpro.nyomanganadipa.com](https://labpro
 ![Register - Desktop](/assets/lighthouse/register-desktop.png)
 ![Register - Mobile](/assets/lighthouse/register-mobile.png)
 
-## B06 - Responsive Layout
+## Responsive Layout
 
 Responsive layout dapat dicoba pada [labpro.nyomanganadipa.com](https://labpro.nyomanganadipa.com/)
 
-## B07 - Dokumentasi API
+## Dokumentasi API
 
 Dokumentasi API dapat dilihat pada [labpro.nyomanganadipa.com/api](https://labpro.nyomanganadipa.com/api/)
 
-## B08 - SOLID
+## SOLID
 
 #### S: Single Responsibility
 
@@ -292,7 +277,7 @@ Dokumentasi API dapat dilihat pada [labpro.nyomanganadipa.com/api](https://labpr
 
 - Setiap modul yang membutuhkan repository hanya bergantung pada interface daripada implementasinya. Ini memastikan bahwa logika tingkat tinggi tidak bergantung pada logika tingkat rendah. Sehingga suatu waktu saat dibutuhkan bisa mengimplementasikan repository metode lain.
 
-## B09 - Automated testing
+## Automated testing
 
 Dilakukan Automated e2e testing untuk bagian front end pada 5 dari 7 halaman yang tersedia. To run the test, do
 
@@ -328,18 +313,13 @@ pnpm cypress -v
 5. Profile Page
    ![Profile Page](/assets/cypress/profile.png)
 
-## B10 - Fitur Tambahan
+## Fitur Tambahan
 
 - Fitur Review Film
 - Fitur Top 5 highest rated movie of the month
 
-## B11 - Ember
+## Ember
 
 - Pada web apps ini, diguankan firebase sebagai cloud storage object yang menyimpan setiap image file dan video file dari setiap films pada aplikasi ini.
 
 
-
-# Admin
-```sql
-username='adminsuer'
-password='password3'
